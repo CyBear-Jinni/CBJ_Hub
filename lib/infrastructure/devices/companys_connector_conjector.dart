@@ -8,6 +8,7 @@ import 'package:cbj_hub/infrastructure/devices/xiaomi_io/xiaomi_io_connector_con
 import 'package:cbj_hub/infrastructure/devices/yeelight/yeelight_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
 import 'package:cbj_hub/injection.dart';
+import 'package:cbj_hub/utils.dart';
 
 class CompanysConnectorConjector {
   static updateAllDevicesReposWithDeviceChanges(
@@ -35,7 +36,8 @@ class CompanysConnectorConjector {
         XiaomiIoConnectorConjector()
             .manageHubRequestsForDevice(deviceEntityAbstract);
       } else {
-        print('Cannot send device changes to its repo, company not supported');
+        logger
+            .i('Cannot send device changes to its repo, company not supported');
       }
     });
   }

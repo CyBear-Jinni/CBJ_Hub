@@ -2,6 +2,7 @@ name: cbj_hub
 description: Easy to use open source Hub to control your smart devices from one app.
 version: 1.0.1
 homepage: https://cybearjinni.com
+publish_to: none
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
