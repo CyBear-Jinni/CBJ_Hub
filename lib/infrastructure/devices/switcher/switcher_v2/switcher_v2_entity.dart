@@ -89,10 +89,12 @@ class SwitcherV2Entity extends GenericBoilerDE {
 
       if (actionToPreform.toString() != boilerSwitchState!.getOrCrash()) {
         if (actionToPreform == DeviceActions.on) {
-          (await turnOnBoiler()).fold((l) => logger.e('Error turning boiler on'),
+          (await turnOnBoiler()).fold(
+              (l) => logger.e('Error turning boiler on'),
               (r) => print('Boiler turn on success'));
         } else if (actionToPreform == DeviceActions.off) {
-          (await turnOffBoiler()).fold((l) => logger.e('Error turning boiler off'),
+          (await turnOffBoiler()).fold(
+              (l) => logger.e('Error turning boiler off'),
               (r) => print('Boiler turn off success'));
         } else {
           logger.e('actionToPreform is not set correctly on Switcher V2');

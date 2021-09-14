@@ -8,6 +8,7 @@
 import 'dart:core' as $core;
 import 'dart:convert' as $convert;
 import 'dart:typed_data' as $typed_data;
+
 @$core.Deprecated('Use aPISourceTypeDescriptor instead')
 const APISourceType$json = const {
   '1': 'APISourceType',
@@ -19,7 +20,8 @@ const APISourceType$json = const {
 };
 
 /// Descriptor for `APISourceType`. Decode as a `google.protobuf.EnumDescriptorProto`.
-final $typed_data.Uint8List aPISourceTypeDescriptor = $convert.base64Decode('Cg1BUElTb3VyY2VUeXBlEg8KC1NPVVJDRV9CT1RIEAASEQoNU09VUkNFX1NFUlZFUhABEhEKDVNPVVJDRV9DTElFTlQQAg==');
+final $typed_data.Uint8List aPISourceTypeDescriptor = $convert.base64Decode(
+    'Cg1BUElTb3VyY2VUeXBlEg8KC1NPVVJDRV9CT1RIEAASEQoNU09VUkNFX1NFUlZFUhABEhEKDVNPVVJDRV9DTElFTlQQAg==');
 @$core.Deprecated('Use void_Descriptor instead')
 const void_$json = const {
   '1': 'void',

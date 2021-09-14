@@ -93,7 +93,8 @@ class SwitcherRunnerEntity extends GenericBlindsDE {
 
       if (actionToPreform.toString() != blindsSwitchState!.getOrCrash()) {
         if (actionToPreform == DeviceActions.moveUp) {
-          (await moveUpBlinds()).fold((l) => logger.e('Error turning blinds up'),
+          (await moveUpBlinds()).fold(
+              (l) => logger.e('Error turning blinds up'),
               (r) => print('Blinds up success'));
         } else if (actionToPreform == DeviceActions.stop) {
           (await stopBlinds()).fold((l) => logger.e('Error stopping blinds '),

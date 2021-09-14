@@ -12,7 +12,6 @@ import 'package:dartz/dartz.dart';
 import 'package:yeedart/yeedart.dart';
 import 'package:cbj_hub/utils.dart';
 
-
 class XiaomiIoGpx4021GlEntity extends GenericRgbwLightDE {
   XiaomiIoGpx4021GlEntity({
     required CoreUniqueId uniqueId,
@@ -104,7 +103,8 @@ class XiaomiIoGpx4021GlEntity extends GenericRgbwLightDE {
             (r) => print('Light turn off success'),
           );
         } else {
-          logger.e('actionToPreform is not set correctly on XiaomiIo Gpx4021Gl');
+          logger
+              .e('actionToPreform is not set correctly on XiaomiIo Gpx4021Gl');
         }
       }
     }
