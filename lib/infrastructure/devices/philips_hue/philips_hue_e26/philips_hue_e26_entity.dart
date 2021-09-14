@@ -10,6 +10,7 @@ import 'package:cbj_hub/infrastructure/devices/philips_hue/philips_hue_device_va
 import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:yeedart/yeedart.dart';
+import 'package:cbj_hub/utils.dart';
 
 class PhilipsHueE26Entity extends GenericRgbwLightDE {
   PhilipsHueE26Entity({
@@ -89,14 +90,14 @@ class PhilipsHueE26Entity extends GenericRgbwLightDE {
       if (actionToPreform.toString() != lightSwitchState!.getOrCrash()) {
         if (actionToPreform == DeviceActions.on) {
           (await turnOnLight()).fold(
-              (l) => print('Error turning philips_hue light on'),
+              (l) => logger.e('Error turning philips_hue light on'),
               (r) => print('Light turn on success'));
         } else if (actionToPreform == DeviceActions.off) {
           (await turnOffLight()).fold(
-              (l) => print('Error turning philips_hue light off'),
+              (l) => logger.e('Error turning philips_hue light off'),
               (r) => print('Light turn off success'));
         } else {
-          print('actionToPreform is not set correctly on PhilipsHue E26');
+          logger.e('actionToPreform is not set correctly on PhilipsHue E26');
         }
       }
     }

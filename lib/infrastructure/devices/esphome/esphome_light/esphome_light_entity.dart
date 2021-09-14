@@ -8,6 +8,7 @@ import 'package:cbj_hub/infrastructure/devices/esphome/esphome_api/esphome_api.d
 import 'package:cbj_hub/infrastructure/devices/esphome/esphome_device_value_objects.dart';
 import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
 import 'package:dartz/dartz.dart';
+import 'package:cbj_hub/utils.dart';
 
 class ESPHomeLightEntity extends GenericLightDE {
   ESPHomeLightEntity({
@@ -64,14 +65,14 @@ class ESPHomeLightEntity extends GenericLightDE {
 
       if (actionToPreform == DeviceActions.on) {
         (await turnOnLight()).fold(
-            (l) => print('Error turning ESPHome light on'),
+            (l) => logger.e('Error turning ESPHome light on'),
             (r) => print('Light turn on success'));
       } else if (actionToPreform == DeviceActions.off) {
         (await turnOffLight()).fold(
-            (l) => print('Error turning ESPHome light off'),
+            (l) => logger.e('Error turning ESPHome light off'),
             (r) => print('Light turn off success'));
       } else {
-        print('actionToPreform is not set correctly ESPHome light');
+        logger.e('actionToPreform is not set correctly ESPHome light');
       }
     }
 

@@ -7,6 +7,7 @@ import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub
 import 'package:cbj_hub/infrastructure/generic_devices/abstract_device/device_entity_dto_abstract.dart';
 import 'package:cbj_hub/injection.dart';
 import 'package:grpc/grpc.dart';
+import 'package:cbj_hub/utils.dart';
 
 class RemotePipesClient {
   static ClientChannel? channel;
@@ -31,7 +32,7 @@ class RemotePipesClient {
                   allRemoteCommands:
                       DeviceHelper.convertDtoToJsonString(deviceEntityDto),
                 ))
-            .handleError((error) => print('Stream have error $error')),
+            .handleError((error) => logger.e('Stream have error $error')),
       );
 
       /// Trigger to send all devices from hub to app using the
@@ -41,7 +42,7 @@ class RemotePipesClient {
       /// All responses from the app->remote pipes going int the hub
       getIt<IAppCommunicationRepository>().getFromApp(response);
     } catch (e) {
-      print('Caught error: $e');
+      logger.e('Caught error: $e');
       await channel?.shutdown();
     }
   }

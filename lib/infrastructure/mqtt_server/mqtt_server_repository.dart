@@ -6,6 +6,7 @@ import 'package:injectable/injectable.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:mqtt_client/src/observable/src/records.dart';
+import 'package:cbj_hub/utils.dart';
 
 @LazySingleton(as: IMqttServerRepository)
 class MqttServerRepository extends IMqttServerRepository {
@@ -54,7 +55,7 @@ class MqttServerRepository extends IMqttServerRepository {
     try {
       await client.connect();
     } catch (e) {
-      print('Error: $e');
+      logger.e('Error: $e');
       client.disconnect();
     }
     client.subscribe('#', MqttQos.atLeastOnce);

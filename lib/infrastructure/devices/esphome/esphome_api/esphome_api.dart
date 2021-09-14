@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cbj_hub/infrastructure/gen/aioesphomeapi/protoc_as_dart/aioesphomeapi/api.pbserver.dart';
+import 'package:cbj_hub/utils.dart';
 
 class EspHomeApi {
   EspHomeApi(this.fSocket);
@@ -112,7 +113,7 @@ class EspHomeApi {
 
       // handle errors
       onError: (error) {
-        print(error);
+        logger.e(error);
         socket.destroy();
       },
 

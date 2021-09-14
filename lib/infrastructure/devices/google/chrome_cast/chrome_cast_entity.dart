@@ -10,6 +10,7 @@ import 'package:cbj_hub/domain/generic_devices/generic_smart_tv/generic_smart_tv
 import 'package:cbj_hub/infrastructure/devices/google/google_device_value_objects.dart';
 import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
 import 'package:dartz/dartz.dart';
+import 'package:cbj_hub/utils.dart';
 
 class ChromeCastEntity extends GenericSmartTvDE {
   ChromeCastEntity({
@@ -72,14 +73,14 @@ class ChromeCastEntity extends GenericSmartTvDE {
       if (actionToPreform.toString() != smartTvSwitchState!.getOrCrash()) {
         if (actionToPreform == DeviceActions.on) {
           (await turnOnLight()).fold(
-              (l) => print('Error turning chrome cast light on'),
+              (l) => logger.e('Error turning chrome cast light on'),
               (r) => print('Light turn on success'));
         } else if (actionToPreform == DeviceActions.off) {
           (await turnOffLight()).fold(
-              (l) => print('Error turning chrome cast light off'),
+              (l) => logger.e('Error turning chrome cast light off'),
               (r) => print('Light turn off success'));
         } else {
-          print('actionToPreform is not set correctly on Chrome Cast');
+          logger.e('actionToPreform is not set correctly on Chrome Cast');
         }
       }
     }

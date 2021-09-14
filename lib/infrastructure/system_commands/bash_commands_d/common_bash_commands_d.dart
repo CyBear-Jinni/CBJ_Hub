@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cbj_hub/infrastructure/system_commands/system_commands_base_class_d.dart';
+import 'package:cbj_hub/utils.dart';
 
 class CommonBashCommandsD implements SystemCommandsBaseClassD {
   @override
@@ -82,8 +83,8 @@ class CommonBashCommandsD implements SystemCommandsBaseClassD {
         etcReleaseFiles += File(releaseContent).readAsStringSync();
       }
     } catch (error) {
-      print('Error getting all files from /etc/that end with release');
-      print('error: $error');
+      logger.e('Error getting all files from /etc/that end with release');
+      logger.e('error: $error');
     }
     return etcReleaseFiles;
   }

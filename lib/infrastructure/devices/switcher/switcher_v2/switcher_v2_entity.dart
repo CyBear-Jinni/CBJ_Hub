@@ -10,6 +10,7 @@ import 'package:cbj_hub/infrastructure/devices/switcher/switcher_api/switcher_ap
 import 'package:cbj_hub/infrastructure/devices/switcher/switcher_device_value_objects.dart';
 import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
 import 'package:dartz/dartz.dart';
+import 'package:cbj_hub/utils.dart';
 
 class SwitcherV2Entity extends GenericBoilerDE {
   SwitcherV2Entity({
@@ -88,13 +89,13 @@ class SwitcherV2Entity extends GenericBoilerDE {
 
       if (actionToPreform.toString() != boilerSwitchState!.getOrCrash()) {
         if (actionToPreform == DeviceActions.on) {
-          (await turnOnBoiler()).fold((l) => print('Error turning boiler on'),
+          (await turnOnBoiler()).fold((l) => logger.e('Error turning boiler on'),
               (r) => print('Boiler turn on success'));
         } else if (actionToPreform == DeviceActions.off) {
-          (await turnOffBoiler()).fold((l) => print('Error turning boiler off'),
+          (await turnOffBoiler()).fold((l) => logger.e('Error turning boiler off'),
               (r) => print('Boiler turn off success'));
         } else {
-          print('actionToPreform is not set correctly on Switcher V2');
+          logger.e('actionToPreform is not set correctly on Switcher V2');
         }
       }
     }

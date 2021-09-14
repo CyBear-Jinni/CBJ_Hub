@@ -5,6 +5,7 @@ import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub
 import 'package:cbj_hub/infrastructure/generic_devices/abstract_device/device_entity_dto_abstract.dart';
 import 'package:cbj_hub/injection.dart';
 import 'package:grpc/service_api.dart';
+import 'package:cbj_hub/utils.dart';
 
 /// Server to get and send information to the app
 class HubAppServer extends CbjHubServiceBase {
@@ -30,9 +31,9 @@ class HubAppServer extends CbjHubServiceBase {
                 allRemoteCommands:
                     DeviceHelper.convertDtoToJsonString(deviceEntityDto),
               ))
-          .handleError((error) => print('Stream have error $error'));
+          .handleError((error) => logger.e('Stream have error $error'));
     } catch (e) {
-      print('Hub server error $e');
+      logger.e('Hub server error $e');
     }
   }
 

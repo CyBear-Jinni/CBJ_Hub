@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:crclib/crclib.dart';
+import 'package:cbj_hub/utils.dart';
 
 class SwitcherApiObject {
   SwitcherApiObject({
@@ -289,7 +290,7 @@ class SwitcherApiObject {
       return resultSession;
     } catch (error) {
       log = 'login failed due to an error $error';
-      print(log);
+      logger.e(log);
       pSession = 'B';
     }
     return pSession!;
@@ -319,7 +320,7 @@ class SwitcherApiObject {
       return resultSession;
     } catch (error) {
       log = 'login2 failed due to an error $error';
-      print(log);
+      logger.e(log);
       pSession = 'B';
     }
     return pSession!;
@@ -574,7 +575,7 @@ class SwitcherApiObject {
       return socket;
     } catch (e) {
       _socket = null;
-      print('Error connecting to socket for switcher device: $e');
+      logger.e('Error connecting to socket for switcher device: $e');
       rethrow;
     }
   }

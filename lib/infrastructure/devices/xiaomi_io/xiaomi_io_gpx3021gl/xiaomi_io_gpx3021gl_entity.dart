@@ -10,6 +10,8 @@ import 'package:cbj_hub/infrastructure/devices/xiaomi_io/xiaomi_io_device_value_
 import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:yeedart/yeedart.dart';
+import 'package:cbj_hub/utils.dart';
+
 
 class XiaomiIoGpx4021GlEntity extends GenericRgbwLightDE {
   XiaomiIoGpx4021GlEntity({
@@ -94,15 +96,15 @@ class XiaomiIoGpx4021GlEntity extends GenericRgbwLightDE {
       if (actionToPreform.toString() != lightSwitchState!.getOrCrash()) {
         if (actionToPreform == DeviceActions.on) {
           (await turnOnLight()).fold(
-              (l) => print('Error turning xiaomi_io light on'),
+              (l) => logger.e('Error turning xiaomi_io light on'),
               (r) => print('Light turn on success'));
         } else if (actionToPreform == DeviceActions.off) {
           (await turnOffLight()).fold(
-            (l) => print('Error turning xiaomi_io light off'),
+            (l) => logger.e('Error turning xiaomi_io light off'),
             (r) => print('Light turn off success'),
           );
         } else {
-          print('actionToPreform is not set correctly on XiaomiIo Gpx4021Gl');
+          logger.e('actionToPreform is not set correctly on XiaomiIo Gpx4021Gl');
         }
       }
     }

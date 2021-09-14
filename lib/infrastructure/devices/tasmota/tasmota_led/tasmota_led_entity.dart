@@ -9,6 +9,7 @@ import 'package:cbj_hub/infrastructure/devices/tasmota/tasmota_device_value_obje
 import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
 import 'package:cbj_hub/injection.dart';
 import 'package:dartz/dartz.dart';
+import 'package:cbj_hub/utils.dart';
 
 class TasmotaLedEntity extends GenericLightDE {
   TasmotaLedEntity({
@@ -61,14 +62,14 @@ class TasmotaLedEntity extends GenericLightDE {
 
       if (actionToPreform == DeviceActions.on) {
         (await turnOnLight()).fold(
-            (l) => print('Error turning tasmota light on'),
+            (l) => logger.e('Error turning tasmota light on'),
             (r) => print('Light turn on success'));
       } else if (actionToPreform == DeviceActions.off) {
         (await turnOffLight()).fold(
-            (l) => print('Error turning tasmota light off'),
+            (l) => logger.e('Error turning tasmota light off'),
             (r) => print('Light turn off success'));
       } else {
-        print('actionToPreform is not set correctly on Tasmota Led');
+        logger.e('actionToPreform is not set correctly on Tasmota Led');
       }
     }
 

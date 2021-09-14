@@ -10,6 +10,7 @@ import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 import 'package:multicast_dns/multicast_dns.dart';
 import 'package:yeedart/yeedart.dart';
+import 'package:cbj_hub/utils.dart';
 
 @singleton
 class YeelightConnectorConjector implements AbstractCompanyConnectorConjector {
@@ -49,7 +50,7 @@ class YeelightConnectorConjector implements AbstractCompanyConnectorConjector {
         }
         await Future.delayed(const Duration(minutes: 3));
       } catch (e) {
-        print('Error discover in yeelight $e');
+        logger.e('Error discover in yeelight $e');
         await Future.delayed(const Duration(seconds: 3));
       }
     }

@@ -12,6 +12,7 @@ import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub
 import 'package:collection/collection.dart';
 import 'package:dartz/dartz.dart';
 import 'package:yeedart/yeedart.dart';
+import 'package:cbj_hub/utils.dart';
 
 class Yeelight1SeEntity extends GenericRgbwLightDE {
   Yeelight1SeEntity({
@@ -94,16 +95,16 @@ class Yeelight1SeEntity extends GenericRgbwLightDE {
       if (actionToPreform.toString() != lightSwitchState!.getOrCrash()) {
         if (actionToPreform == DeviceActions.on) {
           (await turnOnLight()).fold(
-            (l) => print('Error turning yeelight light on'),
+            (l) => logger.e('Error turning yeelight light on'),
             (r) => print('Light turn on success'),
           );
         } else if (actionToPreform == DeviceActions.off) {
           (await turnOffLight()).fold(
-            (l) => print('Error turning yeelight light off'),
+            (l) => logger.e('Error turning yeelight light off'),
             (r) => print('Light turn off success'),
           );
         } else {
-          print('actionToPreform is not set correctly on Yeelight 1SE');
+          logger.e('actionToPreform is not set correctly on Yeelight 1SE');
         }
       }
     }
@@ -123,7 +124,7 @@ class Yeelight1SeEntity extends GenericRgbwLightDE {
         lightColorValueNewValue: newEntity.lightColorValue.getOrCrash(),
       ))
           .fold(
-        (l) => print('Error changing yeelight light color'),
+        (l) => logger.e('Error changing yeelight light color'),
         (r) => print('Light changed color successfully'),
       );
     }

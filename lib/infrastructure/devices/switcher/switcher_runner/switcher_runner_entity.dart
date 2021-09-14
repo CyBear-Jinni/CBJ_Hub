@@ -10,6 +10,7 @@ import 'package:cbj_hub/infrastructure/devices/switcher/switcher_api/switcher_ap
 import 'package:cbj_hub/infrastructure/devices/switcher/switcher_device_value_objects.dart';
 import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
 import 'package:dartz/dartz.dart';
+import 'package:cbj_hub/utils.dart';
 
 class SwitcherRunnerEntity extends GenericBlindsDE {
   SwitcherRunnerEntity({
@@ -92,17 +93,17 @@ class SwitcherRunnerEntity extends GenericBlindsDE {
 
       if (actionToPreform.toString() != blindsSwitchState!.getOrCrash()) {
         if (actionToPreform == DeviceActions.moveUp) {
-          (await moveUpBlinds()).fold((l) => print('Error turning blinds up'),
+          (await moveUpBlinds()).fold((l) => logger.e('Error turning blinds up'),
               (r) => print('Blinds up success'));
         } else if (actionToPreform == DeviceActions.stop) {
-          (await stopBlinds()).fold((l) => print('Error stopping blinds '),
+          (await stopBlinds()).fold((l) => logger.e('Error stopping blinds '),
               (r) => print('Blinds stop success'));
         } else if (actionToPreform == DeviceActions.moveDown) {
           (await moveDownBlinds()).fold(
-              (l) => print('Error turning blinds down'),
+              (l) => logger.e('Error turning blinds down'),
               (r) => print('Blinds down success'));
         } else {
-          print('actionToPreform is not set correctly on Switcher Runner');
+          logger.e('actionToPreform is not set correctly on Switcher Runner');
         }
       }
     }
