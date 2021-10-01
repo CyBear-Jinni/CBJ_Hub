@@ -10,6 +10,7 @@ on:
     branches: [ main, dev ]
   pull_request_target:
     branches: [ main, dev ]
+    types: [opened, synchronize, reopened, assigned]
 
 jobs:
   build:
