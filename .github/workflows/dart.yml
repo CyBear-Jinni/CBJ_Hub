@@ -17,18 +17,20 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+        
       - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
 
       - name: Install dependencies
         run: dart pub get
-      
+       
       - name: generate_all_files
         run: dart run build_runner build --delete-conflicting-outputs
       
       # Verify the use of 'dart format' on each commit.
-      - name: Verify formatting
-        run: dart format --output=none --set-exit-if-changed .
+      - name: Perform formatting
+        run: dart format .
 
       # Consider passing '--fatal-infos' for slightly stricter analysis.
       - name: Analyze project source
@@ -38,3 +40,11 @@ jobs:
       # package:test for this step to succeed.
       - name: Run tests
         run: dart test
+
+      # Perform the commit at the end to make sure tests above don't fail
+      - name: Commit formatting changes
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add .
+          git diff-index --quiet HEAD || (git commit -m 'Automatic formatting' && git push)
