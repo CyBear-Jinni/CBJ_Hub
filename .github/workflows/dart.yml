@@ -28,7 +28,14 @@ jobs:
       
       # Verify the use of 'dart format' on each commit.
       - name: Verify formatting
-        run: dart format --output=none --set-exit-if-changed .
+        run: dart format --output=none .
+
+      - name: Commit formatting
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git commit -am "Automatic formatting"
+          git push -u origin HEAD
 
       # Consider passing '--fatal-infos' for slightly stricter analysis.
       - name: Analyze project source

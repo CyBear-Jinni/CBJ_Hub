@@ -8,9 +8,9 @@ final getIt = GetIt.instance;
 late String currentEnv;
 
 @injectableInit
-Future<void> configureInjection(String environment) async {
-  currentEnv = environment;
-  $initGetIt(getIt, environment: environment);
+	Future<void> configureInjection(String environment) async {
+	currentEnv = environment;
+	$initGetIt(getIt, environment: environment);
 }
 
 abstract class Env {
