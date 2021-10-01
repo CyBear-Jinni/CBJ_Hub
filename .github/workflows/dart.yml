@@ -43,8 +43,8 @@ jobs:
         run: dart test
 
       # Perform the commit at the end to make sure tests above don't fail
-      if: "${{ github.event_name == 'pull_request_target' }}"
       - name: Commit formatting changes
+        if: "${{ github.event_name == 'pull_request_target' }}"
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
