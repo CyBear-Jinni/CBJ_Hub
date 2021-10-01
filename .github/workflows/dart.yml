@@ -44,7 +44,7 @@ jobs:
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          git remote set-url origin https://x-access-token:${{ secrets.SECRET }}@github.com/${{ github.repository }}
           git add .
           git diff-index --quiet HEAD || (git commit -m 'Automatic formatting' && git push)
           
