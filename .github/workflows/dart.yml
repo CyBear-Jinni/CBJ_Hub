@@ -30,7 +30,7 @@ jobs:
       
       # Verify the use of 'dart format' on each commit.
       - name: Perform formatting
-        run: dart format .
+        run: find . -name "*.dart" ! -path '*/gen/*' | tr '\n' ' ' | xargs dart format .
 
       # Consider passing '--fatal-infos' for slightly stricter analysis.
       - name: Analyze project source
