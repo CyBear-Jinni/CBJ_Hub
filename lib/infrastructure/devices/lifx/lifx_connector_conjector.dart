@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:cbj_hub/domain/generic_devices/abstract_device/core_failures.dart';
 import 'package:cbj_hub/domain/generic_devices/abstract_device/device_entity_abstract.dart';
 import 'package:cbj_hub/domain/vendors/lifx_login/generic_lifx_login_entity.dart';
-import 'package:cbj_hub/infrastructure/devices/companys_connector_conjector.dart';
+import 'package:cbj_hub/infrastructure/devices/companies_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/devices/lifx/lifx_helpers.dart';
 import 'package:cbj_hub/infrastructure/devices/lifx/lifx_white/lifx_white_entity.dart';
 import 'package:cbj_hub/infrastructure/generic_devices/abstract_device/abstract_company_connector_conjector.dart';
@@ -44,7 +44,7 @@ class LifxConnectorConjector implements AbstractCompanyConnectorConjector {
                 LifxHelpers.addDiscoverdDevice(lifxDevice);
 
             final DeviceEntityAbstract deviceToAdd =
-                CompanysConnectorConjector.addDiscoverdDeviceToHub(addDevice);
+                CompaniesConnectorConjector.addDiscoverdDeviceToHub(addDevice);
 
             final MapEntry<String, DeviceEntityAbstract> deviceAsEntry =
                 MapEntry(deviceToAdd.uniqueId.getOrCrash(), deviceToAdd);

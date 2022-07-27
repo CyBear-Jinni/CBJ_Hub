@@ -5,7 +5,7 @@ import 'package:cbj_hub/domain/mqtt_server/i_mqtt_server_repository.dart';
 import 'package:cbj_hub/domain/rooms/i_saved_rooms_repo.dart';
 import 'package:cbj_hub/domain/saved_devices/i_saved_devices_repo.dart';
 import 'package:cbj_hub/domain/scene/i_scene_cbj_repository.dart';
-import 'package:cbj_hub/infrastructure/devices/companys_connector_conjector.dart';
+import 'package:cbj_hub/infrastructure/devices/companies_connector_conjector.dart';
 import 'package:cbj_hub/injection.dart';
 
 class BootUp {
@@ -28,10 +28,12 @@ class BootUp {
     final Map<String, DeviceEntityAbstract> allDevices =
         await savedDevicesRepo.getAllDevices();
 
-    CompanysConnectorConjector.addAllDevicesToItsRepos(allDevices);
+    CompaniesConnectorConjector.addAllDevicesToItsRepos(allDevices);
 
-    CompanysConnectorConjector.searchAllMdnsDevicesAndSetThemUp();
-    CompanysConnectorConjector.searchPingableDevicesAndSetThemUpByHostName();
+    CompaniesConnectorConjector.searchAllMdnsDevicesAndSetThemUp();
+    // TODO: Uncomment that line when there is a need to find and add a
+    // TODO: device using a host name
+    // CompaniesConnectorConjector.searchPingableDevicesAndSetThemUpByHostName();
 
     getIt<IMqttServerRepository>();
 

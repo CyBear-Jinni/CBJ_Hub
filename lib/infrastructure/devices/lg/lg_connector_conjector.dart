@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:cbj_hub/domain/generic_devices/abstract_device/core_failures.dart';
 import 'package:cbj_hub/domain/generic_devices/abstract_device/device_entity_abstract.dart';
-import 'package:cbj_hub/infrastructure/devices/companys_connector_conjector.dart';
+import 'package:cbj_hub/infrastructure/devices/companies_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/devices/lg/lg_helpers.dart';
 import 'package:cbj_hub/infrastructure/devices/lg/lg_webos_tv/lg_webos_tv_entity.dart';
 import 'package:cbj_hub/infrastructure/generic_devices/abstract_device/abstract_company_connector_conjector.dart';
@@ -52,7 +52,7 @@ class LgConnectorConjector implements AbstractCompanyConnectorConjector {
 
     for (final DeviceEntityAbstract entityAsDevice in lgDevice) {
       final DeviceEntityAbstract deviceToAdd =
-          CompanysConnectorConjector.addDiscoverdDeviceToHub(entityAsDevice);
+          CompaniesConnectorConjector.addDiscoverdDeviceToHub(entityAsDevice);
 
       final MapEntry<String, DeviceEntityAbstract> deviceAsEntry =
           MapEntry(deviceToAdd.uniqueId.getOrCrash(), deviceToAdd);

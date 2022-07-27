@@ -5,7 +5,7 @@ import 'package:cbj_hub/domain/generic_devices/abstract_device/device_entity_abs
 import 'package:cbj_hub/domain/generic_devices/abstract_device/value_objects_core.dart';
 import 'package:cbj_hub/domain/generic_devices/generic_light_device/generic_light_value_objects.dart';
 import 'package:cbj_hub/domain/mqtt_server/i_mqtt_server_repository.dart';
-import 'package:cbj_hub/infrastructure/devices/companys_connector_conjector.dart';
+import 'package:cbj_hub/infrastructure/devices/companies_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/devices/tasmota/tasmota_mqtt/tasmota_mqtt_device_value_objects.dart';
 import 'package:cbj_hub/infrastructure/devices/tasmota/tasmota_mqtt/tasmota_mqtt_led/tasmota_mqtt_led_entity.dart';
 import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
@@ -57,7 +57,7 @@ class TasmotaMqttConnectorConjector
       }
 
       final DeviceEntityAbstract deviceToAdd =
-          CompanysConnectorConjector.addDiscoverdDeviceToHub(addDevice);
+          CompaniesConnectorConjector.addDiscoverdDeviceToHub(addDevice);
 
       final MapEntry<String, DeviceEntityAbstract> deviceAsEntry =
           MapEntry(deviceToAdd.uniqueId.getOrCrash(), deviceToAdd);

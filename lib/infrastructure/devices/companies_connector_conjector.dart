@@ -20,7 +20,7 @@ import 'package:cbj_hub/injection.dart';
 import 'package:cbj_hub/utils.dart';
 import 'package:network_tools/network_tools.dart';
 
-class CompanysConnectorConjector {
+class CompaniesConnectorConjector {
   static void updateAllDevicesReposWithDeviceChanges(
     Stream<dynamic> allDevices,
   ) {
@@ -238,8 +238,10 @@ class CompanysConnectorConjector {
         activeHost: activeHost,
         hostName: internetAddress.host,
       );
+    } else if (deviceHostNameLowerCase.contains('xiaomi') ||
+        deviceHostNameLowerCase.contains('yeelink')) {
     } else {
-      // logger.i('Internet Name ${internetAddress.host}');
+      logger.i('Internet Name ${internetAddress.host}');
     }
   }
 }

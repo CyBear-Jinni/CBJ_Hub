@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:cbj_hub/domain/generic_devices/abstract_device/core_failures.dart';
 import 'package:cbj_hub/domain/generic_devices/abstract_device/device_entity_abstract.dart';
 import 'package:cbj_hub/domain/vendors/tuya_login/generic_tuya_login_entity.dart';
-import 'package:cbj_hub/infrastructure/devices/companys_connector_conjector.dart';
+import 'package:cbj_hub/infrastructure/devices/companies_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/devices/tuya_smart/tuya_smart_helpers.dart';
 import 'package:cbj_hub/infrastructure/devices/tuya_smart/tuya_smart_jbt_a70_rgbcw_wf/tuya_smart_jbt_a70_rgbcw_wf_entity.dart';
 import 'package:cbj_hub/infrastructure/devices/tuya_smart/tuya_smart_plug/tuya_smart_switch_entity.dart';
@@ -99,7 +99,7 @@ class TuyaSmartConnectorConjector implements AbstractCompanyConnectorConjector {
             );
 
             final DeviceEntityAbstract deviceToAdd =
-                CompanysConnectorConjector.addDiscoverdDeviceToHub(addDevice);
+                CompaniesConnectorConjector.addDiscoverdDeviceToHub(addDevice);
 
             final MapEntry<String, DeviceEntityAbstract> deviceAsEntry =
                 MapEntry(deviceToAdd.uniqueId.getOrCrash(), deviceToAdd);

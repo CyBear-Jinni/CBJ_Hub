@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:cbj_hub/domain/generic_devices/abstract_device/core_failures.dart';
 import 'package:cbj_hub/domain/generic_devices/abstract_device/device_entity_abstract.dart';
-import 'package:cbj_hub/infrastructure/devices/companys_connector_conjector.dart';
+import 'package:cbj_hub/infrastructure/devices/companies_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/devices/yeelight/yeelight_1se/yeelight_1se_entity.dart';
 import 'package:cbj_hub/infrastructure/devices/yeelight/yeelight_helpers.dart';
 import 'package:cbj_hub/infrastructure/generic_devices/abstract_device/abstract_company_connector_conjector.dart';
@@ -39,7 +39,7 @@ class YeelightConnectorConjector implements AbstractCompanyConnectorConjector {
                 YeelightHelpers.addDiscoverdDevice(yeelightDevice);
 
             final DeviceEntityAbstract deviceToAdd =
-                CompanysConnectorConjector.addDiscoverdDeviceToHub(addDevice);
+                CompaniesConnectorConjector.addDiscoverdDeviceToHub(addDevice);
 
             final MapEntry<String, DeviceEntityAbstract> deviceAsEntry =
                 MapEntry(deviceToAdd.uniqueId.getOrCrash(), deviceToAdd);

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:cbj_hub/domain/generic_devices/abstract_device/core_failures.dart';
 import 'package:cbj_hub/domain/generic_devices/abstract_device/device_entity_abstract.dart';
-import 'package:cbj_hub/infrastructure/devices/companys_connector_conjector.dart';
+import 'package:cbj_hub/infrastructure/devices/companies_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/devices/switcher/switcher_api/switcher_api_object.dart';
 import 'package:cbj_hub/infrastructure/devices/switcher/switcher_api/switcher_discover.dart';
 import 'package:cbj_hub/infrastructure/devices/switcher/switcher_helpers.dart';
@@ -57,7 +57,7 @@ class SwitcherConnectorConjector implements AbstractCompanyConnectorConjector {
     }
 
     final DeviceEntityAbstract deviceToAdd =
-        CompanysConnectorConjector.addDiscoverdDeviceToHub(addDevice);
+        CompaniesConnectorConjector.addDiscoverdDeviceToHub(addDevice);
 
     final MapEntry<String, DeviceEntityAbstract> deviceAsEntry =
         MapEntry(deviceToAdd.uniqueId.getOrCrash(), deviceToAdd);

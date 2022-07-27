@@ -19,7 +19,7 @@ import 'package:cbj_hub/domain/vendors/tuya_login/generic_tuya_login_entity.dart
 import 'package:cbj_hub/domain/vendors/tuya_login/generic_tuya_login_value_objects.dart';
 import 'package:cbj_hub/infrastructure/bindings/binding_cbj_dtos.dart';
 import 'package:cbj_hub/infrastructure/core/singleton/my_singleton.dart';
-import 'package:cbj_hub/infrastructure/devices/companys_connector_conjector.dart';
+import 'package:cbj_hub/infrastructure/devices/companies_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/devices/device_helper/device_helper.dart';
 import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
 import 'package:cbj_hub/infrastructure/local_db/hive_objects/bindings_hive_model.dart';
@@ -80,7 +80,7 @@ class HiveRepository extends ILocalDbRepository {
       vendorBoxName: tuyaVendorCredentialsBoxName,
     ))
         .fold((l) {}, (r) {
-      CompanysConnectorConjector.setVendorLoginCredentials(r);
+      CompaniesConnectorConjector.setVendorLoginCredentials(r);
 
       logger.i(
         'Tuya login credentials user name ${r.tuyaUserName.getOrCrash()} found',
@@ -90,7 +90,7 @@ class HiveRepository extends ILocalDbRepository {
       vendorBoxName: smartLifeVendorCredentialsBoxName,
     ))
         .fold((l) {}, (r) {
-      CompanysConnectorConjector.setVendorLoginCredentials(r);
+      CompaniesConnectorConjector.setVendorLoginCredentials(r);
 
       logger.i(
         'Smart Life login credentials user name ${r.tuyaUserName.getOrCrash()} found',
@@ -100,7 +100,7 @@ class HiveRepository extends ILocalDbRepository {
       vendorBoxName: jinvooSmartVendorCredentialsBoxName,
     ))
         .fold((l) {}, (r) {
-      CompanysConnectorConjector.setVendorLoginCredentials(r);
+      CompaniesConnectorConjector.setVendorLoginCredentials(r);
 
       logger.i(
         'Jinvoo Smart login credentials user name ${r.tuyaUserName.getOrCrash()} found',
