@@ -3,7 +3,7 @@
 //  source: aioesphomeapi/api.proto
 //
 // @dart = 2.12
-// ignore_for_file: annotate_overrides,camel_case_types,unnecessary_const,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name,return_of_invalid_type,unnecessary_this,prefer_final_fields
+// ignore_for_file: annotate_overrides,camel_case_types,constant_identifier_names,directives_ordering,library_prefixes,non_constant_identifier_names,prefer_final_fields,return_of_invalid_type,unnecessary_const,unnecessary_import,unnecessary_this,unused_import,unused_shown_name
 
 import 'dart:async' as $async;
 import 'dart:core' as $core;
@@ -4098,16 +4098,16 @@ class ListEntitiesClimateResponse extends $pb.GeneratedMessage {
     ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'uniqueId')
     ..aOB(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'supportsCurrentTemperature')
     ..aOB(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'supportsTwoPointTargetTemperature')
-    ..pc<ClimateMode>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'supportedModes', $pb.PbFieldType.PE, valueOf: ClimateMode.valueOf, enumValues: ClimateMode.values)
+    ..pc<ClimateMode>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'supportedModes', $pb.PbFieldType.KE, valueOf: ClimateMode.valueOf, enumValues: ClimateMode.values, defaultEnumValue: ClimateMode.CLIMATE_MODE_OFF)
     ..a<$core.double>(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'visualMinTemperature', $pb.PbFieldType.OF)
     ..a<$core.double>(9, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'visualMaxTemperature', $pb.PbFieldType.OF)
     ..a<$core.double>(10, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'visualTemperatureStep', $pb.PbFieldType.OF)
     ..aOB(11, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'legacySupportsAway')
     ..aOB(12, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'supportsAction')
-    ..pc<ClimateFanMode>(13, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'supportedFanModes', $pb.PbFieldType.PE, valueOf: ClimateFanMode.valueOf, enumValues: ClimateFanMode.values)
-    ..pc<ClimateSwingMode>(14, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'supportedSwingModes', $pb.PbFieldType.PE, valueOf: ClimateSwingMode.valueOf, enumValues: ClimateSwingMode.values)
+    ..pc<ClimateFanMode>(13, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'supportedFanModes', $pb.PbFieldType.KE, valueOf: ClimateFanMode.valueOf, enumValues: ClimateFanMode.values, defaultEnumValue: ClimateFanMode.CLIMATE_FAN_ON)
+    ..pc<ClimateSwingMode>(14, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'supportedSwingModes', $pb.PbFieldType.KE, valueOf: ClimateSwingMode.valueOf, enumValues: ClimateSwingMode.values, defaultEnumValue: ClimateSwingMode.CLIMATE_SWING_OFF)
     ..pPS(15, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'supportedCustomFanModes')
-    ..pc<ClimatePreset>(16, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'supportedPresets', $pb.PbFieldType.PE, valueOf: ClimatePreset.valueOf, enumValues: ClimatePreset.values)
+    ..pc<ClimatePreset>(16, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'supportedPresets', $pb.PbFieldType.KE, valueOf: ClimatePreset.valueOf, enumValues: ClimatePreset.values, defaultEnumValue: ClimatePreset.CLIMATE_PRESET_NONE)
     ..pPS(17, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'supportedCustomPresets')
     ..hasRequiredFields = false
   ;
