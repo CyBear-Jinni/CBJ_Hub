@@ -128,7 +128,7 @@ class HiveRepository extends ILocalDbRepository {
           roomTypes: RoomTypes(roomHive.roomTypes),
           roomDevicesId: RoomDevicesId(roomHive.roomDevicesId),
           roomScenesId: RoomScenesId(roomHive.roomScenesId),
-          roomRoutinesId: RoomRoutinesId(roomHive.roomScenesId),
+          roomRoutinesId: RoomRoutinesId(roomHive.roomRoutinesId),
           roomBindingsId: RoomBindingsId(roomHive.roomBindingsId),
           roomMostUsedBy: RoomMostUsedBy(roomHive.roomMostUsedBy),
           roomPermissions: RoomPermissions(roomHive.roomPermissions),
@@ -339,6 +339,7 @@ class HiveRepository extends ILocalDbRepository {
           ..roomDevicesId = roomEntityDtos.roomDevicesId
           ..roomScenesId = roomEntityDtos.roomScenesId
           ..roomRoutinesId = roomEntityDtos.roomRoutinesId
+          ..roomBindingsId = roomEntityDtos.roomBindingsId
           ..roomMostUsedBy = roomEntityDtos.roomMostUsedBy
           ..roomPermissions = roomEntityDtos.roomPermissions
           ..roomTypes = roomEntityDtos.roomTypes;

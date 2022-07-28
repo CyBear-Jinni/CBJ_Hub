@@ -79,8 +79,12 @@ abstract class RoomEntity implements _$RoomEntity {
     }
   }
 
-  void deleteIdIfExist(String id) {
-    roomDevicesId.getOrCrash().removeWhere((element) => element == id);
+  /// Return new RoomDevicesId object without id if it exist in roomDevicesId
+  RoomDevicesId deleteIdIfExist(String id) {
+    final List<String> tempList = List.from(roomDevicesId.getOrCrash());
+    tempList.removeWhere((element) => element == id);
+
+    return RoomDevicesId(tempList);
   }
 
   Option<RoomFailure<dynamic>> get failureOption {

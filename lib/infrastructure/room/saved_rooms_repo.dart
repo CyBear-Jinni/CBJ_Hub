@@ -167,7 +167,15 @@ class SavedRoomsRepo extends ISavedRoomsRepo {
     if (_allRooms[roomId] == null) {
       _allRooms.addEntries([MapEntry(roomId, roomEntity)]);
     } else {
-      _allRooms[roomId] = roomEntity;
+      final RoomEntity roomEntityCombinedDevices = roomEntity.copyWith(
+        roomDevicesId: RoomDevicesId(
+          combineNoDuplicateListOfString(
+            _allRooms[roomId]!.roomDevicesId.getOrCrash(),
+            roomEntity.roomDevicesId.getOrCrash(),
+          ),
+        ),
+      );
+      _allRooms[roomId] = roomEntityCombinedDevices;
     }
     await getIt<ISavedDevicesRepo>().saveAndActivateSmartDevicesToDb();
     return getIt<ILocalDbRepository>().saveRoomsToDb(
@@ -196,7 +204,9 @@ class SavedRoomsRepo extends ISavedRoomsRepo {
 
         /// If device id exist in other room than delete it from that room
         if (indexOfDeviceId != -1) {
-          roomEntityTemp.deleteIdIfExist(roomIdTemp);
+          roomEntityTemp.copyWith(
+            roomDevicesId: roomEntityTemp.deleteIdIfExist(roomIdTemp),
+          );
 
           devicesIdInTheRoom.removeAt(indexOfDeviceId);
           if (devicesIdInTheRoom.isEmpty) {
@@ -206,5 +216,15 @@ class SavedRoomsRepo extends ISavedRoomsRepo {
         }
       }
     }
+  }
+
+  List<String> combineNoDuplicateListOfString(
+    List<String> devicesId,
+    List<String> newDevicesId,
+  ) {
+    final HashSet<String> hashSetDevicesId = HashSet<String>();
+    hashSetDevicesId.addAll(devicesId);
+    hashSetDevicesId.addAll(newDevicesId);
+    return List.from(hashSetDevicesId);
   }
 }
