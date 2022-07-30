@@ -51,7 +51,7 @@ dependencies:
   #  network_tools: ^1.0.8
   network_tools:
     git:
-      ref: combine_activehost_and_openport
+      ref: dev
       url: https://github.com/guyluz11/network_tools.git
       path: network_tools
   # Provides runtime support for a Dart implementation of protobufs.
