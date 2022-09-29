@@ -33,13 +33,13 @@ dependencies:
   # Convenient code generator for get_it
   injectable: ^1.5.3
   # Utility library that checks for an Active Internet connection
-  internet_connection_checker: ^0.0.1+4
+  internet_connection_checker: ^1.0.0+1
   # Defines the annotations used by json_serializable to create code for JSON serialization and deserialization.
   json_annotation: ^4.6.0
   # Dart Build System builders for handling JSON.
   json_serializable: ^6.3.1
   # Port of Kotlin's Kotlin Standard library for Dart/Flutter projects
-  kt_dart: ^0.10.0
+  kt_dart: ^1.0.0
   # Implementation of the LIFX HTTP API
   lifx_http_api: ^0.0.13
   # Small, easy to use and extensible logger which prints beautiful logs.
