@@ -88,7 +88,7 @@ _i1.GetIt $initGetIt(
   gh.singleton<_i29.SonoffDiyConnectorConjector>(
       _i29.SonoffDiyConnectorConjector());
   gh.singleton<_i30.SwitcherConnectorConjector>(
-      _i30.SwitcherConnectorConjector());
+      _i30.getIt<SwitcherConnectorConjector>());
   gh.singleton<_i31.TasmotaIpConnectorConjector>(
       _i31.TasmotaIpConnectorConjector());
   gh.singleton<_i32.TasmotaMqttConnectorConjector>(

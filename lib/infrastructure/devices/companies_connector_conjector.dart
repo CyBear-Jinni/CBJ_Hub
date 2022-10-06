@@ -41,7 +41,7 @@ class CompaniesConnectorConjector {
               .manageHubRequestsForDevice(deviceEntityAbstract);
         } else if (deviceVendor ==
             VendorsAndServices.switcherSmartHome.toString()) {
-          SwitcherConnectorConjector()
+          getIt<SwitcherConnectorConjector>()
               .manageHubRequestsForDevice(deviceEntityAbstract);
         } else if (deviceVendor == VendorsAndServices.google.toString()) {
           GoogleConnectorConjector()

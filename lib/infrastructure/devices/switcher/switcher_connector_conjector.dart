@@ -18,7 +18,7 @@ import 'package:injectable/injectable.dart';
 
 @singleton
 class SwitcherConnectorConjector implements AbstractCompanyConnectorConjector {
-  SwitcherConnectorConjector() {
+  getIt<SwitcherConnectorConjector>() {
     _discoverNewDevices();
   }
 
