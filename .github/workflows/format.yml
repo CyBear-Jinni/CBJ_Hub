@@ -2,6 +2,8 @@ name: Main Branch CI
 
 on:
   push:
+    paths-ignore:
+      - '**/*.injection.config.dart'
     branches:
       - main
   pull_request:
