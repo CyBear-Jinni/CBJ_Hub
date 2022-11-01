@@ -83,8 +83,9 @@ class CommonBashCommandsD implements SystemCommandsBaseClassD {
         etcReleaseFiles += File(releaseContent).readAsStringSync();
       }
     } catch (error) {
-      logger
-          .e('Error getting all files from /etc/that end with release\n$error');
+      logger.e(
+        'Error getting all files from /etc/ that end with release\n$error',
+      );
     }
     return etcReleaseFiles;
   }

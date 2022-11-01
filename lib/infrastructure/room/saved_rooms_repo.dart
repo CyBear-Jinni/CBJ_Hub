@@ -174,7 +174,15 @@ class SavedRoomsRepo extends ISavedRoomsRepo {
         RoomUniqueId.discoveredRoomId().getOrCrash();
 
     if (_allRooms[discoveredRoomId] == null) {
-      _allRooms.addEntries([MapEntry(discoveredRoomId, RoomEntity.empty())]);
+      _allRooms.addEntries([
+        MapEntry(
+          discoveredRoomId,
+          RoomEntity.empty().copyWith(
+            uniqueId: RoomUniqueId.fromUniqueString(discoveredRoomId),
+            defaultName: RoomDefaultName.discoveredRoomName(),
+          ),
+        )
+      ]);
     } else {
       _allRooms[discoveredRoomId]!
           .addDeviceId(deviceEntity.uniqueId.getOrCrash());
@@ -191,7 +199,15 @@ class SavedRoomsRepo extends ISavedRoomsRepo {
         RoomUniqueId.discoveredRoomId().getOrCrash();
 
     if (_allRooms[discoveredRoomId] == null) {
-      _allRooms.addEntries([MapEntry(discoveredRoomId, RoomEntity.empty())]);
+      _allRooms.addEntries([
+        MapEntry(
+          discoveredRoomId,
+          RoomEntity.empty().copyWith(
+            uniqueId: RoomUniqueId.fromUniqueString(discoveredRoomId),
+            defaultName: RoomDefaultName.discoveredRoomName(),
+          ),
+        )
+      ]);
     }
     _allRooms[discoveredRoomId]!
         .addSceneId(sceneCbjEntity.uniqueId.getOrCrash());
@@ -207,7 +223,15 @@ class SavedRoomsRepo extends ISavedRoomsRepo {
         RoomUniqueId.discoveredRoomId().getOrCrash();
 
     if (_allRooms[discoveredRoomId] == null) {
-      _allRooms.addEntries([MapEntry(discoveredRoomId, RoomEntity.empty())]);
+      _allRooms.addEntries([
+        MapEntry(
+          discoveredRoomId,
+          RoomEntity.empty().copyWith(
+            uniqueId: RoomUniqueId.fromUniqueString(discoveredRoomId),
+            defaultName: RoomDefaultName.discoveredRoomName(),
+          ),
+        )
+      ]);
     }
     _allRooms[discoveredRoomId]!
         .addRoutineId(routineCbjEntity.uniqueId.getOrCrash());
@@ -223,7 +247,15 @@ class SavedRoomsRepo extends ISavedRoomsRepo {
         RoomUniqueId.discoveredRoomId().getOrCrash();
 
     if (_allRooms[discoveredRoomId] == null) {
-      _allRooms.addEntries([MapEntry(discoveredRoomId, RoomEntity.empty())]);
+      _allRooms.addEntries([
+        MapEntry(
+          discoveredRoomId,
+          RoomEntity.empty().copyWith(
+            uniqueId: RoomUniqueId.fromUniqueString(discoveredRoomId),
+            defaultName: RoomDefaultName.discoveredRoomName(),
+          ),
+        )
+      ]);
     }
     _allRooms[discoveredRoomId]!
         .addBindingId(bindingCbjEntity.uniqueId.getOrCrash());

@@ -30,7 +30,7 @@ abstract class RoomEntity implements _$RoomEntity {
 
   factory RoomEntity.empty() => RoomEntity(
         uniqueId: RoomUniqueId(),
-        defaultName: RoomDefaultName(''),
+        defaultName: RoomDefaultName('Empty Room Name'),
         background: RoomBackground(
           'https://live.staticflickr.com/5220/5486044345_f67abff3e9_h.jpg',
         ),
