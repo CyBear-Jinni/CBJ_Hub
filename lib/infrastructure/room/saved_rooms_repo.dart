@@ -31,8 +31,17 @@ class SavedRoomsRepo extends ISavedRoomsRepo {
 
   Future<void> setUpAllFromDb() async {
     getIt<ILocalDbRepository>().getRoomsFromDb().then((value) {
-      value.fold((l) => null, (r) {
-        for (final element in r) {
+      value.fold((l) => null, (rooms) {
+        /// Gets all rooms from db, if there are non it will create and return
+        /// only a discovered room
+        if (rooms.isEmpty) {
+          final RoomEntity discoveredRoom = RoomEntity.empty().copyWith(
+            uniqueId: RoomUniqueId.discoveredRoomId(),
+            defaultName: RoomDefaultName.discoveredRoomName(),
+          );
+          rooms.add(discoveredRoom);
+        }
+        for (final element in rooms) {
           addOrUpdateRoom(element);
         }
       });

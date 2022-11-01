@@ -37,27 +37,28 @@ class CbjDevicesHelpers {
 
       if (deviceType == CbjDeviceTypes.smartComputer) {
         entityAbstract = CbjSmartComputerEntity(
-            uniqueId: CoreUniqueId(),
-            vendorUniqueId: VendorUniqueId.fromUniqueString(deviceId),
-            deviceVendor: DeviceVendor(
-              VendorsAndServices.cbjDevices.toString(),
-            ),
-            defaultName: DeviceDefaultName(
-              defaultName,
-            ),
-            deviceStateGRPC: DeviceState(deviceStateGrpc.toString()),
-            stateMassage: DeviceStateMassage(deviceStateMassage),
-            senderDeviceOs: DeviceSenderDeviceOs(deviceOs),
-            senderDeviceModel: DeviceSenderDeviceModel(deviceModel),
-            senderId: DeviceSenderId.fromUniqueString(deviceSenderId),
-            compUuid: DeviceCompUuid(deviceCompUuid),
-            smartComputerSuspendState: GenericSmartComputerSuspendState(
-              DeviceActions.itIsFalse.toString(),
-            ),
-            smartComputerShutDownState: GenericSmartComputerShutdownState(
-              DeviceActions.itIsFalse.toString(),
-            ),
-            lastKnownIp: DeviceLastKnownIp(deviceAddress));
+          uniqueId: CoreUniqueId(),
+          vendorUniqueId: VendorUniqueId.fromUniqueString(deviceId),
+          deviceVendor: DeviceVendor(
+            VendorsAndServices.cbjDevices.toString(),
+          ),
+          defaultName: DeviceDefaultName(
+            defaultName,
+          ),
+          deviceStateGRPC: DeviceState(deviceStateGrpc.toString()),
+          stateMassage: DeviceStateMassage(deviceStateMassage),
+          senderDeviceOs: DeviceSenderDeviceOs(deviceOs),
+          senderDeviceModel: DeviceSenderDeviceModel(deviceModel),
+          senderId: DeviceSenderId.fromUniqueString(deviceSenderId),
+          compUuid: DeviceCompUuid(deviceCompUuid),
+          smartComputerSuspendState: GenericSmartComputerSuspendState(
+            DeviceActions.itIsFalse.toString(),
+          ),
+          smartComputerShutDownState: GenericSmartComputerShutdownState(
+            DeviceActions.itIsFalse.toString(),
+          ),
+          lastKnownIp: DeviceLastKnownIp(deviceAddress),
+        );
       } else {
         logger.w('Cbj Smart Device type is not supported ${deviceType.name}');
         continue;

@@ -63,7 +63,8 @@ class SceneCbjRepository implements ISceneCbjRepository {
 
   @override
   Future<Either<SceneCbjFailure, String>> addNewScene(
-      SceneCbjEntity sceneCbj) async {
+    SceneCbjEntity sceneCbj,
+  ) async {
     SceneCbjEntity tempSceneCbj = sceneCbj;
 
     final SceneCbjEntity? existingScene =

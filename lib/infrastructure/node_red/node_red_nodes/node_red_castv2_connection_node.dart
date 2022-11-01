@@ -4,9 +4,9 @@ import 'package:cbj_hub/infrastructure/node_red/node_red_nodes/node_red_visual_n
 /// https://nodered.org/docs/user-guide/writing-castv2s
 class NodeRedCastV2ConnectionNode extends NodeRedVisualNodeAbstract {
   NodeRedCastV2ConnectionNode({
+    required this.host,
     super.wires,
     super.name,
-    required this.host,
   }) : super(
           type: 'castv2-connection',
         );

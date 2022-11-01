@@ -195,6 +195,9 @@ class WorkRoomAreaAction {
       case DeviceTypes.washingMachine:
         // TODO: Handle this case.
         break;
+      case DeviceTypes.smartComputer:
+        // TODO: Handle this case.
+        break;
     }
     return right(actionsList);
   }

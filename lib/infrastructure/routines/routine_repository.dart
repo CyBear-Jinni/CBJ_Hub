@@ -48,7 +48,8 @@ class RoutineCbjRepository implements IRoutineCbjRepository {
 
   @override
   Future<Either<RoutineCbjFailure, Unit>> addNewRoutine(
-      RoutineCbjEntity routineCbj) async {
+    RoutineCbjEntity routineCbj,
+  ) async {
     RoutineCbjEntity tempRoutineCbj = routineCbj;
 
     /// Check if routine already exist

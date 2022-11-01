@@ -4,9 +4,9 @@ import 'package:cbj_hub/infrastructure/node_red/node_red_nodes/node_red_visual_n
 /// https://nodered.org/docs/user-guide/writing-castv2s
 class NodeRedCastV2SenderNode extends NodeRedVisualNodeAbstract {
   NodeRedCastV2SenderNode({
+    required this.connectionId,
     super.wires,
     super.name,
-    required this.connectionId,
   }) : super(
           type: 'castv2-sender',
         );

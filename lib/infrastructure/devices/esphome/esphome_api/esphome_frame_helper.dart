@@ -30,11 +30,11 @@ abstract class APIFrameHelper {
 /// aioesphomeapi:
 /// cName = APIPlaintextFrameHelper
 class EspApiPlaintextFrameHelper extends APIFrameHelper {
-  dynamic _reader;
-  dynamic _writer;
-  dynamic _write_lock;
-  dynamic _read_lock;
-  dynamic _closed_event;
+  dynamic reader;
+  dynamic writer;
+  dynamic write_lock;
+  dynamic read_lock;
+  dynamic closed_event;
 
   @override
   Future<void> close() {

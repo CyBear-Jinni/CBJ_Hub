@@ -26,11 +26,11 @@ class ChromeCastEntity extends GenericSmartTvDE {
     required super.compUuid,
     required super.powerConsumption,
     required super.smartTvSwitchState,
+    required this.googlePort,
     super.openUrl,
     super.pausePlayState,
     super.skip,
     super.volume,
-    required this.googlePort,
     this.deviceMdnsName,
     this.lastKnownIp,
   }) : super(

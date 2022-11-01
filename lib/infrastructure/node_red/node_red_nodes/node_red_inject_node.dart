@@ -5,12 +5,12 @@ import 'package:cbj_hub/utils.dart';
 ///
 class NodeRedInjectAtASpecificTimeNode extends NodeRedVisualNodeAbstract {
   NodeRedInjectAtASpecificTimeNode({
-    super.tempId,
-    super.name,
-    super.wires,
     required this.daysToRepeat,
     required this.hourToRepeat,
     required this.minutesToRepeat,
+    super.tempId,
+    super.name,
+    super.wires,
   }) : super(
           type: 'inject',
         );

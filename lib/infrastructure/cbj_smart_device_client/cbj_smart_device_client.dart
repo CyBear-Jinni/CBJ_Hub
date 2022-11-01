@@ -19,7 +19,7 @@ class CbjSmartDeviceClient {
 
   /// Port to connect to the cbj hub, will change according to the current
   /// running environment
-  static late int smartDevicePort = 50054;
+  static int smartDevicePort = 50054;
   static ClientChannel? channel;
   static CbjSmartDeviceConnectionsClient? smartDeviceClient;
 

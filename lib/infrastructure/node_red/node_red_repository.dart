@@ -12,8 +12,6 @@ import 'package:injectable/injectable.dart';
 /// Control Node-RED, create scenes and more
 @LazySingleton(as: INodeRedRepository)
 class NodeRedRepository extends INodeRedRepository {
-  NodeRedRepository() {}
-
   static NodeRedAPI nodeRedApi = NodeRedAPI();
 
   // /// List of all the scenes JSONs in Node-RED
