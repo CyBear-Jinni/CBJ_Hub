@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cbj_hub/domain/app_communication/i_app_communication_repository.dart';
 import 'package:cbj_hub/domain/binding/binding_cbj_entity.dart';
+import 'package:cbj_hub/domain/binding/i_binding_cbj_repository.dart';
 import 'package:cbj_hub/domain/binding/value_objects_routine_cbj.dart';
 import 'package:cbj_hub/domain/generic_devices/abstract_device/device_entity_abstract.dart';
 import 'package:cbj_hub/domain/generic_devices/abstract_device/value_objects_core.dart';
@@ -9,8 +10,12 @@ import 'package:cbj_hub/domain/local_db/i_local_db_repository.dart';
 import 'package:cbj_hub/domain/local_db/local_db_failures.dart';
 import 'package:cbj_hub/domain/room/room_entity.dart';
 import 'package:cbj_hub/domain/room/value_objects_room.dart';
+import 'package:cbj_hub/domain/rooms/i_saved_rooms_repo.dart';
+import 'package:cbj_hub/domain/routine/i_routine_cbj_repository.dart';
 import 'package:cbj_hub/domain/routine/routine_cbj_entity.dart';
 import 'package:cbj_hub/domain/routine/value_objects_routine_cbj.dart';
+import 'package:cbj_hub/domain/saved_devices/i_saved_devices_repo.dart';
+import 'package:cbj_hub/domain/scene/i_scene_cbj_repository.dart';
 import 'package:cbj_hub/domain/scene/scene_cbj_entity.dart';
 import 'package:cbj_hub/domain/scene/value_objects_scene_cbj.dart';
 import 'package:cbj_hub/domain/vendors/login_abstract/login_entity_abstract.dart';
@@ -125,6 +130,13 @@ class IsarRepository extends ILocalDbRepository {
         'Jinvoo Smart login credentials user name ${r.tuyaUserName.getOrCrash()} found',
       );
     });
+
+    // Rooms need to stay first one
+    await getIt<ISavedRoomsRepo>().setUpAllFromDb();
+    await getIt<ISceneCbjRepository>().setUpAllFromDb();
+    await getIt<IRoutineCbjRepository>().setUpAllFromDb();
+    await getIt<IBindingCbjRepository>().setUpAllFromDb();
+    await getIt<ISavedDevicesRepo>().setUpAllFromDb();
   }
 
   @override

@@ -4,6 +4,9 @@ import 'package:cbj_hub/domain/routine/routine_cbj_failures.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class IRoutineCbjRepository {
+  /// Setting up all routines from db
+  Future<void> setUpAllFromDb();
+
   Future<List<RoutineCbjEntity>> getAllRoutinesAsList();
 
   Future<Map<String, RoutineCbjEntity>> getAllRoutinesAsMap();

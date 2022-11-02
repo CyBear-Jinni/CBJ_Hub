@@ -8,6 +8,9 @@ import 'package:kt_dart/collection.dart';
 import 'package:rxdart/rxdart.dart';
 
 abstract class ISceneCbjRepository {
+  /// Setting up all scenes from db
+  Future<void> setUpAllFromDb();
+
   Future<List<SceneCbjEntity>> getAllScenesAsList();
 
   Future<Map<String, SceneCbjEntity>> getAllScenesAsMap();

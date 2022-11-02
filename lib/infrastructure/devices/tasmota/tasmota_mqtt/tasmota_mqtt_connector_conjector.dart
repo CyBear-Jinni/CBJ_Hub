@@ -17,10 +17,6 @@ import 'package:injectable/injectable.dart';
 @singleton
 class TasmotaMqttConnectorConjector
     implements AbstractCompanyConnectorConjector {
-  TasmotaMqttConnectorConjector() {
-    discoverNewDevices();
-  }
-
   // Future<void> addNewDeviceByHostInfo({
   //   required ActiveHost activeHost,
   // }) async {
@@ -39,7 +35,7 @@ class TasmotaMqttConnectorConjector
 
   static Map<String, DeviceEntityAbstract> companyDevices = {};
 
-  static Future<void> discoverNewDevices() async {
+  Future<void> discoverNewDevices() async {
     getIt<IMqttServerRepository>()
         .streamOfChosenSubscription('tasmota/discovery/+/config')
         .listen((mqttPublishMessage) async {

@@ -17,17 +17,14 @@ import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: ISavedDevicesRepo)
 class SavedDevicesRepo extends ISavedDevicesRepo {
-  SavedDevicesRepo() {
-    setUpAllFromDb();
-  }
-
   static final HashMap<String, DeviceEntityAbstract> _allDevices =
       HashMap<String, DeviceEntityAbstract>();
 
   static bool setUpAllFromDbAtLestOnce = false;
 
+  @override
   Future<void> setUpAllFromDb() async {
-    getIt<ILocalDbRepository>().getSmartDevicesFromDb().then((value) {
+    await getIt<ILocalDbRepository>().getSmartDevicesFromDb().then((value) {
       value.fold((l) => null, (r) {
         for (final element in r) {
           addOrUpdateDevice(element);

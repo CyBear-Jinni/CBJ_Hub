@@ -22,15 +22,12 @@ import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: ISavedRoomsRepo)
 class SavedRoomsRepo extends ISavedRoomsRepo {
-  SavedRoomsRepo() {
-    setUpAllFromDb();
-  }
-
   static final HashMap<String, RoomEntity> _allRooms =
       HashMap<String, RoomEntity>();
 
+  @override
   Future<void> setUpAllFromDb() async {
-    getIt<ILocalDbRepository>().getRoomsFromDb().then((value) {
+    await getIt<ILocalDbRepository>().getRoomsFromDb().then((value) {
       value.fold((l) => null, (rooms) {
         /// Gets all rooms from db, if there are non it will create and return
         /// only a discovered room
@@ -170,23 +167,11 @@ class SavedRoomsRepo extends ISavedRoomsRepo {
     if (roomEntity != null) {
       return;
     }
-    final String discoveredRoomId =
-        RoomUniqueId.discoveredRoomId().getOrCrash();
 
-    if (_allRooms[discoveredRoomId] == null) {
-      _allRooms.addEntries([
-        MapEntry(
-          discoveredRoomId,
-          RoomEntity.empty().copyWith(
-            uniqueId: RoomUniqueId.fromUniqueString(discoveredRoomId),
-            defaultName: RoomDefaultName.discoveredRoomName(),
-          ),
-        )
-      ]);
-    } else {
-      _allRooms[discoveredRoomId]!
-          .addDeviceId(deviceEntity.uniqueId.getOrCrash());
-    }
+    final RoomEntity discoverRoom = createRoomDiscoverIfNotExist();
+
+    _allRooms[discoverRoom.uniqueId.getOrCrash()]!
+        .addDeviceId(deviceEntity.uniqueId.getOrCrash());
   }
 
   @override
@@ -195,21 +180,10 @@ class SavedRoomsRepo extends ISavedRoomsRepo {
     if (roomEntity != null) {
       return;
     }
-    final String discoveredRoomId =
-        RoomUniqueId.discoveredRoomId().getOrCrash();
 
-    if (_allRooms[discoveredRoomId] == null) {
-      _allRooms.addEntries([
-        MapEntry(
-          discoveredRoomId,
-          RoomEntity.empty().copyWith(
-            uniqueId: RoomUniqueId.fromUniqueString(discoveredRoomId),
-            defaultName: RoomDefaultName.discoveredRoomName(),
-          ),
-        )
-      ]);
-    }
-    _allRooms[discoveredRoomId]!
+    final RoomEntity discoverRoom = createRoomDiscoverIfNotExist();
+
+    _allRooms[discoverRoom.uniqueId.getOrCrash()]!
         .addSceneId(sceneCbjEntity.uniqueId.getOrCrash());
   }
 
@@ -219,21 +193,9 @@ class SavedRoomsRepo extends ISavedRoomsRepo {
     if (roomEntity != null) {
       return;
     }
-    final String discoveredRoomId =
-        RoomUniqueId.discoveredRoomId().getOrCrash();
+    final RoomEntity discoverRoom = createRoomDiscoverIfNotExist();
 
-    if (_allRooms[discoveredRoomId] == null) {
-      _allRooms.addEntries([
-        MapEntry(
-          discoveredRoomId,
-          RoomEntity.empty().copyWith(
-            uniqueId: RoomUniqueId.fromUniqueString(discoveredRoomId),
-            defaultName: RoomDefaultName.discoveredRoomName(),
-          ),
-        )
-      ]);
-    }
-    _allRooms[discoveredRoomId]!
+    _allRooms[discoverRoom.uniqueId.getOrCrash()]!
         .addRoutineId(routineCbjEntity.uniqueId.getOrCrash());
   }
 
@@ -243,21 +205,9 @@ class SavedRoomsRepo extends ISavedRoomsRepo {
     if (roomEntity != null) {
       return;
     }
-    final String discoveredRoomId =
-        RoomUniqueId.discoveredRoomId().getOrCrash();
+    final RoomEntity discoverRoom = createRoomDiscoverIfNotExist();
 
-    if (_allRooms[discoveredRoomId] == null) {
-      _allRooms.addEntries([
-        MapEntry(
-          discoveredRoomId,
-          RoomEntity.empty().copyWith(
-            uniqueId: RoomUniqueId.fromUniqueString(discoveredRoomId),
-            defaultName: RoomDefaultName.discoveredRoomName(),
-          ),
-        )
-      ]);
-    }
-    _allRooms[discoveredRoomId]!
+    _allRooms[discoverRoom.uniqueId.getOrCrash()]!
         .addBindingId(bindingCbjEntity.uniqueId.getOrCrash());
   }
 
@@ -504,5 +454,24 @@ class SavedRoomsRepo extends ISavedRoomsRepo {
     ];
 
     return roomImages[Random().nextInt(roomImages.length - 1)];
+  }
+
+  /// Create discovered room if not exist and returns it.
+  static RoomEntity createRoomDiscoverIfNotExist() {
+    final String discoveredRoomId =
+        RoomUniqueId.discoveredRoomId().getOrCrash();
+
+    if (_allRooms[discoveredRoomId] == null) {
+      _allRooms.addEntries([
+        MapEntry(
+          discoveredRoomId,
+          RoomEntity.empty().copyWith(
+            uniqueId: RoomUniqueId.fromUniqueString(discoveredRoomId),
+            defaultName: RoomDefaultName.discoveredRoomName(),
+          ),
+        )
+      ]);
+    }
+    return _allRooms[discoveredRoomId]!;
   }
 }

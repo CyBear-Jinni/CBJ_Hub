@@ -14,16 +14,14 @@ import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: IRoutineCbjRepository)
 class RoutineCbjRepository implements IRoutineCbjRepository {
-  RoutineCbjRepository() {
-    setUpAllFromDb();
-  }
   final Map<String, RoutineCbjEntity> _allRoutines = {};
 
+  @override
   Future<void> setUpAllFromDb() async {
-    getIt<ILocalDbRepository>().getRoutinesFromDb().then((value) {
-      value.fold((l) => null, (r) {
+    await getIt<ILocalDbRepository>().getRoutinesFromDb().then((value) {
+      value.fold((l) => null, (r) async {
         for (final element in r) {
-          addNewRoutine(element);
+          await addNewRoutine(element);
         }
       });
     });

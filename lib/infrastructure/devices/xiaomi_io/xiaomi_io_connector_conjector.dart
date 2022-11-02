@@ -10,10 +10,6 @@ import 'package:injectable/injectable.dart';
 
 @singleton
 class XiaomiIoConnectorConjector implements AbstractCompanyConnectorConjector {
-  // XiaomiIoConnectorConjector() {
-  //   _discoverNewDevices();
-  // }
-
   static Map<String, DeviceEntityAbstract> companyDevices = {};
 
   // Discover from miio package does not work on Linux, but it is better than

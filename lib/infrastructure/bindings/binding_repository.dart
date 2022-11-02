@@ -14,16 +14,14 @@ import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: IBindingCbjRepository)
 class BindingCbjRepository implements IBindingCbjRepository {
-  BindingCbjRepository() {
-    setUpAllFromDb();
-  }
   final Map<String, BindingCbjEntity> _allBindings = {};
 
+  @override
   Future<void> setUpAllFromDb() async {
-    getIt<ILocalDbRepository>().getBindingsFromDb().then((value) {
-      value.fold((l) => null, (r) {
+    await getIt<ILocalDbRepository>().getBindingsFromDb().then((value) {
+      value.fold((l) => null, (r) async {
         for (final element in r) {
-          addNewBinding(element);
+          await addNewBinding(element);
         }
       });
     });

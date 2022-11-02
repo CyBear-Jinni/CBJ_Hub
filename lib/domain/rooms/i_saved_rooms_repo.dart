@@ -7,6 +7,9 @@ import 'package:cbj_hub/domain/scene/scene_cbj_entity.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class ISavedRoomsRepo {
+  /// Setting up all rooms from db
+  Future<void> setUpAllFromDb();
+
   /// Add new room to saved rooms list
   RoomEntity addOrUpdateRoom(RoomEntity roomEntity);
 

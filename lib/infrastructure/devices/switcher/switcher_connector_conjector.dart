@@ -7,7 +7,6 @@ import 'package:cbj_hub/domain/generic_devices/generic_blinds_device/generic_bli
 import 'package:cbj_hub/domain/generic_devices/generic_boiler_device/generic_boiler_entity.dart';
 import 'package:cbj_hub/infrastructure/devices/companies_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/devices/switcher/switcher_api/switcher_api_object.dart';
-import 'package:cbj_hub/infrastructure/devices/switcher/switcher_api/switcher_discover.dart';
 import 'package:cbj_hub/infrastructure/devices/switcher/switcher_helpers.dart';
 import 'package:cbj_hub/infrastructure/devices/switcher/switcher_runner/switcher_runner_entity.dart';
 import 'package:cbj_hub/infrastructure/devices/switcher/switcher_v2/switcher_v2_entity.dart';
@@ -18,20 +17,7 @@ import 'package:injectable/injectable.dart';
 
 @singleton
 class SwitcherConnectorConjector implements AbstractCompanyConnectorConjector {
-  SwitcherConnectorConjector() {
-    _discoverNewDevices();
-  }
-
   static Map<String, DeviceEntityAbstract> companyDevices = {};
-
-  Future<void> _discoverNewDevices() async {
-    SwitcherDiscover.discover20002Devices().listen((switcherApiObject) {
-      addOnlyNewSwitcherDevice(switcherApiObject);
-    });
-    SwitcherDiscover.discover20003Devices().listen((switcherApiObject) {
-      addOnlyNewSwitcherDevice(switcherApiObject);
-    });
-  }
 
   Future<void> addOnlyNewSwitcherDevice(
     SwitcherApiObject switcherApiObject,

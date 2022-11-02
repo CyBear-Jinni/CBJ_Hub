@@ -15,6 +15,7 @@ import 'package:cbj_hub/infrastructure/devices/lg/lg_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/devices/lifx/lifx_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/devices/shelly/shelly_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/devices/sonoff_diy/sonoff_diy_connector_conjector.dart';
+import 'package:cbj_hub/infrastructure/devices/switcher/switcher_api/switcher_discover.dart';
 import 'package:cbj_hub/infrastructure/devices/switcher/switcher_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/devices/tasmota/tasmota_ip/tasmota_ip_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/devices/tuya_smart/tuya_smart_connector_conjector.dart';
@@ -327,5 +328,32 @@ class CompaniesConnectorConjector {
       }
       // logger.i('Found pingable device $deviceHostNameLowerCase');
     }
+  }
+
+  /// Searching devices by binding to sockets, used for devices with
+  /// udp ports which can't be discovered by regular open (tcp) port scan
+  static Future<void> searchDevicesByBindingIntoSockets() async {
+    SwitcherDiscover.discover20002Devices().listen((switcherApiObject) {
+      getIt<SwitcherConnectorConjector>()
+          .addOnlyNewSwitcherDevice(switcherApiObject);
+    });
+    SwitcherDiscover.discover20003Devices().listen((switcherApiObject) {
+      getIt<SwitcherConnectorConjector>()
+          .addOnlyNewSwitcherDevice(switcherApiObject);
+    });
+  }
+
+  /// Searching for mqtt devices
+  static Future<void> searchDevicesByMqttPath() async {
+    // getIt<TasmotaMqttConnectorConjector>().discoverNewDevices();
+  }
+
+  /// Devices that we need to insert in to the other search options but didn't
+  /// got to it yet.
+  /// We do implement here the start of the search for convince organization
+  /// and since putting it in the constructor of singleton will be called
+  /// before all of our program.
+  static Future<void> notImplementedDevicesSearch() async {
+    getIt<YeelightConnectorConjector>().discoverNewDevices();
   }
 }

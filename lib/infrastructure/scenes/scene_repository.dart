@@ -26,13 +26,11 @@ import 'package:rxdart/rxdart.dart';
 
 @LazySingleton(as: ISceneCbjRepository)
 class SceneCbjRepository implements ISceneCbjRepository {
-  SceneCbjRepository() {
-    setUpAllFromDb();
-  }
   final HashMap<String, SceneCbjEntity> _allScenes = HashMap();
 
+  @override
   Future<void> setUpAllFromDb() async {
-    getIt<ILocalDbRepository>().getScenesFromDb().then((value) {
+    await getIt<ILocalDbRepository>().getScenesFromDb().then((value) {
       value.fold((l) => null, (r) {
         for (final element in r) {
           addNewScene(element);

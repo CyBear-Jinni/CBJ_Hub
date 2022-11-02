@@ -4,6 +4,9 @@ import 'package:cbj_hub/domain/local_db/local_db_failures.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class IBindingCbjRepository {
+  /// Setting up all bindings from db
+  Future<void> setUpAllFromDb();
+
   Future<List<BindingCbjEntity>> getAllBindingsAsList();
 
   Future<Map<String, BindingCbjEntity>> getAllBindingsAsMap();

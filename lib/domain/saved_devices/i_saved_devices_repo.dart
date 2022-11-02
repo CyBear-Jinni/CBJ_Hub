@@ -5,6 +5,9 @@ import 'package:cbj_hub/domain/vendors/login_abstract/login_entity_abstract.dart
 import 'package:dartz/dartz.dart';
 
 abstract class ISavedDevicesRepo {
+  /// Setting up all devices from db
+  Future<void> setUpAllFromDb();
+
   DeviceEntityAbstract? addOrUpdateFromMqtt(dynamic updateFromMqtt);
 
   /// Add new device to saved devices list
