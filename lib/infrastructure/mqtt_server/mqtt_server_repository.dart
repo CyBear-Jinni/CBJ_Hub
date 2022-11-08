@@ -21,10 +21,6 @@ import 'package:mqtt_client/src/observable/src/records.dart';
 
 @LazySingleton(as: IMqttServerRepository)
 class MqttServerRepository extends IMqttServerRepository {
-  MqttServerRepository() {
-    connect();
-  }
-
   /// Static instance of connection to mqtt broker
   static MqttServerClient client = MqttServerClient('127.0.0.1', 'CBJ_Hub');
 
@@ -41,6 +37,15 @@ class MqttServerRepository extends IMqttServerRepository {
   static const String routinesTopicTypeName = 'Routines';
 
   static const String bindingsTopicTypeName = 'Bindings';
+
+  static Future<MqttServerClient>? clientFuture;
+
+  static bool clientConnected = false;
+
+  Future<void> asyncConstractor() async {
+    clientFuture = connect();
+    await clientFuture;
+  }
 
   @override
   String getHubBaseTopic() {
@@ -82,11 +87,13 @@ class MqttServerRepository extends IMqttServerRepository {
   Future<MqttServerClient> connect() async {
     if (client.connectionStatus!.state == MqttConnectionState.connected) {
       return client;
-    } else if (client.connectionStatus!.state ==
-        MqttConnectionState.connecting) {
-      await Future.delayed(const Duration(seconds: 1));
-      return client;
-    } else {
+    }
+    // else if (client.connectionStatus!.state ==
+    //     MqttConnectionState.connecting) {
+    //   // await Future.delayed(const Duration(seconds: 1));
+    //   // return client;
+    // }
+    else {
       client.disconnect();
     }
 
@@ -111,39 +118,36 @@ class MqttServerRepository extends IMqttServerRepository {
     client.connectionMessage = connMessage;
     try {
       await client.connect();
+
       client.subscribe('#', MqttQos.atLeastOnce);
     } catch (e) {
       logger.e('Error in mqtt connect\n$e');
       client.disconnect();
     }
+
     return client;
   }
 
   @override
   Future<void> subscribeToTopic(String topic) async {
-    await connect();
     client.subscribe(topic, MqttQos.atLeastOnce);
   }
 
   @override
   Stream<List<MqttReceivedMessage<MqttMessage?>>>
       streamOfAllSubscriptions() async* {
-    await connect();
     yield* MqttClientTopicFilter('#', client.updates).updates;
   }
 
   @override
   Stream<List<MqttReceivedMessage<MqttMessage?>>>
       streamOfAllHubSubscriptions() async* {
-    await connect();
-
     yield* MqttClientTopicFilter('$hubBaseTopic/#', client.updates).updates;
   }
 
   @override
   Stream<List<MqttReceivedMessage<MqttMessage?>>>
       streamOfAllDevicesHubSubscriptions() async* {
-    await connect();
     yield* MqttClientTopicFilter(
       '$hubBaseTopic/$devicesTopicTypeName/#',
       client.updates,
@@ -154,7 +158,6 @@ class MqttServerRepository extends IMqttServerRepository {
   Stream<List<MqttReceivedMessage<MqttMessage?>>> streamOfChosenSubscription(
     String topicPath,
   ) async* {
-    await connect();
     yield* MqttClientTopicFilter(topicPath, client.updates).updates;
   }
 
@@ -187,7 +190,6 @@ class MqttServerRepository extends IMqttServerRepository {
   @override
   Future<void> publishMessage(String topic, String message) async {
     try {
-      await connect();
       final builder = MqttClientPayloadBuilder();
       builder.addUTF8String(message);
       client.publishMessage(topic, MqttQos.atLeastOnce, builder.payload!);
@@ -216,8 +218,6 @@ class MqttServerRepository extends IMqttServerRepository {
 
   @override
   Future<List<ChangeRecord>?> readingFromMqttOnce(String topic) async {
-    await connect();
-
     final MqttClientTopicFilter mqttClientTopic =
         MqttClientTopicFilter(topic, client.updates);
     final Stream<List<MqttReceivedMessage<MqttMessage?>>> myValueStream =
@@ -236,6 +236,8 @@ class MqttServerRepository extends IMqttServerRepository {
 
   /// Callback function for connection succeeded
   void onConnected() {
+    clientConnected = true;
+    clientFuture = Future(() => client);
     logger.v('Connected');
   }
 

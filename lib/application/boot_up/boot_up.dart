@@ -40,7 +40,7 @@ class BootUp {
 
     CompaniesConnectorConjector.notImplementedDevicesSearch();
 
-    getIt<IMqttServerRepository>();
+    await getIt<IMqttServerRepository>().asyncConstractor();
 
     getIt<ICbjWebServerRepository>();
 

@@ -22,8 +22,11 @@ abstract class IMqttServerRepository {
 
   String getBindingsTopicTypeName();
 
-  ///Connecting the hub client to broker
+  /// Connecting the hub client to broker
   Future<MqttServerClient> connect();
+
+  /// Make sure that mqtt is connected state before continuing
+  Future<void> asyncConstractor();
 
   /// Stream all subscription changes
   Stream<List<MqttReceivedMessage<MqttMessage?>>> streamOfAllSubscriptions();
