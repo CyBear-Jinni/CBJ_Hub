@@ -291,3 +291,17 @@ class DevicePort extends ValueObjectCore<String> {
   @override
   final Either<CoreFailure<String>, String> value;
 }
+
+class EspHomeKey extends ValueObjectCore<String> {
+  factory EspHomeKey(String? input) {
+    assert(input != null);
+    return EspHomeKey._(
+      validateEspHomeKeyNotEmpty(input!),
+    );
+  }
+
+  const EspHomeKey._(this.value);
+
+  @override
+  final Either<CoreFailure<String>, String> value;
+}

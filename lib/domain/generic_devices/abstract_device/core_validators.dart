@@ -52,6 +52,10 @@ Either<CoreFailure<String>, String> validatePortNotEmpty(String input) {
   return right(input);
 }
 
+Either<CoreFailure<String>, String> validateEspHomeKeyNotEmpty(String input) {
+  return right(input);
+}
+
 Either<CoreFailure<String>, String> validateDeviceMaxNameLength(
   String input,
   int maxLength,

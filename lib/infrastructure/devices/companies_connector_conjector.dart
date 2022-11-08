@@ -203,6 +203,7 @@ class CompaniesConnectorConjector {
         mDnsName: startOfMdnsName,
         ip: mdnsDeviceIp,
         port: mdnsPort,
+        address: mdnsDeviceIp,
       );
     } else if (ShellyConnectorConjector.mdnsTypes
             .contains(hostMdnsInfo.mdnsServiceType) &&
@@ -268,7 +269,7 @@ class CompaniesConnectorConjector {
               in HostScanner.getAllPingableDevices(
             subnet,
             resultsInAddressAscendingOrder: false,
-            lastSubnet: 126,
+            lastHostId: 126,
           )) {
             try {
               setHostNameDeviceByCompany(
@@ -284,7 +285,7 @@ class CompaniesConnectorConjector {
               in HostScanner.getAllPingableDevices(
             subnet,
             resultsInAddressAscendingOrder: false,
-            firstSubnet: 127,
+            lastHostId: 127,
           )) {
             try {
               setHostNameDeviceByCompany(

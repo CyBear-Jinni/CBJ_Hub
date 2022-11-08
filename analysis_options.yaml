@@ -22,6 +22,7 @@ analyzer:
     - "**/*.gr.dart"
     - "**/*.config.dart"
     - "lib/infrastructure/gen/**"
+    - "**/*.py"
 
 linter:
   rules:

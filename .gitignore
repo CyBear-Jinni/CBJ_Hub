@@ -32,12 +32,6 @@
 *.gr.dart
 injection.config.dart
 
-# Privat data
-lib/infrastructure/core/constant_credentials.dart
-
-# Web related
-lib/generated_plugin_registrant.dart
-
 # Symbolication related
 app.*.symbols
 
@@ -91,3 +85,9 @@ libisar.so
 
 # Spesific files
 saved_cast_state.json
+
+# Privat data
+lib/infrastructure/core/constant_credentials.dart
+
+# Web related
+lib/generated_plugin_registrant.dart

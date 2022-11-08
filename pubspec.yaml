@@ -5,7 +5,7 @@ homepage: https://cybearjinni.com
 publish_to: none
 
 environment:
-  sdk: ^2.18.0
+  sdk: ^2.18.2
 
 dependencies:
   # Contains utility classes in the style of dart:async to work with asynchronous computations.
@@ -49,9 +49,12 @@ dependencies:
   # Service discovery over multicast DNS (mDNS), Bonjour, and Avahi.
   multicast_dns: ^0.3.2+2
   # Helps you discover open ports, devices on subnet and more.
-  network_tools: ^3.0.0+2
+  network_tools: ^3.0.0+3
   # Provides runtime support for a Dart implementation of protobufs.
   protobuf: ^2.1.0
+  # Python Environment Manager and Executor for dart and flutter
+  python_shell:
+    git: 'https://github.com/guyluz11/python_shell.dart.git'
   # Extends the capabilities of Dart Streams and StreamControllers.
   rxdart: ^0.27.5
   # Simple, fast generation of RFC4122 UUIDs.
