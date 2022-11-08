@@ -27,6 +27,8 @@ class EspHomeConnectorConjector implements AbstractCompanyConnectorConjector {
   }) async {
     CoreUniqueId? tempCoreUniqueId;
 
+    logger.i('Found mdns of ESPHome device named $mDnsName in the ip $address');
+
     for (final DeviceEntityAbstract device in companyDevices.values) {
       if (device is EspHomeLightEntity &&
           mDnsName == device.vendorUniqueId.getOrCrash()) {

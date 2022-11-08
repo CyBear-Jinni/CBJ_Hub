@@ -26,55 +26,58 @@ class EspHomePythonApi {
     required String port,
   }) async {
     const String devicePassword = 'MyPassword';
-
-    await getShell();
-
-    final instance = ShellManager.getInstance("default");
-    instance.installRequires(requeiredPythonPackages);
-
-    String? currentType;
-
     final List<DeviceEntityAbstract> devicesList = [];
 
-    final ShellListener shellListener = ShellListener(
-      onMessage: (String message) {
-        if (currentType != null) {
-          final DeviceEntityAbstract? convertedDevice =
-              EsphomePythonJsonObjectsType.getDeviceAsAbstractIfExist(
-            currentType: currentType!,
-            deviceJson: message,
-            address: address,
-            mDnsName: mDnsName,
-            port: port,
-          );
-          if (convertedDevice != null) {
-            devicesList.add(convertedDevice);
+    try {
+      await getShell();
+
+      final instance = ShellManager.getInstance("default");
+      instance.installRequires(requeiredPythonPackages);
+
+      String? currentType;
+
+      final ShellListener shellListener = ShellListener(
+        onMessage: (String message) {
+          if (currentType != null) {
+            final DeviceEntityAbstract? convertedDevice =
+                EsphomePythonJsonObjectsType.getDeviceAsAbstractIfExist(
+              currentType: currentType!,
+              deviceJson: message,
+              address: address,
+              mDnsName: mDnsName,
+              port: port,
+            );
+            if (convertedDevice != null) {
+              devicesList.add(convertedDevice);
+            }
+            currentType = null;
+          } else {
+            currentType = message;
           }
-          currentType = null;
-        } else {
-          currentType = message;
-        }
-      },
-      onComplete: () {
-        logger.v('EspHome device scan done');
-      },
-      onError: (object, stackTrace) {
-        logger.v('EspHome device scan error $object\n$stackTrace');
-      },
-    );
+        },
+        onComplete: () {
+          logger.v('EspHome device scan done');
+        },
+        onError: (object, stackTrace) {
+          logger.v('EspHome device scan error $object\n$stackTrace');
+        },
+      );
 
-    logger.i('Path: ${Directory.current.path}');
+      logger.i('Path: ${Directory.current.path}');
 
-    await instance.runFile(
-      '${Directory.current.path}/lib/infrastructure/devices/esphome/esphome_python_api/esphome_python_files/get_esphome_entities.py',
-      listener: shellListener,
-      arguments: [
-        address,
-        port,
-        devicePassword,
-      ],
-      echo: false,
-    );
+      await instance.runFile(
+        '${Directory.current.path}/lib/infrastructure/devices/esphome/esphome_python_api/esphome_python_files/get_esphome_entities.py',
+        listener: shellListener,
+        arguments: [
+          address,
+          port,
+          devicePassword,
+        ],
+        echo: false,
+      );
+    } catch (e) {
+      logger.e('Error while getting all ESPHome entities\n$e');
+    }
     return devicesList;
   }
 

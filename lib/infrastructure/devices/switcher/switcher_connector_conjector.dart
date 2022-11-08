@@ -62,7 +62,7 @@ class SwitcherConnectorConjector implements AbstractCompanyConnectorConjector {
 
     companyDevices.addEntries([deviceAsEntry]);
 
-    logger.v('New switcher devices name:${switcherApiObject.switcherName}');
+    // logger.v('New switcher devices name:${switcherApiObject.switcherName}');
   }
 
   Future<Either<CoreFailure, Unit>> create(DeviceEntityAbstract switcher) {
