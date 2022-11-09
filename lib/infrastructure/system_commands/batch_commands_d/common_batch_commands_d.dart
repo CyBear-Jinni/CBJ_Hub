@@ -118,11 +118,18 @@ class CommonBatchCommandsD implements SystemCommandsBaseClassD {
   }
 
   @override
-  Future<String> getLocalDbPath() async {
+  Future<String> getLocalDbPath(
+    Future<String?> currentUserName,
+  ) async {
     final String cbjFullPath = (await getCurrentDriveLetter()) +
         r'\Users\' +
         (await getCurrentUserName()) +
         r'\Documents\cbjinni\'; // Will only work if the program located in the os driver
     return cbjFullPath;
+  }
+
+  @override
+  Future<String> getProjectFilesLocation() async {
+    return Directory.current.path;
   }
 }

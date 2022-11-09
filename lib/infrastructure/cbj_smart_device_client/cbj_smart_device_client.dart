@@ -62,7 +62,7 @@ class CbjSmartDeviceClient {
   static Future<ActiveHost?> checkIfDeviceIsCbjSmartDevice(
     String deviceIp,
   ) async {
-    final String? subnet = await SharedVariables.getIps();
+    final String? subnet = await getIt<SharedVariables>().getIps();
 
     if (subnet == null) {
       return null;

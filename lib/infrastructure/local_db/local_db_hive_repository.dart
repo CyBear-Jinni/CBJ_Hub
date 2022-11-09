@@ -23,7 +23,6 @@ import 'package:cbj_hub/domain/vendors/login_abstract/value_login_objects_core.d
 import 'package:cbj_hub/domain/vendors/tuya_login/generic_tuya_login_entity.dart';
 import 'package:cbj_hub/domain/vendors/tuya_login/generic_tuya_login_value_objects.dart';
 import 'package:cbj_hub/infrastructure/bindings/binding_cbj_dtos.dart';
-import 'package:cbj_hub/infrastructure/core/singleton/my_singleton.dart';
 import 'package:cbj_hub/infrastructure/devices/companies_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/devices/device_helper/device_helper.dart';
 import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
@@ -38,6 +37,7 @@ import 'package:cbj_hub/infrastructure/local_db/hive_objects/tuya_vendor_credent
 import 'package:cbj_hub/infrastructure/room/room_entity_dtos.dart';
 import 'package:cbj_hub/infrastructure/routines/routine_cbj_dtos.dart';
 import 'package:cbj_hub/infrastructure/scenes/scene_cbj_dtos.dart';
+import 'package:cbj_hub/infrastructure/system_commands/system_commands_manager_d.dart';
 import 'package:cbj_hub/injection.dart';
 import 'package:cbj_hub/utils.dart';
 import 'package:dartz/dartz.dart';
@@ -49,7 +49,7 @@ import 'package:injectable/injectable.dart';
 class HiveRepository extends ILocalDbRepository {
   @override
   Future<void> initializeDb() async {
-    String? localDbPath = await MySingleton.getLocalDbPath();
+    String? localDbPath = await getIt<SystemCommandsManager>().getLocalDbPath();
 
     if (localDbPath == null) {
       logger.e('Cant find local DB path');
