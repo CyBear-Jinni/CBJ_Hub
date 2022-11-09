@@ -40,8 +40,6 @@ class MqttServerRepository extends IMqttServerRepository {
 
   static Future<MqttServerClient>? clientFuture;
 
-  static bool clientConnected = false;
-
   Future<void> asyncConstractor() async {
     clientFuture = connect();
     await clientFuture;
@@ -236,8 +234,6 @@ class MqttServerRepository extends IMqttServerRepository {
 
   /// Callback function for connection succeeded
   void onConnected() {
-    clientConnected = true;
-    clientFuture = Future(() => client);
     logger.v('Connected');
   }
 

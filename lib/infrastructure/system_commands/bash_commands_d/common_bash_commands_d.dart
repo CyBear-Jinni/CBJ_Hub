@@ -14,10 +14,12 @@ class CommonBashCommandsD implements SystemCommandsBaseClassD {
   @override
   Future<String> getCurrentUserName() async {
     final String whoami =
-        await Process.run('whoami', <String>[]).then((ProcessResult result) {
+        await Process.run('id', <String>['-nu']).then((ProcessResult result) {
+      // whoami is getting permission error inside the snap
+      // await Process.run('whoami', <String>[]).then((ProcessResult result) {
       return result.stdout.toString();
     });
-    return whoami.substring(0, whoami.indexOf('\n'));
+    return whoami.trim();
   }
 
   @override
@@ -50,7 +52,7 @@ class CommonBashCommandsD implements SystemCommandsBaseClassD {
       blkid = blkid.substring(blkid.indexOf('/dev/'));
     }
 
-    blkid = blkid.substring(0, blkid.indexOf('\n'));
+    blkid = blkid.trim();
 
     final String uuid = blkid.substring(blkid.indexOf('UUID="') + 6);
     return uuid.substring(0, uuid.indexOf('"'));
@@ -66,7 +68,7 @@ class CommonBashCommandsD implements SystemCommandsBaseClassD {
 //      logger.v('Host name: ' + hostName);
       return result.stdout.toString();
     });
-    return hostName.substring(0, hostName.indexOf('\n'));
+    return hostName.trim();
   }
 
   @override
@@ -127,7 +129,8 @@ class CommonBashCommandsD implements SystemCommandsBaseClassD {
     final String? snapCommonEnvironmentVariable =
         getIt<SharedVariables>().getSnapCommonEnvironmentVariable();
     if (snapCommonEnvironmentVariable == null) {
-      localDbFolderPath = '/home/${await currentUserName}/Documents';
+      localDbFolderPath = '/home/${await currentUserName}/'
+          '';
     } else {
       // /var/snap/cbj-hub/common/isar
       localDbFolderPath = snapCommonEnvironmentVariable;

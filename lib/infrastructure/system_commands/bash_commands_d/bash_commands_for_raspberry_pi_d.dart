@@ -18,10 +18,7 @@ class BashCommandsForRaspberryPi {
 
     piVersion = piVersion.substring(piVersion.indexOf(':') + 2);
 
-    piVersion = piVersion
-        .substring(0, piVersion.indexOf('\n'))
-        .replaceAll(' ', '_')
-        .replaceAll('.', '_');
+    piVersion = piVersion.trim().replaceAll(' ', '_').replaceAll('.', '_');
 
     return piVersion;
   }

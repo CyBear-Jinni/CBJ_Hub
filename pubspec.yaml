@@ -74,7 +74,7 @@ dev_dependencies:
   # Injectable is a convenient code generator for get_it.
   injectable_generator: ^1.5.4
   # Code generator for the Isar Database. Finds classes annotated with @Collection.
-  isar_generator:
+  isar_generator: ^3.0.2
   # Collection of lint rules for Dart and Flutter projects
   lint: ^1.10.0
   # Library for mocks
