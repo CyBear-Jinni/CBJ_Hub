@@ -6,9 +6,11 @@ import 'package:cbj_hub/domain/generic_devices/abstract_device/value_objects_cor
 import 'package:cbj_hub/domain/generic_devices/device_type_enums.dart';
 import 'package:cbj_hub/domain/generic_devices/generic_blinds_device/generic_blinds_entity.dart';
 import 'package:cbj_hub/domain/generic_devices/generic_blinds_device/generic_blinds_value_objects.dart';
+import 'package:cbj_hub/domain/mqtt_server/i_mqtt_server_repository.dart';
 import 'package:cbj_hub/infrastructure/devices/switcher/switcher_api/switcher_api_object.dart';
 import 'package:cbj_hub/infrastructure/devices/switcher/switcher_device_value_objects.dart';
 import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
+import 'package:cbj_hub/injection.dart';
 import 'package:cbj_hub/utils.dart';
 import 'package:dartz/dartz.dart';
 
@@ -76,43 +78,53 @@ class SwitcherRunnerEntity extends GenericBlindsDE {
     }
 
     try {
-      if (newEntity.blindsSwitchState!.getOrCrash() !=
-              blindsSwitchState!.getOrCrash() ||
-          deviceStateGRPC.getOrCrash() != DeviceStateGRPC.ack.toString()) {
-        final DeviceActions? actionToPreform =
-            EnumHelperCbj.stringToDeviceAction(
-          newEntity.blindsSwitchState!.getOrCrash(),
-        );
+      if (newEntity.deviceStateGRPC.getOrCrash() !=
+          DeviceStateGRPC.ack.toString()) {
+        if (newEntity.blindsSwitchState!.getOrCrash() !=
+            blindsSwitchState!.getOrCrash()) {
+          final DeviceActions? actionToPreform =
+              EnumHelperCbj.stringToDeviceAction(
+            newEntity.blindsSwitchState!.getOrCrash(),
+          );
 
-        if (actionToPreform == DeviceActions.moveUp) {
-          (await moveUpBlinds()).fold((l) {
-            logger.e('Error turning blinds up');
-            throw l;
-          }, (r) {
-            logger.i('Blinds up success');
-          });
-        } else if (actionToPreform == DeviceActions.stop) {
-          (await stopBlinds()).fold((l) {
-            logger.e('Error stopping blinds');
-            throw l;
-          }, (r) {
-            logger.i('Blinds stop success');
-          });
-        } else if (actionToPreform == DeviceActions.moveDown) {
-          (await moveDownBlinds()).fold((l) {
-            logger.e('Error turning blinds down');
-            throw l;
-          }, (r) {
-            logger.i('Blinds down success');
-          });
-        } else {
-          logger.e('actionToPreform is not set correctly on Switcher Runner');
+          if (actionToPreform == DeviceActions.moveUp) {
+            (await moveUpBlinds()).fold((l) {
+              logger.e('Error turning blinds up');
+              throw l;
+            }, (r) {
+              logger.i('Blinds up success');
+            });
+          } else if (actionToPreform == DeviceActions.stop) {
+            (await stopBlinds()).fold((l) {
+              logger.e('Error stopping blinds');
+              throw l;
+            }, (r) {
+              logger.i('Blinds stop success');
+            });
+          } else if (actionToPreform == DeviceActions.moveDown) {
+            (await moveDownBlinds()).fold((l) {
+              logger.e('Error turning blinds down');
+              throw l;
+            }, (r) {
+              logger.i('Blinds down success');
+            });
+          } else {
+            logger.e('actionToPreform is not set correctly on Switcher Runner');
+          }
         }
+        deviceStateGRPC = DeviceState(DeviceStateGRPC.ack.toString());
+
+        getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
+          entityFromTheHub: this,
+        );
       }
-      deviceStateGRPC = DeviceState(DeviceStateGRPC.ack.toString());
       return right(unit);
     } catch (e) {
       deviceStateGRPC = DeviceState(DeviceStateGRPC.newStateFailed.toString());
+
+      getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
+        entityFromTheHub: this,
+      );
       return left(const CoreFailure.unexpected());
     }
   }
@@ -124,6 +136,7 @@ class SwitcherRunnerEntity extends GenericBlindsDE {
 
     try {
       await switcherObject!.setPosition(pos: 100);
+
       return right(unit);
     } catch (e) {
       return left(const CoreFailure.unexpected());

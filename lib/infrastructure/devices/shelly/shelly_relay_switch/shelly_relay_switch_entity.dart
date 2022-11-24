@@ -93,9 +93,15 @@ class ShellyRelaySwitchEntity extends GenericSwitchDE {
         }
       }
       deviceStateGRPC = DeviceState(DeviceStateGRPC.ack.toString());
+      // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
+      //   entityFromTheHub: this,
+      // );
       return right(unit);
     } catch (e) {
       deviceStateGRPC = DeviceState(DeviceStateGRPC.newStateFailed.toString());
+      // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
+      //   entityFromTheHub: this,
+      // );
       return left(const CoreFailure.unexpected());
     }
   }

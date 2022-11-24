@@ -8,7 +8,7 @@ import 'package:cbj_hub/utils.dart';
 
 class CommonBashCommandsD implements SystemCommandsBaseClassD {
   Future<void> asyncConstractor() async {
-    SystemCommandsManager();
+    getIt<SystemCommandsManager>();
   }
 
   @override

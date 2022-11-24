@@ -1,6 +1,5 @@
 import 'package:cbj_hub/domain/generic_devices/abstract_device/device_entity_abstract.dart';
 import 'package:cbj_hub/infrastructure/devices/esphome/esphome_python_api/esphome_python_api.dart';
-import 'package:cbj_hub/utils.dart';
 
 class EspHomeHelpers {
   static Future<List<DeviceEntityAbstract>> addDiscoverdEntities({
@@ -14,7 +13,6 @@ class EspHomeHelpers {
       mDnsName: mDnsName,
       port: port,
     );
-    logger.i(deviceEntityList);
 
     return deviceEntityList;
   }

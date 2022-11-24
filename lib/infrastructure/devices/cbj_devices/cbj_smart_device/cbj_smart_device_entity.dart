@@ -4,7 +4,7 @@ import 'package:cbj_hub/domain/generic_devices/abstract_device/value_objects_cor
 import 'package:cbj_hub/domain/generic_devices/device_type_enums.dart';
 import 'package:cbj_hub/domain/generic_devices/generic_smart_computer_device/generic_smart_computer_entity.dart';
 import 'package:cbj_hub/domain/generic_devices/generic_smart_computer_device/generic_smart_computer_value_objects.dart';
-import 'package:cbj_hub/infrastructure/cbj_smart_device_client/cbj_smart_device_client.dart';
+import 'package:cbj_hub/infrastructure/devices/cbj_devices/cbj_smart_device_client/cbj_smart_device_client.dart';
 import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
 import 'package:cbj_hub/utils.dart';
 import 'package:dartz/dartz.dart';
@@ -83,9 +83,20 @@ class CbjSmartComputerEntity extends GenericSmartComputerDE {
       smartComputerShutDownState =
           GenericSmartComputerShutdownState(DeviceActions.itIsFalse.toString());
 
+      // deviceStateGRPC = DeviceState(DeviceStateGRPC.ack.toString());
+      //
+      // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
+      //   entityFromTheHub: this,
+      // );
+
       return right(unit);
     } catch (e) {
       deviceStateGRPC = DeviceState(DeviceStateGRPC.newStateFailed.toString());
+
+      // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
+      //   entityFromTheHub: this,
+      // );
+
       return left(const CoreFailure.unexpected());
     }
   }

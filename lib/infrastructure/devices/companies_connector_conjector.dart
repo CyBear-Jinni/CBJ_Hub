@@ -1,12 +1,13 @@
 import 'dart:io';
 
 import 'package:cbj_hub/domain/generic_devices/abstract_device/device_entity_abstract.dart';
+import 'package:cbj_hub/domain/mqtt_server/i_mqtt_server_repository.dart';
 import 'package:cbj_hub/domain/saved_devices/i_saved_devices_repo.dart';
 import 'package:cbj_hub/domain/vendors/lifx_login/generic_lifx_login_entity.dart';
 import 'package:cbj_hub/domain/vendors/login_abstract/login_entity_abstract.dart';
 import 'package:cbj_hub/domain/vendors/tuya_login/generic_tuya_login_entity.dart';
-import 'package:cbj_hub/infrastructure/cbj_smart_device_client/cbj_smart_device_client.dart';
 import 'package:cbj_hub/infrastructure/devices/cbj_devices/cbj_devices_connector_conjector.dart';
+import 'package:cbj_hub/infrastructure/devices/cbj_devices/cbj_smart_device_client/cbj_smart_device_client.dart';
 import 'package:cbj_hub/infrastructure/devices/esphome/esphome_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/devices/google/google_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/devices/hp/hp_connector_conjector.dart';
@@ -68,6 +69,9 @@ class CompaniesConnectorConjector {
               .manageHubRequestsForDevice(deviceEntityAbstract);
         } else if (deviceVendor == VendorsAndServices.cbjDevices.toString()) {
           getIt<CbjDevicesConnectorConjector>()
+              .manageHubRequestsForDevice(deviceEntityAbstract);
+        } else if (deviceVendor == VendorsAndServices.hp.toString()) {
+          getIt<HpConnectorConjector>()
               .manageHubRequestsForDevice(deviceEntityAbstract);
         } else {
           logger.w(
@@ -134,7 +138,13 @@ class CompaniesConnectorConjector {
   static DeviceEntityAbstract addDiscoverdDeviceToHub(
     DeviceEntityAbstract deviceEntity,
   ) {
-    return getIt<ISavedDevicesRepo>().addOrUpdateDevice(deviceEntity);
+    final DeviceEntityAbstract deviceEntityGotSaved =
+        getIt<ISavedDevicesRepo>().addOrUpdateDevice(deviceEntity);
+
+    getIt<IMqttServerRepository>()
+        .postSmartDeviceToAppMqtt(entityFromTheHub: deviceEntityGotSaved);
+
+    return deviceEntityGotSaved;
   }
 
   static void setVendorLoginCredentials(LoginEntityAbstract loginEntity) {
@@ -149,31 +159,37 @@ class CompaniesConnectorConjector {
   }
 
   static Future<void> searchAllMdnsDevicesAndSetThemUp() async {
-    while (true) {
+    try {
       while (true) {
-        // TODO: mdns search crash if there is no local internet connection
-        // but crash can't be cached using try catch.
-        // InternetConnectionChecker().hasConnection; check if there is
-        // connection to the www which is not needed for mdns search.
-        // we need to replace this part with check that return true if
-        // there is local internet connection/ device is connected to
-        // local network.
-        final bool result = await InternetConnectionChecker().hasConnection;
-        if (result) {
-          break;
+        while (true) {
+          // TODO: mdns search crash if there is no local internet connection
+          // but crash can't be cached using try catch.
+          // InternetConnectionChecker().hasConnection; check if there is
+          // connection to the www which is not needed for mdns search.
+          // we need to replace this part with check that return true if
+          // there is local internet connection/ device is connected to
+          // local network.
+          final bool result = await InternetConnectionChecker().hasConnection;
+          if (result) {
+            break;
+          }
+          logger.w('No internet connection detected, will try again in 2m to'
+              ' search mdns in the network');
+          await Future.delayed(const Duration(minutes: 2));
         }
-        await Future.delayed(const Duration(minutes: 2));
-      }
-      for (final ActiveHost activeHost in await MdnsScanner.searchMdnsDevices(
-        forceUseOfSavedSrvRecordList: true,
-      )) {
-        final MdnsInfo? mdnsInfo = await activeHost.mdnsInfo;
+        for (final ActiveHost activeHost in await MdnsScanner.searchMdnsDevices(
+          forceUseOfSavedSrvRecordList: true,
+        )) {
+          final MdnsInfo? mdnsInfo = await activeHost.mdnsInfo;
 
-        if (mdnsInfo != null) {
-          setMdnsDeviceByCompany(activeHost);
+          if (mdnsInfo != null) {
+            setMdnsDeviceByCompany(activeHost);
+          }
         }
+        await Future.delayed(const Duration(seconds: 50));
       }
-      await Future.delayed(const Duration(minutes: 2));
+    } catch (e) {
+      logger.e('Mdns search error\n$e');
     }
   }
 

@@ -98,7 +98,7 @@ class AppCommunicationRepository extends IAppCommunicationRepository {
   @override
   void sendToApp(Stream<MqttPublishMessage> dataToSend) {
     dataToSend.listen((MqttPublishMessage event) async {
-      logger.i('Got AppRequestsToHub');
+      logger.i('Got hub requests to app');
 
       (await getIt<ISavedDevicesRepo>().getAllDevices())
           .forEach((String id, deviceEntityToSend) {
@@ -130,7 +130,7 @@ class AppCommunicationRepository extends IAppCommunicationRepository {
         deviceEntityFromApp.deviceStateGRPC =
             DeviceState(DeviceStateGRPC.waitingInComp.toString());
 
-        getIt<IMqttServerRepository>().postToMqtt(
+        getIt<IMqttServerRepository>().postToHubMqtt(
           entityFromTheApp: deviceEntityFromApp,
           gotFromApp: true,
         );
@@ -143,7 +143,7 @@ class AppCommunicationRepository extends IAppCommunicationRepository {
           roomEntity: roomEntityFromApp,
         );
 
-        getIt<IMqttServerRepository>().postToMqtt(
+        getIt<IMqttServerRepository>().postToHubMqtt(
           entityFromTheApp: roomEntityFromApp,
           gotFromApp: true,
         );
@@ -292,7 +292,6 @@ class AppCommunicationRepository extends IAppCommunicationRepository {
     if (allRooms.isNotEmpty) {
       /// The delay fix this issue in gRPC for some reason
       /// https://github.com/grpc/grpc-dart/issues/558
-      await Future.delayed(const Duration(milliseconds: 15));
       allRooms.map((String id, RoomEntity d) {
         HubRequestsToApp.streamRequestsToApp.sink.add(d.toInfrastructure());
         return MapEntry(id, jsonEncode(d.toInfrastructure().toJson()));

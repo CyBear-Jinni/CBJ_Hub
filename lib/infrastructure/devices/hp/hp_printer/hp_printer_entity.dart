@@ -3,7 +3,6 @@ import 'package:cbj_hub/domain/generic_devices/abstract_device/device_entity_abs
 import 'package:cbj_hub/domain/generic_devices/abstract_device/value_objects_core.dart';
 import 'package:cbj_hub/domain/generic_devices/generic_printer_device/generic_printer_entity.dart';
 import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
-import 'package:cbj_hub/utils.dart';
 import 'package:dartz/dartz.dart';
 
 class HpPrinterEntity extends GenericPrinterDE {
@@ -38,7 +37,18 @@ class HpPrinterEntity extends GenericPrinterDE {
   Future<Either<CoreFailure, Unit>> executeDeviceAction({
     required DeviceEntityAbstract newEntity,
   }) async {
-    logger.i('Currently printer does not support any action');
+    // logger.i('Currently printer does not support any action');
+    // deviceStateGRPC = DeviceState(DeviceStateGRPC.ack.toString());
+    //
+    // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
+    //   entityFromTheHub: this,
+    // );
+
+    // deviceStateGRPC = DeviceState(DeviceStateGRPC.newStateFailed.toString());
+    // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
+    //   entityFromTheHub: this,
+    // );
+
     return right(unit);
   }
 

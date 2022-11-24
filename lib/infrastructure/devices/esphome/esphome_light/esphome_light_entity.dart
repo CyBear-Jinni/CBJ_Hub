@@ -78,9 +78,17 @@ class EspHomeLightEntity extends GenericLightDE {
         }
       }
       deviceStateGRPC = DeviceState(DeviceStateGRPC.ack.toString());
+      // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
+      //   entityFromTheHub: this,
+      // );
       return right(unit);
     } catch (e) {
       deviceStateGRPC = DeviceState(DeviceStateGRPC.newStateFailed.toString());
+      //
+      // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
+      //   entityFromTheHub: this,
+      // );
+
       return left(const CoreFailure.unexpected());
     }
   }
@@ -90,7 +98,7 @@ class EspHomeLightEntity extends GenericLightDE {
     lightSwitchState = GenericLightSwitchState(DeviceActions.on.toString());
 
     try {
-      logger.v('Turn on ESPHome device');
+      logger.v('Turn on ESPHome Light');
       await EspHomePythonApi.turnOnOffLightEntity(
         address: lastKnownIp!.getOrCrash(),
         port: devicePort.getOrCrash(),

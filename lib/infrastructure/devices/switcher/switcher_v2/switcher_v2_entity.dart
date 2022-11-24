@@ -6,9 +6,11 @@ import 'package:cbj_hub/domain/generic_devices/abstract_device/value_objects_cor
 import 'package:cbj_hub/domain/generic_devices/device_type_enums.dart';
 import 'package:cbj_hub/domain/generic_devices/generic_boiler_device/generic_boiler_entity.dart';
 import 'package:cbj_hub/domain/generic_devices/generic_boiler_device/generic_boiler_value_objects.dart';
+import 'package:cbj_hub/domain/mqtt_server/i_mqtt_server_repository.dart';
 import 'package:cbj_hub/infrastructure/devices/switcher/switcher_api/switcher_api_object.dart';
 import 'package:cbj_hub/infrastructure/devices/switcher/switcher_device_value_objects.dart';
 import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
+import 'package:cbj_hub/injection.dart';
 import 'package:cbj_hub/utils.dart';
 import 'package:dartz/dartz.dart';
 
@@ -74,42 +76,53 @@ class SwitcherV2Entity extends GenericBoilerDE {
     }
 
     try {
-      if (newEntity.boilerSwitchState!.getOrCrash() !=
-              boilerSwitchState!.getOrCrash() ||
-          deviceStateGRPC.getOrCrash() != DeviceStateGRPC.ack.toString()) {
-        final DeviceActions? actionToPreform =
-            EnumHelperCbj.stringToDeviceAction(
-          newEntity.boilerSwitchState!.getOrCrash(),
-        );
+      if (newEntity.deviceStateGRPC.getOrCrash() !=
+          DeviceStateGRPC.ack.toString()) {
+        if (newEntity.boilerSwitchState!.getOrCrash() !=
+            boilerSwitchState!.getOrCrash()) {
+          final DeviceActions? actionToPreform =
+              EnumHelperCbj.stringToDeviceAction(
+            newEntity.boilerSwitchState!.getOrCrash(),
+          );
 
-        if (actionToPreform == DeviceActions.on) {
-          (await turnOnBoiler()).fold(
-            (l) {
-              logger.e('Error turning boiler on');
-              throw l;
-            },
-            (r) {
-              logger.i('Boiler turn on success');
-            },
-          );
-        } else if (actionToPreform == DeviceActions.off) {
-          (await turnOffBoiler()).fold(
-            (l) {
-              logger.e('Error turning boiler off');
-              throw l;
-            },
-            (r) {
-              logger.i('Boiler turn off success');
-            },
-          );
-        } else {
-          logger.e('actionToPreform is not set correctly on Switcher V2');
+          if (actionToPreform == DeviceActions.on) {
+            (await turnOnBoiler()).fold(
+              (l) {
+                logger.e('Error turning boiler on');
+                throw l;
+              },
+              (r) {
+                logger.i('Boiler turn on success');
+              },
+            );
+          } else if (actionToPreform == DeviceActions.off) {
+            (await turnOffBoiler()).fold(
+              (l) {
+                logger.e('Error turning boiler off');
+                throw l;
+              },
+              (r) {
+                logger.i('Boiler turn off success');
+              },
+            );
+          } else {
+            logger.e('actionToPreform is not set correctly on Switcher V2');
+          }
         }
+        deviceStateGRPC = DeviceState(DeviceStateGRPC.ack.toString());
+
+        getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
+          entityFromTheHub: this,
+        );
       }
-      deviceStateGRPC = DeviceState(DeviceStateGRPC.ack.toString());
       return right(unit);
     } catch (e) {
       deviceStateGRPC = DeviceState(DeviceStateGRPC.newStateFailed.toString());
+
+      getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
+        entityFromTheHub: this,
+      );
+
       return left(const CoreFailure.unexpected());
     }
   }
@@ -120,6 +133,9 @@ class SwitcherV2Entity extends GenericBoilerDE {
 
     try {
       await switcherObject!.turnOn();
+      // TODO: Add a way to get switch value to improve code and test new
+      // TODO: response state from the hub
+      // await switcherObject.getSocket();
       return right(unit);
     } catch (e) {
       return left(const CoreFailure.unexpected());
@@ -132,6 +148,7 @@ class SwitcherV2Entity extends GenericBoilerDE {
 
     try {
       await switcherObject!.turnOff();
+
       return right(unit);
     } catch (e) {
       return left(const CoreFailure.unexpected());

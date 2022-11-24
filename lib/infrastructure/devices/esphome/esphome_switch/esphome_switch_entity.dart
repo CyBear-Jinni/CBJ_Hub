@@ -77,9 +77,17 @@ class EspHomeSwitchEntity extends GenericSwitchDE {
         }
       }
       deviceStateGRPC = DeviceState(DeviceStateGRPC.ack.toString());
+      // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
+      //   entityFromTheHub: this,
+      // );
       return right(unit);
     } catch (e) {
       deviceStateGRPC = DeviceState(DeviceStateGRPC.newStateFailed.toString());
+      //
+      // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
+      //   entityFromTheHub: this,
+      // );
+
       return left(const CoreFailure.unexpected());
     }
   }
@@ -95,7 +103,7 @@ class EspHomeSwitchEntity extends GenericSwitchDE {
         deviceKey: espHomeKey.getOrCrash(),
         newState: 'True',
       );
-      logger.v('Turn on ESPHome device');
+      logger.v('Turn on ESPHome switch');
       return right(unit);
     } catch (e) {
       return left(const CoreFailure.unexpected());

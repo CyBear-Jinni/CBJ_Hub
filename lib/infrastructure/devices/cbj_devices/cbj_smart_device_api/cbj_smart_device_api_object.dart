@@ -313,7 +313,7 @@ class CbjDevicesApiObject {
 
       return resultSession;
     } catch (error) {
-      logger.e('login failed due to an error\n$error');
+      logger.e('Cbj smart device login failed due to an error\n$error');
       pSession = 'B';
     }
     return pSession!;

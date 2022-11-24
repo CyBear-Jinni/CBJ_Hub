@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cbj_hub/application/connector/connector.dart';
 import 'package:cbj_hub/domain/generic_devices/abstract_device/device_entity_abstract.dart';
 import 'package:cbj_hub/domain/generic_devices/abstract_device/value_objects_core.dart';
@@ -11,6 +13,7 @@ import 'package:cbj_hub/domain/generic_devices/generic_smart_tv/generic_smart_tv
 import 'package:cbj_hub/domain/generic_devices/generic_switch_device/generic_switch_entity.dart';
 import 'package:cbj_hub/domain/mqtt_server/i_mqtt_server_repository.dart';
 import 'package:cbj_hub/domain/saved_devices/i_saved_devices_repo.dart';
+import 'package:cbj_hub/infrastructure/app_communication/app_communication_repository.dart';
 import 'package:cbj_hub/infrastructure/generic_devices/abstract_device/device_entity_dto_abstract.dart';
 import 'package:cbj_hub/injection.dart';
 import 'package:cbj_hub/utils.dart';
@@ -25,6 +28,8 @@ class MqttServerRepository extends IMqttServerRepository {
   static MqttServerClient client = MqttServerClient('127.0.0.1', 'CBJ_Hub');
 
   static const String hubBaseTopic = 'CBJ_Hub_Topic';
+
+  static const String appBaseTopic = 'CBJ_App_Topic';
 
   static const String nodeRedApiBaseTopic = 'NodeRed_Api_Topic';
 
@@ -153,6 +158,15 @@ class MqttServerRepository extends IMqttServerRepository {
   }
 
   @override
+  Stream<List<MqttReceivedMessage<MqttMessage?>>>
+      streamOfAllDeviceAppSubscriptions() async* {
+    yield* MqttClientTopicFilter(
+      '$appBaseTopic/$devicesTopicTypeName/#',
+      client.updates,
+    ).updates;
+  }
+
+  @override
   Stream<List<MqttReceivedMessage<MqttMessage?>>> streamOfChosenSubscription(
     String topicPath,
   ) async* {
@@ -182,6 +196,65 @@ class MqttServerRepository extends IMqttServerRepository {
           {deviceDeviceTypeThatChanged: mqttPublishMessage[0].payload},
         ),
       );
+    });
+  }
+
+  @override
+  Future<void> sendToApp() async {
+    streamOfAllDeviceAppSubscriptions().listen(
+        (List<MqttReceivedMessage<MqttMessage?>> mqttPublishMessage) async {
+      final String messageTopic = mqttPublishMessage[0].topic;
+      final List<String> topicsSplitted = messageTopic.split('/');
+      if (topicsSplitted.length < 4) {
+        return;
+      }
+      final String deviceId = topicsSplitted[2];
+      final String deviceDeviceTypeThatChanged = topicsSplitted[3];
+
+      final Map<String, dynamic> devicePropertyAndValues = {
+        deviceDeviceTypeThatChanged: mqttPublishMessage[0].payload
+      };
+
+      final ISavedDevicesRepo savedDevicesRepo = getIt<ISavedDevicesRepo>();
+
+      final Map<String, DeviceEntityAbstract> allDevices =
+          await savedDevicesRepo.getAllDevices();
+
+      for (final DeviceEntityAbstract d in allDevices.values) {
+        if (d.getDeviceId() == deviceId) {
+          final Map<String, dynamic> deviceAsJson =
+              d.toInfrastructure().toJson();
+
+          for (final String property in devicePropertyAndValues.keys) {
+            final String pt = MqttPublishPayload.bytesToStringAsString(
+              (devicePropertyAndValues[property] as MqttPublishMessage)
+                  .payload
+                  .message,
+            ).replaceAll('\n', '');
+
+            final valueMessage =
+                (devicePropertyAndValues[property] as MqttPublishMessage)
+                    .payload
+                    .message;
+            final String propertyValueString =
+                utf8.decode(valueMessage, allowMalformed: true);
+
+            if (propertyValueString.contains('value')) {
+              final Map<String, dynamic> propertyValueJson =
+                  jsonDecode(propertyValueString) as Map<String, dynamic>;
+              deviceAsJson[property] = propertyValueJson['value'];
+            } else {
+              deviceAsJson[property] = propertyValueString;
+            }
+            final DeviceEntityDtoAbstract savedDeviceWithSameIdAsMqtt =
+                DeviceEntityDtoAbstract.fromJson(deviceAsJson);
+
+            HubRequestsToApp.streamRequestsToApp.sink
+                .add(savedDeviceWithSameIdAsMqtt);
+            return;
+          }
+        }
+      }
     });
   }
 
@@ -321,14 +394,14 @@ class MqttServerRepository extends IMqttServerRepository {
       logger.i(
         'getValues got called on Device $deviceId and will get reposted to mqtt',
       );
-      postToMqtt(entityFromTheApp: deviceObjectOfDeviceId);
+      postToHubMqtt(entityFromTheApp: deviceObjectOfDeviceId);
     } else {
       logger.w('Device id does not exist');
     }
   }
 
   @override
-  Future<void> postToMqtt({
+  Future<void> postToHubMqtt({
     dynamic entityFromTheApp,
     bool? gotFromApp,
   }) async {
@@ -446,5 +519,41 @@ class MqttServerRepository extends IMqttServerRepository {
         'support sending to MQTT',
       );
     }
+  }
+
+  @override
+  Future<void> postToAppMqtt({
+    required DeviceEntityAbstract entityFromTheHub,
+  }) async {
+    // if (entityFromTheHub is Map<String, dynamic>) {
+    // if (entityFromTheHub['deviceStateGRPC'] !=
+    //         DeviceStateGRPC.waitingInComp.toString() ||
+    //     entityFromTheHub['deviceStateGRPC'] !=
+    //         DeviceStateGRPC.ack.toString()) {
+    //   logger.w("Hub didn't confirmed receiving the request yet");
+    //   return;
+    // }
+
+    final MapEntry<String, dynamic> deviceInMapEntry =
+        MapEntry<String, dynamic>(
+      entityFromTheHub.uniqueId.getOrCrash(),
+      entityFromTheHub,
+    );
+
+    ConnectorStreamToMqtt.toMqttController.sink.add(deviceInMapEntry);
+
+    // } else {
+    //   logger.w(
+    //     'Entity from Hub type ${entityFromTheHub.runtimeType} not '
+    //     'support sending to MQTT for the app',
+    //   );
+    // }
+  }
+
+  @override
+  Future<void> postSmartDeviceToAppMqtt({
+    required DeviceEntityAbstract entityFromTheHub,
+  }) async {
+    postToAppMqtt(entityFromTheHub: entityFromTheHub);
   }
 }

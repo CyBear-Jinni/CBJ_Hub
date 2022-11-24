@@ -313,7 +313,7 @@ class SwitcherApiObject {
 
       return resultSession;
     } catch (error) {
-      logger.e('login failed due to an error\n$error');
+      logger.e('Switcher login failed due to an error\n$error');
       pSession = 'B';
     }
     return pSession!;
