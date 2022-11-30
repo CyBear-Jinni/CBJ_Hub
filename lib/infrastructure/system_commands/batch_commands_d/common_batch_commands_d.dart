@@ -132,4 +132,10 @@ class CommonBatchCommandsD implements SystemCommandsBaseClassD {
   Future<String> getProjectFilesLocation() async {
     return Directory.current.path;
   }
+
+  @override
+  Future<String?> getIpFromMdnsName(String mdnsName) async {
+    // TODO: implement getIpFromMdnsName
+    throw UnimplementedError();
+  }
 }

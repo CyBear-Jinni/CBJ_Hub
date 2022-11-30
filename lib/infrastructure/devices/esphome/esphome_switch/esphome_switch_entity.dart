@@ -6,7 +6,10 @@ import 'package:cbj_hub/domain/generic_devices/generic_switch_device/generic_swi
 import 'package:cbj_hub/domain/generic_devices/generic_switch_device/generic_switch_value_objects.dart';
 import 'package:cbj_hub/infrastructure/devices/esphome/esphome_python_api/esphome_python_api.dart';
 import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
+import 'package:cbj_hub/infrastructure/system_commands/system_commands_manager_d.dart';
+import 'package:cbj_hub/injection.dart';
 import 'package:cbj_hub/utils.dart';
+import 'package:compute/compute.dart';
 import 'package:dartz/dartz.dart';
 
 class EspHomeSwitchEntity extends GenericSwitchDE {
@@ -97,11 +100,21 @@ class EspHomeSwitchEntity extends GenericSwitchDE {
     switchState = GenericSwitchSwitchState(DeviceActions.on.toString());
 
     try {
-      await EspHomePythonApi.turnOnOffSwitchEntity(
+      final HelperEspHomeDeviceInfo helperEspHomeDeviceInfo =
+          HelperEspHomeDeviceInfo(
         address: lastKnownIp!.getOrCrash(),
         port: devicePort.getOrCrash(),
         deviceKey: espHomeKey.getOrCrash(),
         newState: 'True',
+        mDnsName: 'null',
+        devicePassword: 'MyPassword',
+        getProjectFilesLocation:
+            await getIt<SystemCommandsManager>().getProjectFilesLocation(),
+      );
+
+      await compute(
+        EspHomePythonApi.turnOnOffSwitchEntity,
+        helperEspHomeDeviceInfo,
       );
       logger.v('Turn on ESPHome switch');
       return right(unit);
@@ -115,12 +128,22 @@ class EspHomeSwitchEntity extends GenericSwitchDE {
     switchState = GenericSwitchSwitchState(DeviceActions.off.toString());
 
     try {
-      logger.v('Turn off ESPHome device');
-      await EspHomePythonApi.turnOnOffSwitchEntity(
+      final HelperEspHomeDeviceInfo helperEspHomeDeviceInfo =
+          HelperEspHomeDeviceInfo(
         address: lastKnownIp!.getOrCrash(),
         port: devicePort.getOrCrash(),
         deviceKey: espHomeKey.getOrCrash(),
         newState: 'False',
+        mDnsName: 'null',
+        devicePassword: 'MyPassword',
+        getProjectFilesLocation:
+            await getIt<SystemCommandsManager>().getProjectFilesLocation(),
+      );
+
+      logger.v('Turn off ESPHome device');
+      await compute(
+        EspHomePythonApi.turnOnOffSwitchEntity,
+        helperEspHomeDeviceInfo,
       );
       return right(unit);
     } catch (e) {

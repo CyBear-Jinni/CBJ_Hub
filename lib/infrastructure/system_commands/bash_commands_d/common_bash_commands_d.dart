@@ -148,4 +148,19 @@ class CommonBashCommandsD implements SystemCommandsBaseClassD {
 
     return snapLocation;
   }
+
+  @override
+  Future<String?> getIpFromMdnsName(String mdnsName) async {
+    try {
+      final String fileContent =
+          await Process.run('avahi-resolve-host-name', <String>[mdnsName])
+              .then((ProcessResult result) {
+        return result.stdout.toString();
+      });
+      return fileContent.substring(fileContent.indexOf('\t') + 1).trim();
+    } catch (e) {
+      logger.w("Can't get device IP from mdns $mdnsName\n$e");
+    }
+    return null;
+  }
 }

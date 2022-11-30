@@ -1,7 +1,5 @@
 import 'package:cbj_hub/domain/generic_devices/abstract_device/device_entity_abstract.dart';
 import 'package:cbj_hub/infrastructure/devices/esphome/esphome_python_api/esphome_python_json_objects_type.dart';
-import 'package:cbj_hub/infrastructure/system_commands/system_commands_manager_d.dart';
-import 'package:cbj_hub/injection.dart';
 import 'package:cbj_hub/utils.dart';
 import 'package:python_shell/python_shell.dart';
 
@@ -10,21 +8,26 @@ class EspHomePythonApi {
 
   static PythonShell? _shell;
 
-  static Future<PythonShell> getShell() async {
-    if (_shell != null) {
-      return _shell!;
-    }
+  static Future<PythonShell?> getShell() async {
+    try {
+      if (_shell != null) {
+        return _shell!;
+      }
 
-    _shell = PythonShell(PythonShellConfig());
-    await _shell!.initialize();
-    return _shell!;
+      _shell = PythonShell(PythonShellConfig());
+      await _shell!.initialize();
+      final instance = ShellManager.getInstance("default");
+      instance.installRequires(requeiredPythonPackages);
+      return _shell!;
+    } catch (e) {
+      logger.e('Error getting python shell\n$e');
+    }
+    return null;
   }
 
-  static Future<List<DeviceEntityAbstract>> getAllEntities({
-    required String address,
-    required String mDnsName,
-    required String port,
-  }) async {
+  static Future<List<DeviceEntityAbstract>> getAllEntities(
+    HelperEspHomeDeviceInfo helperEspHomeDeviceInfo,
+  ) async {
     const String devicePassword = 'MyPassword';
     final List<DeviceEntityAbstract> devicesList = [];
 
@@ -32,7 +35,6 @@ class EspHomePythonApi {
       await getShell();
 
       final instance = ShellManager.getInstance("default");
-      instance.installRequires(requeiredPythonPackages);
 
       String? currentType;
 
@@ -43,9 +45,9 @@ class EspHomePythonApi {
                 EsphomePythonJsonObjectsType.getDeviceAsAbstractIfExist(
               currentType: currentType!,
               deviceJson: message,
-              address: address,
-              mDnsName: mDnsName,
-              port: port,
+              address: helperEspHomeDeviceInfo.address,
+              mDnsName: helperEspHomeDeviceInfo.mDnsName,
+              port: helperEspHomeDeviceInfo.port,
             );
             if (convertedDevice != null) {
               devicesList.add(convertedDevice);
@@ -56,7 +58,7 @@ class EspHomePythonApi {
           }
         },
         onComplete: () {
-          logger.v('EspHome device scan done');
+          logger.v('EspHome get all entities scan done');
         },
         onError: (object, stackTrace) {
           logger.v('EspHome device scan error $object\n$stackTrace');
@@ -64,11 +66,11 @@ class EspHomePythonApi {
       );
 
       await instance.runFile(
-        '${await getIt<SystemCommandsManager>().getProjectFilesLocation()}/lib/infrastructure/devices/esphome/esphome_python_api/esphome_python_files/get_esphome_entities.py',
+        '${helperEspHomeDeviceInfo.getProjectFilesLocation}/lib/infrastructure/devices/esphome/esphome_python_api/esphome_python_files/get_esphome_entities.py',
         listener: shellListener,
         arguments: [
-          address,
-          port,
+          helperEspHomeDeviceInfo.address,
+          helperEspHomeDeviceInfo.port,
           devicePassword,
         ],
         echo: false,
@@ -79,77 +81,93 @@ class EspHomePythonApi {
     return devicesList;
   }
 
-  static Future<void> turnOnOffLightEntity({
-    required String address,
-    required String port,
-    required String deviceKey,
-    required String newState,
-  }) async {
-    const String devicePassword = 'MyPassword';
+  static Future<void> turnOnOffLightEntity(
+    HelperEspHomeDeviceInfo helperEspHomeDeviceInfo,
+  ) async {
+    try {
+      await getShell();
 
-    await getShell();
+      final instance = ShellManager.getInstance("default");
 
-    final instance = ShellManager.getInstance("default");
-    instance.installRequires(requeiredPythonPackages);
+      final ShellListener shellListener = ShellListener(
+        onMessage: (String message) {},
+        onComplete: () {
+          logger
+              .v('EspHome turn lights on or off action completed successfully');
+        },
+        onError: (object, stackTrace) {
+          logger.v('EspHome device scan error $object\n$stackTrace');
+        },
+      );
 
-    final ShellListener shellListener = ShellListener(
-      onMessage: (String message) {},
-      onComplete: () {
-        logger.v('EspHome device scan done');
-      },
-      onError: (object, stackTrace) {
-        logger.v('EspHome device scan error $object\n$stackTrace');
-      },
-    );
-
-    await instance.runFile(
-      '${await getIt<SystemCommandsManager>().getProjectFilesLocation()}/lib/infrastructure/devices/esphome/esphome_python_api/esphome_python_files/turn_on_off_light_entity_esphome_devices.py',
-      listener: shellListener,
-      arguments: [
-        address,
-        port,
-        devicePassword,
-        deviceKey,
-        newState,
-      ],
-      echo: false,
-    );
+      await instance.runFile(
+        '${helperEspHomeDeviceInfo.getProjectFilesLocation}/lib/infrastructure/devices/esphome/esphome_python_api/esphome_python_files/turn_on_off_light_entity_esphome_devices.py',
+        listener: shellListener,
+        arguments: [
+          helperEspHomeDeviceInfo.address,
+          helperEspHomeDeviceInfo.port,
+          helperEspHomeDeviceInfo.devicePassword,
+          helperEspHomeDeviceInfo.deviceKey,
+          helperEspHomeDeviceInfo.newState,
+        ],
+        echo: false,
+      );
+    } catch (e) {
+      logger.e('Error while turning esphome light entity $e');
+    }
   }
 
-  static Future<void> turnOnOffSwitchEntity({
-    required String address,
-    required String port,
-    required String deviceKey,
-    required String newState,
-  }) async {
-    const String devicePassword = 'MyPassword';
+  static Future<void> turnOnOffSwitchEntity(
+    HelperEspHomeDeviceInfo helperEspHomeDeviceInfo,
+  ) async {
+    try {
+      final instance = ShellManager.getInstance("default");
 
-    await getShell();
+      final ShellListener shellListener = ShellListener(
+        onMessage: (String message) {},
+        onComplete: () {
+          logger
+              .v('EspHome turn switch on or off action completed successfully');
+        },
+        onError: (object, stackTrace) {
+          logger.v('EspHome device scan error $object\n$stackTrace');
+        },
+      );
 
-    final instance = ShellManager.getInstance("default");
-    instance.installRequires(requeiredPythonPackages);
-
-    final ShellListener shellListener = ShellListener(
-      onMessage: (String message) {},
-      onComplete: () {
-        logger.v('EspHome device scan done');
-      },
-      onError: (object, stackTrace) {
-        logger.v('EspHome device scan error $object\n$stackTrace');
-      },
-    );
-
-    await instance.runFile(
-      '${await getIt<SystemCommandsManager>().getProjectFilesLocation()}/lib/infrastructure/devices/esphome/esphome_python_api/esphome_python_files/turn_on_off_switch_entity_esphome_devices.py',
-      listener: shellListener,
-      arguments: [
-        address,
-        port,
-        devicePassword,
-        deviceKey,
-        newState,
-      ],
-      echo: false,
-    );
+      await instance.runFile(
+        '${helperEspHomeDeviceInfo.getProjectFilesLocation}/lib/infrastructure/devices/esphome/esphome_python_api/esphome_python_files/turn_on_off_switch_entity_esphome_devices.py',
+        listener: shellListener,
+        arguments: [
+          helperEspHomeDeviceInfo.address,
+          helperEspHomeDeviceInfo.port,
+          helperEspHomeDeviceInfo.devicePassword,
+          helperEspHomeDeviceInfo.deviceKey,
+          helperEspHomeDeviceInfo.newState,
+        ],
+        echo: false,
+      );
+    } catch (e) {
+      logger.e('Error while turning esphome light entity $e');
+    }
   }
+}
+
+class HelperEspHomeDeviceInfo {
+  HelperEspHomeDeviceInfo({
+    required this.address,
+    required this.port,
+    required this.deviceKey,
+    required this.newState,
+    required this.mDnsName,
+    required this.devicePassword,
+    required this.getProjectFilesLocation,
+  });
+
+  String address;
+  String port;
+  String deviceKey;
+  String newState;
+  String mDnsName;
+  String devicePassword;
+  String getProjectFilesLocation;
 }

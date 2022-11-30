@@ -66,4 +66,8 @@ class SystemCommandsManager {
   Future<String?> getRaspberryPiDeviceVersion() {
     return BashCommandsForRaspberryPi.getRaspberryPiDeviceVersion();
   }
+
+  Future<String?> getIpFromMdnsName(String mdnsName) {
+    return systemCommandsBaseClassD!.getIpFromMdnsName(mdnsName);
+  }
 }

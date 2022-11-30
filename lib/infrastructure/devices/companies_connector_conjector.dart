@@ -23,6 +23,7 @@ import 'package:cbj_hub/infrastructure/devices/tuya_smart/tuya_smart_connector_c
 import 'package:cbj_hub/infrastructure/devices/xiaomi_io/xiaomi_io_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/devices/yeelight/yeelight_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
+import 'package:cbj_hub/infrastructure/system_commands/system_commands_manager_d.dart';
 import 'package:cbj_hub/injection.dart';
 import 'package:cbj_hub/utils.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -177,16 +178,34 @@ class CompaniesConnectorConjector {
               ' search mdns in the network');
           await Future.delayed(const Duration(minutes: 2));
         }
-        for (final ActiveHost activeHost in await MdnsScanner.searchMdnsDevices(
+        for (ActiveHost activeHost in await MdnsScanner.searchMdnsDevices(
           forceUseOfSavedSrvRecordList: true,
         )) {
+          // In some cases for some reason we get empty result when trying to
+          // resolve mdns name to ip, the only way we found to fix that is to
+          // use resolve it using avahi-resolve-host-name
+          if (activeHost.address == '0.0.0.0') {
+            final String? mdnsSrvTarget =
+                (await activeHost.mdnsInfo)?.mdnsSrvTarget;
+            if (mdnsSrvTarget == null) {
+              continue;
+            }
+            final String? deviceIp = await getIt<SystemCommandsManager>()
+                .getIpFromMdnsName(mdnsSrvTarget);
+            if (deviceIp == null) {
+              continue;
+            }
+            activeHost = activeHost
+              ..internetAddress = InternetAddress(deviceIp);
+          }
+
           final MdnsInfo? mdnsInfo = await activeHost.mdnsInfo;
 
           if (mdnsInfo != null) {
             setMdnsDeviceByCompany(activeHost);
           }
         }
-        await Future.delayed(const Duration(seconds: 50));
+        await Future.delayed(const Duration(minutes: 2));
       }
     } catch (e) {
       logger.e('Mdns search error\n$e');

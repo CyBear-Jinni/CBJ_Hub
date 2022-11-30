@@ -15,6 +15,8 @@ abstract class SystemCommandsBaseClassD {
 
   Future<String> getProjectFilesLocation();
 
+  Future<String?> getIpFromMdnsName(String mdnsName);
+
 // TODO: Need to find a way in dart to get os environment variable
 // /// Get Snap location environment variable "SNAP"
 // Future<String> getSnapLocationEnvironmentVariable();
