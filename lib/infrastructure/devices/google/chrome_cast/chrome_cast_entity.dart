@@ -48,7 +48,7 @@ class ChromeCastEntity extends GenericSmartTvDE {
 
   late ChromecastApiNodeRed chromecastApiNodeRed;
 
-  void setUpNodeRedApi() async {
+  Future<void> setUpNodeRedApi() async {
     // TODO: add check to add  uniqueId + action as flow in node read only if missing
     chromecastApiNodeRed = ChromecastApiNodeRed();
     chromecastApiNodeRed.setNewYoutubeVideoNodes(

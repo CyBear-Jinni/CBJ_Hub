@@ -6,15 +6,13 @@ import 'package:cbj_hub/domain/generic_devices/abstract_device/value_objects_cor
 import 'package:cbj_hub/domain/generic_devices/device_type_enums.dart';
 import 'package:cbj_hub/domain/generic_devices/generic_light_device/generic_light_entity.dart';
 import 'package:cbj_hub/domain/generic_devices/generic_light_device/generic_light_value_objects.dart';
-import 'package:cbj_hub/infrastructure/devices/lifx/lifx_connector_conjector.dart';
-import 'package:cbj_hub/infrastructure/devices/lifx/lifx_device_value_objects.dart';
+import 'package:cbj_hub/infrastructure/devices/wiz/wiz_device_value_objects.dart';
 import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
 import 'package:cbj_hub/utils.dart';
 import 'package:dartz/dartz.dart';
-import 'package:lifx_http_api/lifx_http_api.dart';
 
-class LifxWhiteEntity extends GenericLightDE {
-  LifxWhiteEntity({
+class WizWhiteEntity extends GenericLightDE {
+  WizWhiteEntity({
     required super.uniqueId,
     required super.vendorUniqueId,
     required super.defaultName,
@@ -27,10 +25,10 @@ class LifxWhiteEntity extends GenericLightDE {
     required super.powerConsumption,
     required super.lightSwitchState,
   }) : super(
-          deviceVendor: DeviceVendor(VendorsAndServices.lifx.toString()),
+          deviceVendor: DeviceVendor(VendorsAndServices.wiz.toString()),
         );
 
-  LifxPort? lifxPort;
+  WizPort? wizPort;
 
   /// Please override the following methods
   @override
@@ -56,20 +54,20 @@ class LifxWhiteEntity extends GenericLightDE {
 
         if (actionToPreform == DeviceActions.on) {
           (await turnOnLight()).fold((l) {
-            logger.e('Error turning Lifx light on');
+            logger.e('Error turning Wiz light on');
             throw l;
           }, (r) {
-            logger.i('Lifx light turn on success');
+            logger.i('Wiz light turn on success');
           });
         } else if (actionToPreform == DeviceActions.off) {
           (await turnOffLight()).fold((l) {
-            logger.e('Error turning Lifx light off');
+            logger.e('Error turning Wiz light off');
             throw l;
           }, (r) {
-            logger.i('Lifx light turn off success');
+            logger.i('Wiz light turn off success');
           });
         } else {
-          logger.w('actionToPreform is not set correctly on Lifx White');
+          logger.w('actionToPreform is not set correctly on Wiz White');
         }
       }
       deviceStateGRPC = DeviceState(DeviceStateGRPC.ack.toString());
@@ -90,23 +88,23 @@ class LifxWhiteEntity extends GenericLightDE {
   Future<Either<CoreFailure, Unit>> turnOnLight() async {
     lightSwitchState = GenericLightSwitchState(DeviceActions.on.toString());
     try {
-      final setStateBodyResponse =
-          await LifxConnectorConjector.lifxClient?.setState(
-        Selector.id(vendorUniqueId.getOrCrash()),
-        power: 'on',
-        fast: true,
-      );
-      if (setStateBodyResponse == null) {
-        throw 'setStateBodyResponse is null';
-      }
-
-      return right(unit);
+      // final setStateBodyResponse =
+      //     await WizConnectorConjector.wizClient?.setState(
+      //   // Selector.id(vendorUniqueId.getOrCrash()),
+      //   power: 'on',
+      //   fast: true,
+      // );
+      // if (setStateBodyResponse == null) {
+      //   throw 'setStateBodyResponse is null';
+      // }
+      //
+      // return right(unit);
     } catch (e) {
       // As we are using the fast = true the response is always
-      // LifxHttpException Error
-      return right(unit);
-      // return left(const CoreFailure.unexpected());
+      // WizHttpException Error
+      return left(const CoreFailure.unexpected());
     }
+    return left(const CoreFailure.unexpected());
   }
 
   @override
@@ -114,21 +112,21 @@ class LifxWhiteEntity extends GenericLightDE {
     lightSwitchState = GenericLightSwitchState(DeviceActions.off.toString());
 
     try {
-      final setStateBodyResponse =
-          await LifxConnectorConjector.lifxClient?.setState(
-        Selector.id(vendorUniqueId.getOrCrash()),
-        power: 'off',
-        fast: true,
-      );
-      if (setStateBodyResponse == null) {
-        throw 'setStateBodyResponse is null';
-      }
-      return right(unit);
+      // final setStateBodyResponse =
+      //     await WizConnectorConjector.wizClient?.setState(
+      // Selector.id(vendorUniqueId.getOrCrash()),
+      //   power: 'off',
+      //   fast: true,
+      // );
+      // if (setStateBodyResponse == null) {
+      //   throw 'setStateBodyResponse is null';
+      // }
+      // return right(unit);
     } catch (e) {
       // As we are using the fast = true the response is always
-      // LifxHttpException Error
-      return right(unit);
-      // return left(const CoreFailure.unexpected());
+      // WizHttpException Error
+      return left(const CoreFailure.unexpected());
     }
+    return left(const CoreFailure.unexpected());
   }
 }

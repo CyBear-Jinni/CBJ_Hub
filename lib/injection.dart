@@ -12,7 +12,7 @@ late String currentEnv;
 Future<void> configureInjection(String environment) async {
   currentEnv = environment;
   logger.i('Current CyBear Jinni Hub environment name: $currentEnv');
-  $initGetIt(getIt, environment: environment);
+  getIt.init(environment: environment);
 }
 
 abstract class Env {

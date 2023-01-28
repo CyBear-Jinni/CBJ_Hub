@@ -12,7 +12,6 @@ import 'package:cbj_hub/utils.dart';
 /// TODO: Source: https://github.com/esphome/aioesphomeapi
 class EspHomeApiClient {
   EspHomeApiClient({
-    required String deviceMdnsT,
     this.devicePort = 6053,
     this.devicePass,
   });

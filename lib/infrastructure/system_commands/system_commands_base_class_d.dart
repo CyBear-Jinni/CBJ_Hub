@@ -26,5 +26,4 @@ abstract class SystemCommandsBaseClassD {
 //
 // /// Get Snap user common environment variable "SNAP_USER_COMMON"
 // Future<String> getSnapUserCommonEnvironmentVariable();
-
 }

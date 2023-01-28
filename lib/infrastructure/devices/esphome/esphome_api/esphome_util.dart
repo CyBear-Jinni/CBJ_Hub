@@ -67,5 +67,4 @@ class EspHomeUtil {
   //   prec = 7 - l10
   //   return round(value, prec)
   // }
-
 }

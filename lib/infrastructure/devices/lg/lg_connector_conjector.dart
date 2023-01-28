@@ -69,7 +69,8 @@ class LgConnectorConjector implements AbstractCompanyConnectorConjector {
 
       companyDevices.addEntries([deviceAsEntry]);
       logger.i(
-          'New LG device got added ${entityAsDevice.defaultName.getOrCrash()}');
+        'New LG device got added ${entityAsDevice.defaultName.getOrCrash()}',
+      );
     }
   }
 

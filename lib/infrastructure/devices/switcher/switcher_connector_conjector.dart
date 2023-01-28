@@ -9,6 +9,7 @@ import 'package:cbj_hub/infrastructure/devices/companies_connector_conjector.dar
 import 'package:cbj_hub/infrastructure/devices/switcher/switcher_api/switcher_api_object.dart';
 import 'package:cbj_hub/infrastructure/devices/switcher/switcher_helpers.dart';
 import 'package:cbj_hub/infrastructure/devices/switcher/switcher_runner/switcher_runner_entity.dart';
+import 'package:cbj_hub/infrastructure/devices/switcher/switcher_smart_plug/switcher_smart_plug_entity.dart';
 import 'package:cbj_hub/infrastructure/devices/switcher/switcher_v2/switcher_v2_entity.dart';
 import 'package:cbj_hub/infrastructure/generic_devices/abstract_device/abstract_company_connector_conjector.dart';
 import 'package:cbj_hub/utils.dart';
@@ -26,7 +27,8 @@ class SwitcherConnectorConjector implements AbstractCompanyConnectorConjector {
 
     for (final DeviceEntityAbstract savedDevice in companyDevices.values) {
       if ((savedDevice is SwitcherV2Entity ||
-              savedDevice is SwitcherRunnerEntity) &&
+              savedDevice is SwitcherRunnerEntity ||
+              savedDevice is SwitcherSmartPlugEntity) &&
           switcherApiObject.deviceId ==
               savedDevice.vendorUniqueId.getOrCrash()) {
         return;
@@ -93,7 +95,9 @@ class SwitcherConnectorConjector implements AbstractCompanyConnectorConjector {
     // }
 
     if (device != null &&
-        (device is SwitcherV2Entity || device is SwitcherRunnerEntity)) {
+        (device is SwitcherV2Entity ||
+            device is SwitcherRunnerEntity ||
+            device is SwitcherSmartPlugEntity)) {
       device.executeDeviceAction(newEntity: switcherDE);
     } else {
       logger.w('Switcher device type ${device.runtimeType} does not exist');

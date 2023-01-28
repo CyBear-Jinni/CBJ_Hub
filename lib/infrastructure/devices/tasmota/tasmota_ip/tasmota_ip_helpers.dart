@@ -76,7 +76,6 @@ class TasmotaIpHelpers {
     } else if (componentInDeviceNumberLabelAsInt >= 32 &&
         componentInDeviceNumberLabelAsInt <= 39) {
       // UI Label: Button
-
     } else if (componentInDeviceNumberLabelAsInt >= 64 &&
         componentInDeviceNumberLabelAsInt <= 71) {
       // UI Label: Button_n

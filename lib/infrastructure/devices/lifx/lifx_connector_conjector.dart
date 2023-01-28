@@ -12,26 +12,27 @@ import 'package:cbj_hub/infrastructure/generic_devices/abstract_device/abstract_
 import 'package:cbj_hub/utils.dart';
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
-import 'package:lifx_http_api/lifx_http_api.dart' as lifx;
+import 'package:lifx_http_api/lifx_http_api.dart';
 
 @singleton
 class LifxConnectorConjector implements AbstractCompanyConnectorConjector {
   Future<String> accountLogin(GenericLifxLoginDE genericLifxLoginDE) async {
-    lifxClient = lifx.Client(genericLifxLoginDE.lifxApiKey.getOrCrash());
+    lifxClient = LIFXClient(genericLifxLoginDE.lifxApiKey.getOrCrash());
     _discoverNewDevices();
     return 'Success';
   }
 
   static Map<String, DeviceEntityAbstract> companyDevices = {};
 
-  static lifx.Client? lifxClient;
+  static LIFXClient? lifxClient;
 
   Future<void> _discoverNewDevices() async {
     while (true) {
       try {
-        final Iterable<lifx.Bulb> lights = await lifxClient!.listLights();
+        final Iterable<LIFXBulb> lights =
+            await lifxClient!.listLights(const Selector());
 
-        for (final lifx.Bulb lifxDevice in lights) {
+        for (final LIFXBulb lifxDevice in lights) {
           CoreUniqueId? tempCoreUniqueId;
           bool deviceExist = false;
           for (final DeviceEntityAbstract savedDevice
