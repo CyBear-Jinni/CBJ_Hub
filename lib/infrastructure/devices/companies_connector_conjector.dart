@@ -14,12 +14,14 @@ import 'package:cbj_hub/infrastructure/devices/hp/hp_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/devices/hp/hp_printer/hp_printer_entity.dart';
 import 'package:cbj_hub/infrastructure/devices/lg/lg_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/devices/lifx/lifx_connector_conjector.dart';
+import 'package:cbj_hub/infrastructure/devices/philips_hue/philips_hue_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/devices/shelly/shelly_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/devices/sonoff_diy/sonoff_diy_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/devices/switcher/switcher_api/switcher_discover.dart';
 import 'package:cbj_hub/infrastructure/devices/switcher/switcher_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/devices/tasmota/tasmota_ip/tasmota_ip_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/devices/tuya_smart/tuya_smart_connector_conjector.dart';
+import 'package:cbj_hub/infrastructure/devices/wiz/wiz_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/devices/xiaomi_io/xiaomi_io_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/devices/yeelight/yeelight_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
@@ -73,6 +75,9 @@ class CompaniesConnectorConjector {
               .manageHubRequestsForDevice(deviceEntityAbstract);
         } else if (deviceVendor == VendorsAndServices.hp.toString()) {
           getIt<HpConnectorConjector>()
+              .manageHubRequestsForDevice(deviceEntityAbstract);
+        } else if (deviceVendor == VendorsAndServices.philipsHue.toString()) {
+          getIt<PhilipsHueConnectorConjector>()
               .manageHubRequestsForDevice(deviceEntityAbstract);
         } else {
           logger.w(
@@ -131,6 +136,8 @@ class CompaniesConnectorConjector {
       ShellyConnectorConjector.companyDevices.addEntries([devicesEntry]);
     } else if (deviceVendor == VendorsAndServices.sonoffDiy.toString()) {
       SonoffDiyConnectorConjector.companyDevices.addEntries([devicesEntry]);
+    } else if (deviceVendor == VendorsAndServices.philipsHue.toString()) {
+      PhilipsHueConnectorConjector.companyDevices.addEntries([devicesEntry]);
     } else {
       logger.w('Cannot add device entity to its repo, type not supported');
     }
@@ -282,6 +289,13 @@ class CompaniesConnectorConjector {
         ip: mdnsDeviceIp,
         port: mdnsPort,
       );
+    } else if (PhilipsHueConnectorConjector.mdnsTypes
+        .contains(hostMdnsInfo.mdnsServiceType)) {
+      getIt<PhilipsHueConnectorConjector>().addNewDeviceByMdnsName(
+        mDnsName: startOfMdnsName,
+        ip: mdnsDeviceIp,
+        port: mdnsPort,
+      );
     } else {
       // logger.v(
       //   'mDNS service type ${hostMdnsInfo.mdnsServiceType} is not supported\n IP: ${activeHost.address}, Port: ${hostMdnsInfo.mdnsPort}, ServiceType: ${hostMdnsInfo.mdnsServiceType}, MdnsName: ${hostMdnsInfo.getOnlyTheStartOfMdnsName()}',
@@ -352,6 +366,9 @@ class CompaniesConnectorConjector {
         deviceHostNameLowerCase.contains('yeelink') ||
         deviceHostNameLowerCase.contains('xiao')) {
       getIt<XiaomiIoConnectorConjector>().discoverNewDevices();
+    } else if (deviceHostNameLowerCase.startsWith('wiz')) {
+      getIt<WizConnectorConjector>()
+          .addNewDeviceByHostInfo(activeHost: activeHost);
     } else {
       final ActiveHost? cbjSmartDeviceHost =
           await CbjSmartDeviceClient.checkIfDeviceIsCbjSmartDevice(

@@ -8,6 +8,7 @@ import 'package:cbj_hub/infrastructure/generic_devices/abstract_device/abstract_
 import 'package:cbj_hub/utils.dart';
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
+import 'package:network_tools/network_tools.dart';
 
 @singleton
 class WizConnectorConjector implements AbstractCompanyConnectorConjector {
@@ -18,6 +19,55 @@ class WizConnectorConjector implements AbstractCompanyConnectorConjector {
   }
 
   static Map<String, DeviceEntityAbstract> companyDevices = {};
+
+  Future<void> addNewDeviceByHostInfo({
+    required ActiveHost activeHost,
+  }) async {
+    logger.w('Wiz device got discovered but missing implementation');
+    // final List<CoreUniqueId?> tempCoreUniqueId = [];
+    //
+    // for (final DeviceEntityAbstract savedDevice in companyDevices.values) {
+    //   if ((savedDevice is WizWhiteEntity) &&
+    //       await activeHost.hostName ==
+    //           savedDevice.vendorUniqueId.getOrCrash()) {
+    //     return;
+    //   } else if (await activeHost.hostName ==
+    //       savedDevice.vendorUniqueId.getOrCrash()) {
+    //     logger.w(
+    //       'Wiz IP device type supported but implementation is missing here',
+    //     );
+    //   }
+    // }
+    // // TODO: Create list of CoreUniqueId and populate it with all the
+    // //  components saved devices that already exist
+    // final List<String> componentsInDevice =
+    //     await getAllComponentsOfDevice(activeHost);
+    //
+    // final List<DeviceEntityAbstract> wizIpDevices =
+    //     await WizIpHelpers.addDiscoverdDevice(
+    //   activeHost: activeHost,
+    //   uniqueDeviceIdList: tempCoreUniqueId,
+    //   componentInDeviceNumberLabelList: componentsInDevice,
+    // );
+    //
+    // if (wizIpDevices.isEmpty) {
+    //   return;
+    // }
+    //
+    // for (final DeviceEntityAbstract entityAsDevice in wizIpDevices) {
+    //   final DeviceEntityAbstract deviceToAdd =
+    //       CompaniesConnectorConjector.addDiscoverdDeviceToHub(entityAsDevice);
+    //
+    //   final MapEntry<String, DeviceEntityAbstract> deviceAsEntry =
+    //       MapEntry(deviceToAdd.uniqueId.getOrCrash(), deviceToAdd);
+    //
+    //   companyDevices.addEntries([deviceAsEntry]);
+    //
+    //   logger.v(
+    //     'New Wiz Ip device name:${entityAsDevice.defaultName.getOrCrash()}',
+    //   );
+    // }
+  }
 
   // static WizClient? wizClient;
 

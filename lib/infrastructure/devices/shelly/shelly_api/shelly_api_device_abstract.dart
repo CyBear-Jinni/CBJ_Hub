@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:http/http.dart';
 
 abstract class ShellyApiDeviceAbstract {
   ShellyApiDeviceAbstract({
@@ -17,9 +17,8 @@ abstract class ShellyApiDeviceAbstract {
   late String url;
 
   Future<String> getStatus() async {
-    final HttpClientRequest httpClientRequest =
-        await HttpClient().getUrl(Uri.parse('$url/status'));
-    final HttpClientResponse response = await httpClientRequest.close();
-    return response.reasonPhrase;
+    final Response response = await get(Uri.parse('$url/status'));
+
+    return response.body;
   }
 }

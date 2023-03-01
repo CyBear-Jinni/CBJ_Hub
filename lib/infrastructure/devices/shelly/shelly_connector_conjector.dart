@@ -47,7 +47,7 @@ class ShellyConnectorConjector implements AbstractCompanyConnectorConjector {
     }
 
     final List<DeviceEntityAbstract> espDevice =
-        ShellyHelpers.addDiscoverdDevice(
+        await ShellyHelpers.addDiscoverdDevice(
       mDnsName: mDnsName,
       ip: ip,
       port: port,
