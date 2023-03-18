@@ -1,14 +1,15 @@
 import 'dart:async';
-import 'dart:collection';
 
 import 'package:cbj_hub/domain/generic_devices/abstract_device/core_failures.dart';
 import 'package:cbj_hub/domain/generic_devices/abstract_device/device_entity_abstract.dart';
-import 'package:cbj_hub/domain/generic_devices/abstract_device/value_objects_core.dart';
-import 'package:cbj_hub/domain/generic_devices/generic_light_device/generic_light_entity.dart';
+import 'package:cbj_hub/domain/saved_devices/i_saved_devices_repo.dart';
+import 'package:cbj_hub/domain/vendors/esphome_login/generic_esphome_login_entity.dart';
 import 'package:cbj_hub/infrastructure/devices/companies_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/devices/esphome/esphome_helpers.dart';
 import 'package:cbj_hub/infrastructure/devices/esphome/esphome_light/esphome_light_entity.dart';
+import 'package:cbj_hub/infrastructure/devices/esphome/esphome_switch/esphome_switch_entity.dart';
 import 'package:cbj_hub/infrastructure/generic_devices/abstract_device/abstract_company_connector_conjector.dart';
+import 'package:cbj_hub/injection.dart';
 import 'package:cbj_hub/utils.dart';
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
@@ -18,7 +19,20 @@ class EspHomeConnectorConjector implements AbstractCompanyConnectorConjector {
   static const List<String> mdnsTypes = ['_esphomelib._tcp'];
 
   static Map<String, DeviceEntityAbstract> companyDevices = {};
-  static HashSet<String> lastMdnsName = HashSet<String>();
+
+  static String? espHomeDevicePass;
+
+  Map<String, DeviceEntityAbstract> get getAllCompanyDevices => companyDevices;
+
+  Future<String> accountLogin(
+      GenericEspHomeLoginDE genericEspHomeDeviceLoginDE) async {
+    espHomeDevicePass =
+        genericEspHomeDeviceLoginDE.espHomeDevicePass.getOrCrash();
+    // We can start a search of devices in node red using a request to
+    // /esphome/discovery but for now lets just let the devices get found by
+    // the global mdns search
+    return 'Success';
+  }
 
   /// Add new devices to [companyDevices] if not exist
   Future<void> addNewDeviceByMdnsName({
@@ -27,31 +41,10 @@ class EspHomeConnectorConjector implements AbstractCompanyConnectorConjector {
     required String port,
     required String address,
   }) async {
-    CoreUniqueId? tempCoreUniqueId;
-
-    // Python process take so much that the same result can arrive again
-    // before the device completed the process and got add
-    // This fixe it
-    if (lastMdnsName.contains(mDnsName)) {
+    if (espHomeDevicePass == null) {
+      logger.w('ESPHome device got found but missing a password, please add '
+          'password for it in the app UI');
       return;
-    }
-
-    lastMdnsName.add(mDnsName);
-
-    for (final DeviceEntityAbstract device in companyDevices.values) {
-      if (device is EspHomeLightEntity &&
-          mDnsName == device.vendorUniqueId.getOrCrash()) {
-        return;
-      } else if (device is GenericLightDE &&
-          mDnsName == device.vendorUniqueId.getOrCrash()) {
-        tempCoreUniqueId = device.uniqueId;
-        break;
-      } else if (mDnsName == device.vendorUniqueId.getOrCrash()) {
-        logger.w(
-          'ESPHome device type supported but implementation is missing here',
-        );
-        return;
-      }
     }
 
     final List<DeviceEntityAbstract> espDevice =
@@ -59,18 +52,15 @@ class EspHomeConnectorConjector implements AbstractCompanyConnectorConjector {
       mDnsName: mDnsName,
       port: port,
       address: address,
+      devicePassword: espHomeDevicePass!,
     );
-
-    if (espDevice.isEmpty) {
-      return;
-    }
 
     for (final DeviceEntityAbstract entityAsDevice in espDevice) {
       final DeviceEntityAbstract deviceToAdd =
           CompaniesConnectorConjector.addDiscoverdDeviceToHub(entityAsDevice);
 
       final MapEntry<String, DeviceEntityAbstract> deviceAsEntry =
-          MapEntry(deviceToAdd.uniqueId.getOrCrash(), deviceToAdd);
+          MapEntry(deviceToAdd.vendorUniqueId.getOrCrash(), deviceToAdd);
 
       companyDevices.addEntries([deviceAsEntry]);
 
@@ -78,15 +68,20 @@ class EspHomeConnectorConjector implements AbstractCompanyConnectorConjector {
         'New ESPHome devices name:${entityAsDevice.defaultName.getOrCrash()}',
       );
     }
+    // Save state locally so that nodeRED flows will not get created again
+    // after restart
+    getIt<ISavedDevicesRepo>().saveAndActivateSmartDevicesToDb();
   }
 
   Future<void> manageHubRequestsForDevice(
     DeviceEntityAbstract espHomeDE,
   ) async {
     final DeviceEntityAbstract? device =
-        companyDevices[espHomeDE.getDeviceId()];
+        companyDevices[espHomeDE.vendorUniqueId.getOrCrash()];
 
     if (device is EspHomeLightEntity) {
+      device.executeDeviceAction(newEntity: espHomeDE);
+    } else if (device is EspHomeSwitchEntity) {
       device.executeDeviceAction(newEntity: espHomeDE);
     } else {
       logger.w('ESPHome device type does not exist');

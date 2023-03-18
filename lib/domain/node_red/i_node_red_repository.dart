@@ -24,4 +24,17 @@ abstract class INodeRedRepository {
     required String nodes,
     required String flowId,
   });
+
+  /// Update existing flow with more nodes
+  Future<String> updateFlowNodes({
+    required String nodes,
+    required String flowId,
+  });
+
+  /// Install node module if needed and set one global node
+  /// Label is name of the flow
+  Future<String> setGlobalNodes({
+    required String? moduleToUse,
+    required String nodes,
+  });
 }

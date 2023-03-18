@@ -4,12 +4,11 @@ import 'package:cbj_hub/domain/generic_devices/abstract_device/value_objects_cor
 import 'package:cbj_hub/domain/generic_devices/device_type_enums.dart';
 import 'package:cbj_hub/domain/generic_devices/generic_switch_device/generic_switch_entity.dart';
 import 'package:cbj_hub/domain/generic_devices/generic_switch_device/generic_switch_value_objects.dart';
-import 'package:cbj_hub/infrastructure/devices/esphome/esphome_python_api/esphome_python_api.dart';
+import 'package:cbj_hub/domain/mqtt_server/i_mqtt_server_repository.dart';
+import 'package:cbj_hub/infrastructure/devices/esphome/esphome_node_red_api/esphome_node_red_api.dart';
 import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
-import 'package:cbj_hub/infrastructure/system_commands/system_commands_manager_d.dart';
 import 'package:cbj_hub/injection.dart';
 import 'package:cbj_hub/utils.dart';
-import 'package:compute/compute.dart';
 import 'package:dartz/dartz.dart';
 
 class EspHomeSwitchEntity extends GenericSwitchDE {
@@ -98,29 +97,21 @@ class EspHomeSwitchEntity extends GenericSwitchDE {
   @override
   Future<Either<CoreFailure, Unit>> turnOnSwitch() async {
     switchState = GenericSwitchSwitchState(DeviceActions.on.toString());
-
     try {
-      final HelperEspHomeDeviceInfo helperEspHomeDeviceInfo =
-          HelperEspHomeDeviceInfo(
-        address: lastKnownIp!.getOrCrash(),
-        port: devicePort.getOrCrash(),
-        deviceKey: espHomeKey.getOrCrash(),
-        newState: 'True',
-        mDnsName: 'null',
-        devicePassword: 'MyPassword',
-        getProjectFilesLocation:
-            await getIt<SystemCommandsManager>().getProjectFilesLocation(),
-      );
+      final String nodeRedApiBaseTopic =
+          getIt<IMqttServerRepository>().getNodeRedApiBaseTopic();
 
-      await compute(
-        EspHomePythonApi.turnOnOffSwitchEntity,
-        helperEspHomeDeviceInfo,
-      );
-      logger.v('Turn on ESPHome switch');
-      return right(unit);
+      final String nodeRedDevicesTopic =
+          getIt<IMqttServerRepository>().getNodeRedDevicesTopicTypeName();
+      final String topic =
+          '$nodeRedApiBaseTopic/$nodeRedDevicesTopic/${espHomeKey.getOrCrash()}/${EspHomeNodeRedApi.deviceStateProperty}/${EspHomeNodeRedApi.inputDeviceProperty}';
+
+      getIt<IMqttServerRepository>()
+          .publishMessage(topic, """{"state":true}""");
     } catch (e) {
       return left(const CoreFailure.unexpected());
     }
+    return right(unit);
   }
 
   @override
@@ -128,26 +119,19 @@ class EspHomeSwitchEntity extends GenericSwitchDE {
     switchState = GenericSwitchSwitchState(DeviceActions.off.toString());
 
     try {
-      final HelperEspHomeDeviceInfo helperEspHomeDeviceInfo =
-          HelperEspHomeDeviceInfo(
-        address: lastKnownIp!.getOrCrash(),
-        port: devicePort.getOrCrash(),
-        deviceKey: espHomeKey.getOrCrash(),
-        newState: 'False',
-        mDnsName: 'null',
-        devicePassword: 'MyPassword',
-        getProjectFilesLocation:
-            await getIt<SystemCommandsManager>().getProjectFilesLocation(),
-      );
+      final String nodeRedApiBaseTopic =
+          getIt<IMqttServerRepository>().getNodeRedApiBaseTopic();
 
-      logger.v('Turn off ESPHome device');
-      await compute(
-        EspHomePythonApi.turnOnOffSwitchEntity,
-        helperEspHomeDeviceInfo,
-      );
-      return right(unit);
+      final String nodeRedDevicesTopic =
+          getIt<IMqttServerRepository>().getNodeRedDevicesTopicTypeName();
+      final String topic =
+          '$nodeRedApiBaseTopic/$nodeRedDevicesTopic/${espHomeKey.getOrCrash()}/${EspHomeNodeRedApi.deviceStateProperty}/${EspHomeNodeRedApi.inputDeviceProperty}';
+
+      getIt<IMqttServerRepository>()
+          .publishMessage(topic, """{"state":false}""");
     } catch (e) {
       return left(const CoreFailure.unexpected());
     }
+    return right(unit);
   }
 }

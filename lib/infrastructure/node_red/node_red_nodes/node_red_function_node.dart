@@ -21,6 +21,16 @@ class NodeRedFunctionNode extends NodeRedVisualNodeAbstract {
     return NodeRedFunctionNode(funcString: function, wires: wires, name: name);
   }
 
+  /// Gets input string and parse the payload as json to the next node
+  factory NodeRedFunctionNode.inputPayloadToJson({
+    List<List<String>>? wires,
+  }) {
+    const String function =
+        '''msg.payload = JSON.parse(msg.payload); return msg;''';
+    return NodeRedFunctionNode(
+        funcString: function, wires: wires, name: 'Input to json');
+  }
+
   String funcString;
 
   @override
@@ -33,6 +43,8 @@ class NodeRedFunctionNode extends NodeRedVisualNodeAbstract {
     "func": "$funcString",
     "outputs": 1,
     "noerr": 0,
+    "x": 400,
+    "y": 1000,
     "initialize": "",
     "finalize": "",
     "wires":  ${fixWiresForNodeRed()}

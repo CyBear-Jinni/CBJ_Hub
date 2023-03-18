@@ -41,6 +41,8 @@ class NodeRedInjectAtASpecificTimeNode extends NodeRedVisualNodeAbstract {
     "crontab": "$crontab",
     "once": false,
     "onceDelay": 0.1,
+    "x": 400,
+    "y": 800,
     "topic": "",
     "payload": "",
     "payloadType": "date",

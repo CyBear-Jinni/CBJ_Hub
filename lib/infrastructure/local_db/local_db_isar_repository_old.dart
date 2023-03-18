@@ -18,6 +18,10 @@ import 'package:cbj_hub/domain/saved_devices/i_saved_devices_repo.dart';
 import 'package:cbj_hub/domain/scene/i_scene_cbj_repository.dart';
 import 'package:cbj_hub/domain/scene/scene_cbj_entity.dart';
 import 'package:cbj_hub/domain/scene/value_objects_scene_cbj.dart';
+import 'package:cbj_hub/domain/vendors/esphome_login/generic_esphome_login_entity.dart';
+import 'package:cbj_hub/domain/vendors/esphome_login/generic_esphome_login_value_objects.dart';
+import 'package:cbj_hub/domain/vendors/lifx_login/generic_lifx_login_entity.dart';
+import 'package:cbj_hub/domain/vendors/lifx_login/generic_lifx_login_value_objects.dart';
 import 'package:cbj_hub/domain/vendors/login_abstract/login_entity_abstract.dart';
 import 'package:cbj_hub/domain/vendors/login_abstract/value_login_objects_core.dart';
 import 'package:cbj_hub/domain/vendors/tuya_login/generic_tuya_login_entity.dart';
@@ -26,6 +30,8 @@ import 'package:cbj_hub/infrastructure/bindings/binding_cbj_dtos.dart';
 import 'package:cbj_hub/infrastructure/devices/companies_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/devices/device_helper/device_helper.dart';
 import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
+import 'package:cbj_hub/infrastructure/local_db/hive_objects/esphome_vendor_credentials_hive_model.dart';
+import 'package:cbj_hub/infrastructure/local_db/hive_objects/lifx_vendor_credentials_hive_model.dart';
 import 'package:cbj_hub/infrastructure/local_db/hive_objects/tuya_vendor_credentials_hive_model.dart';
 import 'package:cbj_hub/infrastructure/local_db/isar_old_objects/bindings_isar_model.dart';
 import 'package:cbj_hub/infrastructure/local_db/isar_old_objects/devices_isar_model.dart';
@@ -684,5 +690,74 @@ class IsarRepository extends ILocalDbRepository {
     }
 
     return right(unit);
+  }
+
+  @override
+  Future<Either<LocalDbFailures, GenericLifxLoginDE>>
+      getLifxVendorLoginCredentials({
+    required List<LifxVendorCredentialsHiveModel>
+        lifxVendorCredentialsModelFromDb,
+  }) async {
+    try {
+      if (lifxVendorCredentialsModelFromDb.isNotEmpty) {
+        final LifxVendorCredentialsHiveModel firstLifxVendorFromDB =
+            lifxVendorCredentialsModelFromDb[0];
+
+        final String? senderUniqueId = firstLifxVendorFromDB.senderUniqueId;
+        final String lifxApiKey = firstLifxVendorFromDB.lifxApiKey;
+
+        final GenericLifxLoginDE genericLifxLoginDE = GenericLifxLoginDE(
+          senderUniqueId: CoreLoginSenderId.fromUniqueString(senderUniqueId),
+          lifxApiKey: GenericLifxLoginApiKey(lifxApiKey),
+        );
+
+        logger.i(
+          'Lifx got returned from local storage',
+        );
+        return right(genericLifxLoginDE);
+      }
+      logger.i(
+        "Didn't find any Lifx in the local DB",
+      );
+    } catch (e) {
+      logger.e('Local DB hive error while getting Lifx vendor: $e');
+    }
+    return left(const LocalDbFailures.unexpected());
+  }
+
+  @override
+  Future<Either<LocalDbFailures, GenericEspHomeLoginDE>>
+      getEspHomeVendorLoginCredentials({
+    required List<EspHomeVendorCredentialsHiveModel>
+        espHomeVendorCredentialsModelFromDb,
+  }) async {
+    try {
+      if (espHomeVendorCredentialsModelFromDb.isNotEmpty) {
+        final EspHomeVendorCredentialsHiveModel firstEspHomeVendorFromDB =
+            espHomeVendorCredentialsModelFromDb[0];
+
+        final String? senderUniqueId = firstEspHomeVendorFromDB.senderUniqueId;
+        final String espHomeDevicePass =
+            firstEspHomeVendorFromDB.espHomeDevicePass;
+
+        final GenericEspHomeLoginDE genericEspHomeLoginDE =
+            GenericEspHomeLoginDE(
+          senderUniqueId: CoreLoginSenderId.fromUniqueString(senderUniqueId),
+          espHomeDevicePass:
+              GenericEspHomeDeviceLoginApiPass(espHomeDevicePass),
+        );
+
+        logger.i(
+          'ESPHome got returned from local storage',
+        );
+        return right(genericEspHomeLoginDE);
+      }
+      logger.i(
+        "Didn't find any ESPHome in the local DB",
+      );
+    } catch (e) {
+      logger.e('Local DB hive error while getting ESPHome vendor: $e');
+    }
+    return left(const LocalDbFailures.unexpected());
   }
 }

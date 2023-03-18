@@ -28,6 +28,8 @@ class NodeRedMqttInNode extends NodeRedVisualNodeAbstract {
     "name": "$name",
     "topic": "$topic",
     "qos": "$qos",
+    "x": 600,
+    "y": 400,
     "datatype": "$datatype",
     "broker": "$brokerNodeId",
     "wires":  ${fixWiresForNodeRed()}

@@ -119,6 +119,26 @@ class NodeRedAPI {
     );
   }
 
+  // TODO: not working
+  /// Add a single global node
+  Future<Response> postGlobalNode({
+    /// Should be node json string {}
+    required String nodes,
+  }) async {
+    final String jsonStringWithFields = '''
+      {
+        "id": "global",
+        "configs": [ ],
+        "subflows": $nodes
+      }
+      ''';
+    return put(
+      Uri.parse('$requestsUrl/flow/global'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonStringWithFields,
+    );
+  }
+
   /// Add a flow to the active configuration
   Future<Response> postFlow({
     required String label,

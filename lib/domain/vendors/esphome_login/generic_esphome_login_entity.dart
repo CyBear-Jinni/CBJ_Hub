@@ -1,31 +1,31 @@
-import 'package:cbj_hub/domain/vendors/lifx_login/generic_lifx_login_value_objects.dart';
+import 'package:cbj_hub/domain/vendors/esphome_login/generic_esphome_login_value_objects.dart';
 import 'package:cbj_hub/domain/vendors/login_abstract/core_login_failures.dart';
 import 'package:cbj_hub/domain/vendors/login_abstract/login_entity_abstract.dart';
 import 'package:cbj_hub/domain/vendors/login_abstract/value_login_objects_core.dart';
 import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
-import 'package:cbj_hub/infrastructure/generic_vendors_login/generic_lifx_login/generic_lifx_login_dtos.dart';
+import 'package:cbj_hub/infrastructure/generic_vendors_login/generic_esphome_login/generic_esphome_login_dtos.dart';
 import 'package:cbj_hub/infrastructure/generic_vendors_login/generic_login_abstract/login_entity_dto_abstract.dart';
 import 'package:dartz/dartz.dart';
 
-/// Abstract smart GenericLifx that exist inside a computer, the
-/// implementations will be actual GenericLifx like blinds lifxs and more
-class GenericLifxLoginDE extends LoginEntityAbstract {
-  /// All public field of GenericLifx entity
-  GenericLifxLoginDE({
+/// Abstract smart GenericEspHome that exist inside a computer, the
+/// implementations will be actual GenericEspHome like blinds esphomes and more
+class GenericEspHomeLoginDE extends LoginEntityAbstract {
+  /// All public field of GenericEspHome entity
+  GenericEspHomeLoginDE({
     required super.senderUniqueId,
-    required this.lifxApiKey,
+    required this.espHomeDevicePass,
   }) : super(
-          loginVendor: CoreLoginVendor(VendorsAndServices.lifx.name),
+          loginVendor: CoreLoginVendor(VendorsAndServices.espHome.name),
         );
 
-  /// Empty instance of GenericLifxEntity
-  factory GenericLifxLoginDE.empty() => GenericLifxLoginDE(
+  /// Empty instance of GenericEspHomeEntity
+  factory GenericEspHomeLoginDE.empty() => GenericEspHomeLoginDE(
         senderUniqueId: CoreLoginSenderId.fromUniqueString(''),
-        lifxApiKey: GenericLifxLoginApiKey(''),
+        espHomeDevicePass: GenericEspHomeDeviceLoginApiPass(''),
       );
 
-  /// Lifx api key
-  GenericLifxLoginApiKey lifxApiKey;
+  /// EspHome api key
+  GenericEspHomeDeviceLoginApiPass espHomeDevicePass;
 
   Option<CoreLoginFailure<dynamic>> get failureOption =>
       senderUniqueId.value.fold((f) => some(f), (_) => none());
@@ -53,10 +53,10 @@ class GenericLifxLoginDE extends LoginEntityAbstract {
 
   @override
   LoginEntityDtoAbstract toInfrastructure() {
-    return GenericLifxLoginDtos(
+    return GenericEspHomeLoginDtos(
       senderUniqueId: senderUniqueId.getOrCrash(),
       loginVendor: loginVendor.getOrCrash(),
-      lifxApiKey: lifxApiKey.getOrCrash(),
+      esphomeDevicePass: espHomeDevicePass.getOrCrash(),
       // serverTimeStamp: FieldValue.serverTimestamp(),
     );
   }

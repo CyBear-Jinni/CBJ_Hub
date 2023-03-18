@@ -25,6 +25,8 @@ class NodeRedMqttOutNode extends NodeRedVisualNodeAbstract {
     "type": "$type",
     "name": "$name",
     "topic": "$topic",
+    "x": 600,
+    "y": 300,
     "qos": "$qos",
     "retain": "",
     "broker": "$brokerNodeId",

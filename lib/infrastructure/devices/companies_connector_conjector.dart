@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cbj_hub/domain/generic_devices/abstract_device/device_entity_abstract.dart';
 import 'package:cbj_hub/domain/mqtt_server/i_mqtt_server_repository.dart';
 import 'package:cbj_hub/domain/saved_devices/i_saved_devices_repo.dart';
+import 'package:cbj_hub/domain/vendors/esphome_login/generic_esphome_login_entity.dart';
 import 'package:cbj_hub/domain/vendors/lifx_login/generic_lifx_login_entity.dart';
 import 'package:cbj_hub/domain/vendors/login_abstract/login_entity_abstract.dart';
 import 'package:cbj_hub/domain/vendors/tuya_login/generic_tuya_login_entity.dart';
@@ -158,6 +159,8 @@ class CompaniesConnectorConjector {
   static void setVendorLoginCredentials(LoginEntityAbstract loginEntity) {
     if (loginEntity is GenericLifxLoginDE) {
       getIt<LifxConnectorConjector>().accountLogin(loginEntity);
+    } else if (loginEntity is GenericEspHomeLoginDE) {
+      getIt<EspHomeConnectorConjector>().accountLogin(loginEntity);
     } else if (loginEntity is GenericTuyaLoginDE) {
       getIt<TuyaSmartConnectorConjector>()
           .accountLogin(genericTuyaLoginDE: loginEntity);
@@ -312,12 +315,14 @@ class CompaniesConnectorConjector {
       for (final NetworkInterface networkInterface in networkInterfaceList) {
         for (final InternetAddress address in networkInterface.addresses) {
           final String ip = address.address;
+          if (!ip.contains('.')) {
+            continue;
+          }
           final String subnet = ip.substring(0, ip.lastIndexOf('.'));
 
           await for (final ActiveHost activeHost
               in HostScanner.getAllPingableDevices(
             subnet,
-            resultsInAddressAscendingOrder: false,
             lastHostId: 126,
           )) {
             try {
@@ -333,8 +338,7 @@ class CompaniesConnectorConjector {
           await for (final ActiveHost activeHost
               in HostScanner.getAllPingableDevices(
             subnet,
-            resultsInAddressAscendingOrder: false,
-            lastHostId: 127,
+            firstHostId: 127,
           )) {
             try {
               setHostNameDeviceByCompany(
@@ -365,7 +369,8 @@ class CompaniesConnectorConjector {
     } else if (deviceHostNameLowerCase.contains('xiaomi') ||
         deviceHostNameLowerCase.contains('yeelink') ||
         deviceHostNameLowerCase.contains('xiao')) {
-      getIt<XiaomiIoConnectorConjector>().discoverNewDevices();
+      getIt<XiaomiIoConnectorConjector>()
+          .discoverNewDevices(activeHost: activeHost);
     } else if (deviceHostNameLowerCase.startsWith('wiz')) {
       getIt<WizConnectorConjector>()
           .addNewDeviceByHostInfo(activeHost: activeHost);

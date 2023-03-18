@@ -69,7 +69,7 @@ class HpConnectorConjector implements AbstractCompanyConnectorConjector {
     if (device is HpPrinterEntity) {
       device.executeDeviceAction(newEntity: hpDE);
     } else {
-      logger.w('ESPHome device type does not exist');
+      logger.w('HP device type does not exist');
     }
   }
 
