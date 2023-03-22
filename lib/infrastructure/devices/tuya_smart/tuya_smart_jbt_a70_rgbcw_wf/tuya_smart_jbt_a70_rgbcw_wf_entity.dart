@@ -15,22 +15,34 @@ import 'package:dartz/dartz.dart';
 class TuyaSmartJbtA70RgbcwWfEntity extends GenericRgbwLightDE {
   TuyaSmartJbtA70RgbcwWfEntity({
     required super.uniqueId,
-    required super.vendorUniqueId,
-    required super.defaultName,
-    required super.deviceStateGRPC,
+    required super.entityUniqueId,
+    required super.cbjEntityName,
+    required super.entityOriginalName,
+    required super.deviceOriginalName,
     required super.stateMassage,
     required super.senderDeviceOs,
     required super.senderDeviceModel,
     required super.senderId,
     required super.compUuid,
+    required super.entityStateGRPC,
     required super.powerConsumption,
+    required super.deviceUniqueId,
+    required super.devicePort,
+    required super.deviceLastKnownIp,
+    required super.deviceHostName,
+    required super.deviceMdns,
+    required super.devicesMacAddress,
+    required super.entityKey,
+    required super.requestTimeStamp,
+    required super.lastResponseFromDeviceTimeStamp,
+    required super.deviceCbjUniqueId,
     required super.lightSwitchState,
     required super.lightColorTemperature,
-    required super.lightBrightness,
     required super.lightColorAlpha,
     required super.lightColorHue,
     required super.lightColorSaturation,
     required super.lightColorValue,
+    required super.lightBrightness,
     required this.cloudTuya,
   }) : super(
           deviceVendor: DeviceVendor(VendorsAndServices.tuyaSmart.toString()),
@@ -54,7 +66,7 @@ class TuyaSmartJbtA70RgbcwWfEntity extends GenericRgbwLightDE {
     try {
       if (newEntity.lightSwitchState!.getOrCrash() !=
               lightSwitchState!.getOrCrash() ||
-          deviceStateGRPC.getOrCrash() != DeviceStateGRPC.ack.toString()) {
+          entityStateGRPC.getOrCrash() != DeviceStateGRPC.ack.toString()) {
         final DeviceActions? actionToPreform =
             EnumHelperCbj.stringToDeviceAction(
           newEntity.lightSwitchState!.getOrCrash(),
@@ -68,7 +80,7 @@ class TuyaSmartJbtA70RgbcwWfEntity extends GenericRgbwLightDE {
             },
             (r) {
               logger.d('Tuya light turn on success');
-              deviceStateGRPC = DeviceState(DeviceStateGRPC.ack.toString());
+              entityStateGRPC = EntityState(DeviceStateGRPC.ack.toString());
             },
           );
         } else if (actionToPreform == DeviceActions.off) {
@@ -79,7 +91,7 @@ class TuyaSmartJbtA70RgbcwWfEntity extends GenericRgbwLightDE {
             },
             (r) {
               logger.d('Tuya light turn off success');
-              deviceStateGRPC = DeviceState(DeviceStateGRPC.ack.toString());
+              entityStateGRPC = EntityState(DeviceStateGRPC.ack.toString());
             },
           );
         } else {
@@ -92,7 +104,7 @@ class TuyaSmartJbtA70RgbcwWfEntity extends GenericRgbwLightDE {
 
       if (newEntity.lightColorTemperature.getOrCrash() !=
               lightColorTemperature.getOrCrash() ||
-          deviceStateGRPC.getOrCrash() != DeviceStateGRPC.ack.toString()) {
+          entityStateGRPC.getOrCrash() != DeviceStateGRPC.ack.toString()) {
         (await changeColorTemperature(
           lightColorTemperatureNewValue:
               newEntity.lightColorTemperature.getOrCrash(),
@@ -115,7 +127,7 @@ class TuyaSmartJbtA70RgbcwWfEntity extends GenericRgbwLightDE {
               lightColorSaturation.getOrCrash() ||
           newEntity.lightColorValue.getOrCrash() !=
               lightColorValue.getOrCrash() ||
-          deviceStateGRPC.getOrCrash() != DeviceStateGRPC.ack.toString()) {
+          entityStateGRPC.getOrCrash() != DeviceStateGRPC.ack.toString()) {
         (await changeColorHsv(
           lightColorAlphaNewValue: newEntity.lightColorAlpha.getOrCrash(),
           lightColorHueNewValue: newEntity.lightColorHue.getOrCrash(),
@@ -146,13 +158,13 @@ class TuyaSmartJbtA70RgbcwWfEntity extends GenericRgbwLightDE {
           },
         );
       }
-      deviceStateGRPC = DeviceState(DeviceStateGRPC.ack.toString());
+      entityStateGRPC = EntityState(DeviceStateGRPC.ack.toString());
       // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
       //   entityFromTheHub: this,
       // );
       return right(unit);
     } catch (e) {
-      deviceStateGRPC = DeviceState(DeviceStateGRPC.newStateFailed.toString());
+      entityStateGRPC = EntityState(DeviceStateGRPC.newStateFailed.toString());
       // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
       //   entityFromTheHub: this,
       // );
@@ -165,7 +177,7 @@ class TuyaSmartJbtA70RgbcwWfEntity extends GenericRgbwLightDE {
     lightSwitchState = GenericRgbwLightSwitchState(DeviceActions.on.toString());
     try {
       final String requestResponse = await cloudTuya.turnOn(
-        vendorUniqueId.getOrCrash(),
+        entityUniqueId.getOrCrash(),
       );
       return tuyaResponseToCyBearJinniSucessFailure(requestResponse);
     } catch (e) {
@@ -180,7 +192,7 @@ class TuyaSmartJbtA70RgbcwWfEntity extends GenericRgbwLightDE {
 
     try {
       final String requestResponse = await cloudTuya.turnOff(
-        vendorUniqueId.getOrCrash(),
+        entityUniqueId.getOrCrash(),
       );
       return tuyaResponseToCyBearJinniSucessFailure(requestResponse);
     } catch (e) {
@@ -194,7 +206,7 @@ class TuyaSmartJbtA70RgbcwWfEntity extends GenericRgbwLightDE {
 
     try {
       final String requestResponse = await cloudTuya.setBrightness(
-        vendorUniqueId.getOrCrash(),
+        entityUniqueId.getOrCrash(),
         lightBrightness.getOrCrash(),
       );
       return tuyaResponseToCyBearJinniSucessFailure(requestResponse);
@@ -212,7 +224,7 @@ class TuyaSmartJbtA70RgbcwWfEntity extends GenericRgbwLightDE {
 
     try {
       final String requestResponse = await cloudTuya.setColorTemperature(
-        deviceId: vendorUniqueId.getOrCrash(),
+        deviceId: entityUniqueId.getOrCrash(),
         newTemperature: lightColorTemperatureNewValue,
       );
       return tuyaResponseToCyBearJinniSucessFailure(requestResponse);
@@ -236,7 +248,7 @@ class TuyaSmartJbtA70RgbcwWfEntity extends GenericRgbwLightDE {
 
     try {
       final String requestResponse = await cloudTuya.setColorHsv(
-        deviceId: vendorUniqueId.getOrCrash(),
+        deviceId: entityUniqueId.getOrCrash(),
         hue: lightColorHue.getOrCrash(),
         saturation: lightColorSaturation.getOrCrash(),
         brightness: lightBrightness.getOrCrash(),

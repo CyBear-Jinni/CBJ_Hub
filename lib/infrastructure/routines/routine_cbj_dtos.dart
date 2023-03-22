@@ -13,7 +13,7 @@ abstract class RoutineCbjDtos implements _$RoutineCbjDtos {
     required String uniqueId,
     required String name,
     required String backgroundColor,
-    required String? deviceStateGRPC,
+    required String? entityStateGRPC,
     required String? senderDeviceOs,
     required String? senderDeviceModel,
     required String? senderId,
@@ -45,7 +45,7 @@ abstract class RoutineCbjDtos implements _$RoutineCbjDtos {
       iconCodePoint: routineCbj.iconCodePoint.getOrCrash(),
       image: routineCbj.image.getOrCrash(),
       lastDateOfExecute: routineCbj.lastDateOfExecute.getOrCrash(),
-      deviceStateGRPC: routineCbj.deviceStateGRPC.getOrCrash(),
+      entityStateGRPC: routineCbj.entityStateGRPC.getOrCrash(),
       senderDeviceModel: routineCbj.senderDeviceModel.getOrCrash(),
       senderDeviceOs: routineCbj.senderDeviceOs.getOrCrash(),
       senderId: routineCbj.senderId.getOrCrash(),
@@ -55,8 +55,6 @@ abstract class RoutineCbjDtos implements _$RoutineCbjDtos {
       repeateDateDays: routineCbj.repeateDateDays.getOrCrash(),
       repeateDateHour: routineCbj.repeateDateHour.getOrCrash(),
       repeateDateMinute: routineCbj.repeateDateMinute.getOrCrash(),
-
-      // serverTimeStamp: FieldValue.serverTimestamp(),
     );
   }
 
@@ -76,7 +74,7 @@ abstract class RoutineCbjDtos implements _$RoutineCbjDtos {
       iconCodePoint: RoutineCbjIconCodePoint(iconCodePoint),
       image: RoutineCbjBackgroundImage(image),
       lastDateOfExecute: RoutineCbjLastDateOfExecute(lastDateOfExecute),
-      deviceStateGRPC: RoutineCbjDeviceStateGRPC(deviceStateGRPC),
+      entityStateGRPC: RoutineCbjDeviceStateGRPC(entityStateGRPC),
       senderDeviceModel: RoutineCbjSenderDeviceModel(senderDeviceModel),
       senderDeviceOs: RoutineCbjSenderDeviceOs(senderDeviceOs),
       senderId: RoutineCbjSenderId(senderId),

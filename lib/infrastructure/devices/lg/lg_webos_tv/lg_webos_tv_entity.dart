@@ -13,29 +13,35 @@ import 'package:dartz/dartz.dart';
 class LgWebosTvEntity extends GenericSmartTvDE {
   LgWebosTvEntity({
     required super.uniqueId,
-    required super.vendorUniqueId,
-    required super.defaultName,
-    required super.deviceStateGRPC,
+    required super.entityUniqueId,
+    required super.cbjEntityName,
+    required super.entityOriginalName,
+    required super.deviceOriginalName,
     required super.stateMassage,
     required super.senderDeviceOs,
     required super.senderDeviceModel,
     required super.senderId,
     required super.compUuid,
+    required super.entityStateGRPC,
     required super.powerConsumption,
+    required super.deviceUniqueId,
+    required super.devicePort,
+    required super.deviceLastKnownIp,
+    required super.deviceHostName,
+    required super.deviceMdns,
+    required super.devicesMacAddress,
+    required super.entityKey,
+    required super.requestTimeStamp,
+    required super.lastResponseFromDeviceTimeStamp,
+    required super.deviceCbjUniqueId,
     required super.smartTvSwitchState,
-    required this.port,
-    this.deviceMdnsName,
-    this.lastKnownIp,
+    super.openUrl,
+    super.pausePlayState,
+    super.skip,
+    super.volume,
   }) : super(
           deviceVendor: DeviceVendor(VendorsAndServices.lg.toString()),
         );
-
-  /// Lg communication port
-  DevicePort? port;
-
-  DeviceLastKnownIp? lastKnownIp;
-
-  DeviceMdnsName? deviceMdnsName;
 
   /// Please override the following methods
   @override
@@ -53,7 +59,7 @@ class LgWebosTvEntity extends GenericSmartTvDE {
     try {
       if (newEntity.lightSwitchState!.getOrCrash() !=
               smartTvSwitchState!.getOrCrash() ||
-          deviceStateGRPC.getOrCrash() != DeviceStateGRPC.ack.toString()) {
+          entityStateGRPC.getOrCrash() != DeviceStateGRPC.ack.toString()) {
         final DeviceActions? actionToPreform =
             EnumHelperCbj.stringToDeviceAction(
           newEntity.lightSwitchState!.getOrCrash(),
@@ -77,14 +83,14 @@ class LgWebosTvEntity extends GenericSmartTvDE {
           logger.e('actionToPreform is not set correctly on WebOs');
         }
       }
-      deviceStateGRPC = DeviceState(DeviceStateGRPC.ack.toString());
+      entityStateGRPC = EntityState(DeviceStateGRPC.ack.toString());
 
       // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
       //   entityFromTheHub: this,
       // );
       return right(unit);
     } catch (e) {
-      deviceStateGRPC = DeviceState(DeviceStateGRPC.newStateFailed.toString());
+      entityStateGRPC = EntityState(DeviceStateGRPC.newStateFailed.toString());
       // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
       //   entityFromTheHub: this,
       // );

@@ -22,13 +22,13 @@ class CbjDevicesHelpers {
       final CbjDeviceTypes deviceType =
           smartDeviceInfo.deviceTypesActions.deviceType;
       final String deviceId = smartDeviceInfo.id;
-      final String defaultName = smartDeviceInfo.defaultName;
-      final String deviceState = smartDeviceInfo.state;
+      final String cbjEntityName = smartDeviceInfo.cbjEntityName;
+      // final String deviceState = smartDeviceInfo.state;
       final String deviceStateMassage = smartDeviceInfo.stateMassage.isEmpty
           ? 'ok'
           : smartDeviceInfo.stateMassage;
       final CbjDeviceStateGRPC deviceStateGrpc =
-          smartDeviceInfo.deviceTypesActions.deviceStateGRPC;
+          smartDeviceInfo.deviceTypesActions.entityStateGRPC;
 
       final String deviceOs = smartDeviceInfo.senderDeviceOs;
       final String deviceModel = smartDeviceInfo.senderDeviceModel;
@@ -38,14 +38,12 @@ class CbjDevicesHelpers {
       if (deviceType == CbjDeviceTypes.smartComputer) {
         entityAbstract = CbjSmartComputerEntity(
           uniqueId: CoreUniqueId(),
-          vendorUniqueId: VendorUniqueId.fromUniqueString(deviceId),
+          entityUniqueId: EntityUniqueId(deviceId),
           deviceVendor: DeviceVendor(
             VendorsAndServices.cbjDevices.toString(),
           ),
-          defaultName: DeviceDefaultName(
-            defaultName,
-          ),
-          deviceStateGRPC: DeviceState(deviceStateGrpc.toString()),
+          cbjEntityName: CbjEntityName(cbjEntityName),
+          entityStateGRPC: EntityState(deviceStateGrpc.toString()),
           stateMassage: DeviceStateMassage(deviceStateMassage),
           senderDeviceOs: DeviceSenderDeviceOs(deviceOs),
           senderDeviceModel: DeviceSenderDeviceModel(deviceModel),
@@ -58,6 +56,19 @@ class CbjDevicesHelpers {
             DeviceActions.itIsFalse.toString(),
           ),
           lastKnownIp: DeviceLastKnownIp(deviceAddress),
+          entityOriginalName: EntityOriginalName(cbjEntityName),
+          deviceOriginalName: DeviceOriginalName(cbjEntityName),
+          powerConsumption: DevicePowerConsumption('0'),
+          deviceUniqueId: DeviceUniqueId('0'),
+          devicePort: DevicePort('0'),
+          deviceLastKnownIp: DeviceLastKnownIp('0'),
+          deviceHostName: DeviceHostName('0'),
+          deviceMdns: DeviceMdns('0'),
+          devicesMacAddress: DevicesMacAddress('0'),
+          entityKey: EntityKey('0'),
+          requestTimeStamp: RequestTimeStamp('0'),
+          lastResponseFromDeviceTimeStamp: LastResponseFromDeviceTimeStamp('0'),
+          deviceCbjUniqueId: CoreUniqueId(),
         );
       } else {
         logger.w('Cbj Smart Device type is not supported ${deviceType.name}');

@@ -45,8 +45,8 @@ class Connector {
     }
 
     Future.delayed(const Duration(milliseconds: 3000)).whenComplete(() {
-      final IAppCommunicationRepository appCommunication =
-          getIt<IAppCommunicationRepository>();
+      // final IAppCommunicationRepository appCommunication =
+      getIt<IAppCommunicationRepository>();
     });
 
     getIt<IMqttServerRepository>().allHubDevicesSubscriptions();
@@ -73,14 +73,15 @@ class Connector {
     final Map<String, dynamic> devicePropertyAndValues =
         deviceChangeFromMqtt.value;
 
-    String? deviceStateValue;
+    // String? deviceStateValue;
 
     for (final DeviceEntityAbstract d in allDevices.values) {
       if (d.getDeviceId() == deviceChangeFromMqtt.key) {
         final Map<String, dynamic> deviceAsJson = d.toInfrastructure().toJson();
 
         for (final String property in devicePropertyAndValues.keys) {
-          final String pt = MqttPublishPayload.bytesToStringAsString(
+          // final String pt =
+          MqttPublishPayload.bytesToStringAsString(
             (devicePropertyAndValues[property] as MqttPublishMessage)
                 .payload
                 .message,
@@ -106,7 +107,7 @@ class Connector {
           ConnectorDevicesStreamFromMqtt.fromMqttStream.sink
               .add(savedDeviceWithSameIdAsMqtt);
 
-          if (property == 'deviceStateGRPC' &&
+          if (property == 'entityStateGRPC' &&
               propertyValueString == DeviceStateGRPC.ack.toString()) {
             final Map<String, RoomEntity> rooms =
                 await getIt<ISavedRoomsRepo>().getAllRooms();

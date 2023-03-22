@@ -28,8 +28,6 @@ abstract class GenericEspHomeLoginDtos
       senderUniqueId: genericEspHomeDE.senderUniqueId.getOrCrash(),
       loginVendor: genericEspHomeDE.loginVendor.getOrCrash(),
       esphomeDevicePass: genericEspHomeDE.espHomeDevicePass.getOrCrash(),
-
-      // serverTimeStamp: FieldValue.serverTimestamp(),
     );
   }
 

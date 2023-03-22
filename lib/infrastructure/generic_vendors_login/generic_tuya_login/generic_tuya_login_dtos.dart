@@ -34,8 +34,6 @@ abstract class GenericTuyaLoginDtos
       countryCode: genericTuyaDE.tuyaCountryCode.getOrCrash(),
       bizType: genericTuyaDE.tuyaBizType.getOrCrash(),
       region: genericTuyaDE.tuyaRegion.getOrCrash(),
-
-      // serverTimeStamp: FieldValue.serverTimestamp(),
     );
   }
 

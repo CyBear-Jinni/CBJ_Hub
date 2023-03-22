@@ -2,7 +2,7 @@ import 'package:cbj_hub/domain/generic_devices/abstract_device/core_failures.dar
 import 'package:cbj_hub/domain/generic_devices/device_type_enums.dart';
 import 'package:dartz/dartz.dart';
 
-Either<CoreFailure<String>, String> validateDeviceNotEmpty(String input) {
+Either<CoreFailure<String>, String> validateNotEmpty(String input) {
   if (input.isNotEmpty) {
     return right(input);
   } else {
@@ -52,11 +52,11 @@ Either<CoreFailure<String>, String> validatePortNotEmpty(String input) {
   return right(input);
 }
 
-Either<CoreFailure<String>, String> validateEspHomeKeyNotEmpty(String input) {
+Either<CoreFailure<String>, String> validateKeyNotEmpty(String input) {
   return right(input);
 }
 
-Either<CoreFailure<String>, String> validateDeviceMaxNameLength(
+Either<CoreFailure<String>, String> validateMaxNameLength(
   String input,
   int maxLength,
 ) {

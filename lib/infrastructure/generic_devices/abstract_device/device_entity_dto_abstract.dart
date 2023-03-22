@@ -27,46 +27,46 @@ class DeviceEntityDtoAbstract {
     final String jsonDeviceDtoClass = json['deviceDtoClass'].toString();
 
     if (jsonDeviceDtoClass == (GenericLightDeviceDtos).toString() ||
-        json['deviceTypes'] == DeviceTypes.light.toString()) {
+        json['entityTypes'] == DeviceTypes.light.toString()) {
       deviceEntityDtoAbstract = GenericLightDeviceDtos.fromJson(json);
     } else if (jsonDeviceDtoClass == (GenericRgbwLightDeviceDtos).toString() ||
-        json['deviceTypes'] == DeviceTypes.rgbwLights.toString()) {
+        json['entityTypes'] == DeviceTypes.rgbwLights.toString()) {
       deviceEntityDtoAbstract = GenericRgbwLightDeviceDtos.fromJson(json);
     } else if (jsonDeviceDtoClass == (GenericBlindsDeviceDtos).toString() ||
-        json['deviceTypes'] == DeviceTypes.blinds.toString()) {
+        json['entityTypes'] == DeviceTypes.blinds.toString()) {
       deviceEntityDtoAbstract = GenericBlindsDeviceDtos.fromJson(json);
     } else if (jsonDeviceDtoClass == (GenericBoilerDeviceDtos).toString() ||
-        json['deviceTypes'] == DeviceTypes.boiler.toString()) {
+        json['entityTypes'] == DeviceTypes.boiler.toString()) {
       deviceEntityDtoAbstract = GenericBoilerDeviceDtos.fromJson(json);
     } else if (jsonDeviceDtoClass == (GenericSmartTvDeviceDtos).toString() ||
-        json['deviceTypes'] == DeviceTypes.smartTV.toString()) {
+        json['entityTypes'] == DeviceTypes.smartTV.toString()) {
       deviceEntityDtoAbstract = GenericSmartTvDeviceDtos.fromJson(json);
     } else if (jsonDeviceDtoClass == (GenericSwitchDeviceDtos).toString() ||
-        json['deviceTypes'] == DeviceTypes.switch_.toString()) {
+        json['entityTypes'] == DeviceTypes.switch_.toString()) {
       deviceEntityDtoAbstract = GenericSwitchDeviceDtos.fromJson(json);
     } else if (jsonDeviceDtoClass == (GenericSmartPlugDeviceDtos).toString() ||
-        json['deviceTypes'] == DeviceTypes.smartPlug.toString()) {
+        json['entityTypes'] == DeviceTypes.smartPlug.toString()) {
       deviceEntityDtoAbstract = GenericSmartPlugDeviceDtos.fromJson(json);
     } else if (jsonDeviceDtoClass ==
             (GenericSmartComputerDeviceDtos).toString() ||
-        json['deviceTypes'] == DeviceTypes.smartComputer.toString()) {
+        json['entityTypes'] == DeviceTypes.smartComputer.toString()) {
       deviceEntityDtoAbstract = GenericSmartComputerDeviceDtos.fromJson(json);
     } else if (jsonDeviceDtoClass == (GenericPrinterDeviceDtos).toString() ||
-        json['deviceTypes'] == DeviceTypes.printer.toString()) {
+        json['entityTypes'] == DeviceTypes.printer.toString()) {
       deviceEntityDtoAbstract = GenericPrinterDeviceDtos.fromJson(json);
     } else if (jsonDeviceDtoClass == (GenericEmptyDeviceDtos).toString() ||
-        json['deviceTypes'] == DeviceTypes.emptyDevice.toString()) {
+        json['entityTypes'] == DeviceTypes.emptyDevice.toString()) {
       deviceEntityDtoAbstract = GenericEmptyDeviceDtos.fromJson(json);
     } else if (jsonDeviceDtoClass == (GenericPingDeviceDtos).toString() ||
-        json['deviceTypes'] == DeviceTypes.pingDevice.toString()) {
+        json['entityTypes'] == DeviceTypes.pingDevice.toString()) {
       deviceEntityDtoAbstract = GenericPingDeviceDtos.fromJson(json);
     } else if (jsonDeviceDtoClass ==
             (GenericSmartTypeNotSupportedDeviceDtos).toString() ||
-        json['deviceTypes'] == DeviceTypes.smartTypeNotSupported.toString()) {
+        json['entityTypes'] == DeviceTypes.smartTypeNotSupported.toString()) {
       deviceEntityDtoAbstract =
           GenericSmartTypeNotSupportedDeviceDtos.fromJson(json);
     } else {
-      throw 'DtoClassTypeDoesNotExist, please add here support for ${json['deviceTypes']}';
+      throw 'DtoClassTypeDoesNotExist, please add here support for ${json['entityTypes']}';
     }
     return deviceEntityDtoAbstract;
   }

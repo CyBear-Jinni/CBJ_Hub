@@ -34,7 +34,7 @@ class BindingCbjEntity with _$BindingCbjEntity {
     required BindingCbjSenderDeviceModel senderDeviceModel,
     required BindingCbjSenderId senderId,
     required BindingCbjCompUuid compUuid,
-    required BindingCbjDeviceStateGRPC deviceStateGRPC,
+    required BindingCbjDeviceStateGRPC entityStateGRPC,
   }) = _BindingCbjEntity;
 
   const BindingCbjEntity._();
@@ -50,13 +50,12 @@ class BindingCbjEntity with _$BindingCbjEntity {
       iconCodePoint: iconCodePoint.getOrCrash(),
       image: image.getOrCrash(),
       lastDateOfExecute: lastDateOfExecute.getOrCrash(),
-      deviceStateGRPC: deviceStateGRPC.getOrCrash(),
+      entityStateGRPC: entityStateGRPC.getOrCrash(),
       senderDeviceModel: senderDeviceModel.getOrCrash(),
       senderDeviceOs: senderDeviceOs.getOrCrash(),
       senderId: senderId.getOrCrash(),
       compUuid: compUuid.getOrCrash(),
       stateMassage: stateMassage.getOrCrash(),
-      // serverTimeStamp: FieldValue.serverTimestamp(),
     );
   }
 }

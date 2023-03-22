@@ -22,7 +22,7 @@ class ChromecastNodeRedApi {
   final String outputVideoTopicProperty = 'outputVideo';
 
   Future<String> setNewYoutubeVideoNodes(
-    String deviceUniqueId,
+    String entityUniqueId,
     String deviceIp,
   ) async {
     String nodes = '[\n';
@@ -36,7 +36,7 @@ class ChromecastNodeRedApi {
     const String mqttNodeName = 'Chromecast';
 
     final String topic =
-        '$nodeRedApiBaseTopic/$nodeRedDevicesTopic/$deviceUniqueId/$youtubeVideoTopicProperty';
+        '$nodeRedApiBaseTopic/$nodeRedDevicesTopic/$entityUniqueId/$youtubeVideoTopicProperty';
 
     /// Mqtt broker
     final NodeRedMqttBrokerNode mqttBrokerNode =
@@ -127,7 +127,7 @@ class ChromecastNodeRedApi {
       moduleToUse: module,
       label: 'playYoutubeUrl',
       nodes: nodes,
-      flowId: '$deviceUniqueId-YoutubeVideo',
+      flowId: '$entityUniqueId-YoutubeVideo',
     );
     return settingTheFlowResponse;
   }

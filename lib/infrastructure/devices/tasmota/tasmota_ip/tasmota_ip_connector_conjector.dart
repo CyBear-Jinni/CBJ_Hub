@@ -29,16 +29,16 @@ class TasmotaIpConnectorConjector implements AbstractCompanyConnectorConjector {
     for (final DeviceEntityAbstract savedDevice in companyDevices.values) {
       if ((savedDevice is TasmotaIpSwitchEntity) &&
           await activeHost.hostName ==
-              savedDevice.vendorUniqueId.getOrCrash()) {
+              savedDevice.entityUniqueId.getOrCrash()) {
         return;
       } else if (savedDevice is GenericLightDE &&
           await activeHost.hostName ==
-              savedDevice.vendorUniqueId.getOrCrash()) {
+              savedDevice.entityUniqueId.getOrCrash()) {
         /// Device exist as generic and needs to get converted to non generic type for this vendor
         tempCoreUniqueId.add(savedDevice.uniqueId);
         break;
       } else if (await activeHost.hostName ==
-          savedDevice.vendorUniqueId.getOrCrash()) {
+          savedDevice.entityUniqueId.getOrCrash()) {
         logger.w(
           'Tasmota IP device type supported but implementation is missing here',
         );
@@ -70,7 +70,7 @@ class TasmotaIpConnectorConjector implements AbstractCompanyConnectorConjector {
       companyDevices.addEntries([deviceAsEntry]);
 
       logger.v(
-        'New Tasmota Ip device name:${entityAsDevice.defaultName.getOrCrash()}',
+        'New Tasmota Ip device name:${entityAsDevice.cbjEntityName.getOrCrash()}',
       );
     }
   }
@@ -131,4 +131,7 @@ class TasmotaIpConnectorConjector implements AbstractCompanyConnectorConjector {
     }
     return componentTypeAndName;
   }
+
+  @override
+  Future<void> setUpDeviceFromDb(DeviceEntityAbstract deviceEntity) async {}
 }

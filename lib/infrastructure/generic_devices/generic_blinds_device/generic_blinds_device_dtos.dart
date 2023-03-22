@@ -14,16 +14,29 @@ abstract class GenericBlindsDeviceDtos
   factory GenericBlindsDeviceDtos({
     // @JsonKey(ignore: true)
     required String id,
-    required String vendorUniqueId,
-    required String? defaultName,
-    required String? deviceStateGRPC,
+    required String entityUniqueId,
+    required String? cbjEntityName,
+    required String? entityOriginalName,
+    required String? deviceOriginalName,
+    required String? entityStateGRPC,
     required String? senderDeviceOs,
     required String? senderDeviceModel,
     required String? senderId,
     required String? blindsSwitchState,
-    required String? deviceTypes,
+    required String? entityTypes,
     required String? compUuid,
     required String? deviceVendor,
+    required String? powerConsumption,
+    required String? deviceUniqueId,
+    required String? devicePort,
+    required String? deviceLastKnownIp,
+    required String? deviceHostName,
+    required String? deviceMdns,
+    required String? devicesMacAddress,
+    required String? entityKey,
+    required String? requestTimeStamp,
+    required String? lastResponseFromDeviceTimeStamp,
+    required String? deviceCbjUniqueId,
     String? deviceDtoClass,
     String? stateMassage,
 
@@ -32,22 +45,35 @@ abstract class GenericBlindsDeviceDtos
 
   GenericBlindsDeviceDtos._();
 
-  factory GenericBlindsDeviceDtos.fromDomain(GenericBlindsDE genericBlindsDE) {
+  factory GenericBlindsDeviceDtos.fromDomain(GenericBlindsDE deviceDe) {
     return GenericBlindsDeviceDtos(
       deviceDtoClass: (GenericBlindsDeviceDtos).toString(),
-      id: genericBlindsDE.uniqueId.getOrCrash(),
-      vendorUniqueId: genericBlindsDE.vendorUniqueId.getOrCrash(),
-      defaultName: genericBlindsDE.defaultName.getOrCrash(),
-      deviceStateGRPC: genericBlindsDE.deviceStateGRPC.getOrCrash(),
-      stateMassage: genericBlindsDE.stateMassage.getOrCrash(),
-      senderDeviceOs: genericBlindsDE.senderDeviceOs.getOrCrash(),
-      senderDeviceModel: genericBlindsDE.senderDeviceModel.getOrCrash(),
-      senderId: genericBlindsDE.senderId.getOrCrash(),
-      blindsSwitchState: genericBlindsDE.blindsSwitchState!.getOrCrash(),
-      deviceTypes: genericBlindsDE.deviceTypes.getOrCrash(),
-      compUuid: genericBlindsDE.compUuid.getOrCrash(),
-      deviceVendor: genericBlindsDE.deviceVendor.getOrCrash(),
-      // serverTimeStamp: FieldValue.serverTimestamp(),
+      id: deviceDe.uniqueId.getOrCrash(),
+      entityUniqueId: deviceDe.entityUniqueId.getOrCrash(),
+      cbjEntityName: deviceDe.cbjEntityName.getOrCrash(),
+      entityOriginalName: deviceDe.entityOriginalName.getOrCrash(),
+      deviceOriginalName: deviceDe.deviceOriginalName.getOrCrash(),
+      entityStateGRPC: deviceDe.entityStateGRPC.getOrCrash(),
+      stateMassage: deviceDe.stateMassage.getOrCrash(),
+      senderDeviceOs: deviceDe.senderDeviceOs.getOrCrash(),
+      senderDeviceModel: deviceDe.senderDeviceModel.getOrCrash(),
+      senderId: deviceDe.senderId.getOrCrash(),
+      blindsSwitchState: deviceDe.blindsSwitchState!.getOrCrash(),
+      entityTypes: deviceDe.entityTypes.getOrCrash(),
+      compUuid: deviceDe.compUuid.getOrCrash(),
+      deviceVendor: deviceDe.deviceVendor.getOrCrash(),
+      powerConsumption: deviceDe.powerConsumption.getOrCrash(),
+      deviceUniqueId: deviceDe.deviceUniqueId.getOrCrash(),
+      devicePort: deviceDe.devicePort.getOrCrash(),
+      deviceLastKnownIp: deviceDe.deviceLastKnownIp.getOrCrash(),
+      deviceHostName: deviceDe.deviceHostName.getOrCrash(),
+      deviceMdns: deviceDe.deviceMdns.getOrCrash(),
+      devicesMacAddress: deviceDe.devicesMacAddress.getOrCrash(),
+      entityKey: deviceDe.entityKey.getOrCrash(),
+      requestTimeStamp: deviceDe.requestTimeStamp.getOrCrash(),
+      lastResponseFromDeviceTimeStamp:
+          deviceDe.lastResponseFromDeviceTimeStamp.getOrCrash(),
+      deviceCbjUniqueId: deviceDe.deviceCbjUniqueId.getOrCrash(),
     );
   }
 
@@ -61,9 +87,11 @@ abstract class GenericBlindsDeviceDtos
   DeviceEntityAbstract toDomain() {
     return GenericBlindsDE(
       uniqueId: CoreUniqueId.fromUniqueString(id),
-      vendorUniqueId: VendorUniqueId.fromUniqueString(vendorUniqueId),
-      defaultName: DeviceDefaultName(defaultName),
-      deviceStateGRPC: DeviceState(deviceStateGRPC),
+      entityUniqueId: EntityUniqueId(entityUniqueId),
+      cbjEntityName: CbjEntityName(cbjEntityName),
+      entityOriginalName: EntityOriginalName(cbjEntityName),
+      deviceOriginalName: DeviceOriginalName(cbjEntityName),
+      entityStateGRPC: EntityState(entityStateGRPC),
       stateMassage: DeviceStateMassage(stateMassage),
       senderDeviceOs: DeviceSenderDeviceOs(senderDeviceOs),
       senderDeviceModel: DeviceSenderDeviceModel(senderDeviceModel),
@@ -71,6 +99,18 @@ abstract class GenericBlindsDeviceDtos
       deviceVendor: DeviceVendor(deviceVendor),
       compUuid: DeviceCompUuid(compUuid),
       blindsSwitchState: GenericBlindsSwitchState(blindsSwitchState),
+      powerConsumption: DevicePowerConsumption(powerConsumption),
+      deviceUniqueId: DeviceUniqueId(deviceUniqueId),
+      devicePort: DevicePort(devicePort),
+      deviceLastKnownIp: DeviceLastKnownIp(deviceLastKnownIp),
+      deviceHostName: DeviceHostName(deviceHostName),
+      deviceMdns: DeviceMdns(deviceMdns),
+      devicesMacAddress: DevicesMacAddress(devicesMacAddress),
+      entityKey: EntityKey(entityKey),
+      requestTimeStamp: RequestTimeStamp(requestTimeStamp),
+      lastResponseFromDeviceTimeStamp:
+          LastResponseFromDeviceTimeStamp(lastResponseFromDeviceTimeStamp),
+      deviceCbjUniqueId: CoreUniqueId.fromUniqueString(deviceCbjUniqueId!),
     );
   }
 }

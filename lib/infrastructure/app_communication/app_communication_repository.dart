@@ -127,8 +127,8 @@ class AppCommunicationRepository extends IAppCommunicationRepository {
         final DeviceEntityAbstract deviceEntityFromApp =
             DeviceHelper.convertJsonStringToDomain(event.allRemoteCommands);
 
-        deviceEntityFromApp.deviceStateGRPC =
-            DeviceState(DeviceStateGRPC.waitingInComp.toString());
+        deviceEntityFromApp.entityStateGRPC =
+            EntityState(DeviceStateGRPC.waitingInComp.toString());
 
         getIt<IMqttServerRepository>().postToHubMqtt(
           entityFromTheApp: deviceEntityFromApp,
@@ -176,10 +176,10 @@ class AppCommunicationRepository extends IAppCommunicationRepository {
             SceneCbjDtos.fromJson(jsonSceneFromJsonString).toDomain();
 
         final String sceneStateGrpcTemp =
-            sceneCbj.deviceStateGRPC.getOrCrash()!;
+            sceneCbj.entityStateGRPC.getOrCrash()!;
 
         sceneCbj.copyWith(
-          deviceStateGRPC: SceneCbjDeviceStateGRPC(
+          entityStateGRPC: SceneCbjDeviceStateGRPC(
             DeviceStateGRPC.waitingInComp.toString(),
           ),
         );
@@ -197,10 +197,10 @@ class AppCommunicationRepository extends IAppCommunicationRepository {
             RoutineCbjDtos.fromJson(jsonRoutineFromJsonString).toDomain();
 
         final String routineStateGrpcTemp =
-            routineCbj.deviceStateGRPC.getOrCrash()!;
+            routineCbj.entityStateGRPC.getOrCrash()!;
 
         routineCbj.copyWith(
-          deviceStateGRPC: RoutineCbjDeviceStateGRPC(
+          entityStateGRPC: RoutineCbjDeviceStateGRPC(
             DeviceStateGRPC.waitingInComp.toString(),
           ),
         );
@@ -332,7 +332,7 @@ class AppCommunicationRepository extends IAppCommunicationRepository {
         nodeRedFlowId: SceneCbjNodeRedFlowId(null),
         firstNodeId: SceneCbjFirstNodeId(null),
         lastDateOfExecute: SceneCbjLastDateOfExecute(null),
-        deviceStateGRPC:
+        entityStateGRPC:
             SceneCbjDeviceStateGRPC(DeviceStateGRPC.ack.toString()),
         senderDeviceModel: SceneCbjSenderDeviceModel(null),
         senderDeviceOs: SceneCbjSenderDeviceOs(null),

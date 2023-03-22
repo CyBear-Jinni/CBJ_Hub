@@ -13,7 +13,7 @@ abstract class BindingCbjDtos implements _$BindingCbjDtos {
     required String uniqueId,
     required String name,
     required String backgroundColor,
-    required String? deviceStateGRPC,
+    required String? entityStateGRPC,
     required String? senderDeviceOs,
     required String? senderDeviceModel,
     required String? senderId,
@@ -41,13 +41,12 @@ abstract class BindingCbjDtos implements _$BindingCbjDtos {
       iconCodePoint: bindingCbj.iconCodePoint.getOrCrash(),
       image: bindingCbj.image.getOrCrash(),
       lastDateOfExecute: bindingCbj.lastDateOfExecute.getOrCrash(),
-      deviceStateGRPC: bindingCbj.deviceStateGRPC.getOrCrash(),
+      entityStateGRPC: bindingCbj.entityStateGRPC.getOrCrash(),
       senderDeviceModel: bindingCbj.senderDeviceModel.getOrCrash(),
       senderDeviceOs: bindingCbj.senderDeviceOs.getOrCrash(),
       senderId: bindingCbj.senderId.getOrCrash(),
       compUuid: bindingCbj.compUuid.getOrCrash(),
       stateMassage: bindingCbj.stateMassage.getOrCrash(),
-      // serverTimeStamp: FieldValue.serverTimestamp(),
     );
   }
 
@@ -67,7 +66,7 @@ abstract class BindingCbjDtos implements _$BindingCbjDtos {
       iconCodePoint: BindingCbjIconCodePoint(iconCodePoint),
       image: BindingCbjBackgroundImage(image),
       lastDateOfExecute: BindingCbjLastDateOfExecute(lastDateOfExecute),
-      deviceStateGRPC: BindingCbjDeviceStateGRPC(deviceStateGRPC),
+      entityStateGRPC: BindingCbjDeviceStateGRPC(entityStateGRPC),
       senderDeviceModel: BindingCbjSenderDeviceModel(senderDeviceModel),
       senderDeviceOs: BindingCbjSenderDeviceOs(senderDeviceOs),
       senderId: BindingCbjSenderId(senderId),

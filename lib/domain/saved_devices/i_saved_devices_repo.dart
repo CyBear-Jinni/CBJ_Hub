@@ -33,6 +33,6 @@ abstract class ISavedDevicesRepo {
 
   /// Get device by unique ID
   Future<Either<LocalDbFailures, DeviceEntityAbstract>> getDeviceById(
-    String deviceUniqueId,
+    String entityUniqueId,
   );
 }

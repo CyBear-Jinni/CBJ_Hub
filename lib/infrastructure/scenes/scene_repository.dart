@@ -207,7 +207,7 @@ class SceneCbjRepository implements ISceneCbjRepository {
     for (final SceneCbjEntity sceneCbjEntity in scenesList.asList()) {
       addOrUpdateNewSceneInHub(
         sceneCbjEntity.copyWith(
-          deviceStateGRPC: SceneCbjDeviceStateGRPC(
+          entityStateGRPC: SceneCbjDeviceStateGRPC(
             DeviceStateGRPC.waitingInFirebase.toString(),
           ),
         ),

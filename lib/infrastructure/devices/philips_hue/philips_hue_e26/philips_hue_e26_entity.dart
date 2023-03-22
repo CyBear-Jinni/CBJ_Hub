@@ -8,7 +8,6 @@ import 'package:cbj_hub/domain/generic_devices/generic_light_device/generic_ligh
 import 'package:cbj_hub/domain/generic_devices/generic_light_with_brightness_device/generic_light_with_brightness_entity.dart';
 import 'package:cbj_hub/domain/generic_devices/generic_light_with_brightness_device/generic_light_with_brightness_value_objects.dart';
 import 'package:cbj_hub/infrastructure/devices/philips_hue/philips_hue_api/philips_hue_api_light.dart';
-import 'package:cbj_hub/infrastructure/devices/philips_hue/philips_hue_device_value_objects.dart';
 import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
 import 'package:cbj_hub/utils.dart';
 import 'package:dartz/dartz.dart';
@@ -17,33 +16,36 @@ import 'package:yeedart/yeedart.dart';
 class PhilipsHueE26Entity extends GenericLightWithBrightnessDE {
   PhilipsHueE26Entity({
     required super.uniqueId,
-    required super.vendorUniqueId,
-    required super.defaultName,
-    required super.deviceStateGRPC,
+    required super.entityUniqueId,
+    required super.cbjEntityName,
+    required super.entityOriginalName,
+    required super.deviceOriginalName,
     required super.stateMassage,
     required super.senderDeviceOs,
     required super.senderDeviceModel,
     required super.senderId,
     required super.compUuid,
+    required super.entityStateGRPC,
     required super.powerConsumption,
+    required super.deviceUniqueId,
+    required super.devicePort,
+    required super.deviceLastKnownIp,
+    required super.deviceHostName,
+    required super.deviceMdns,
+    required super.devicesMacAddress,
+    required super.entityKey,
+    required super.requestTimeStamp,
+    required super.lastResponseFromDeviceTimeStamp,
+    required super.deviceCbjUniqueId,
     required super.lightSwitchState,
     required super.lightBrightness,
     required this.philipsHueApiLight,
-    required this.philipsHuePort,
-    this.deviceMdnsName,
-    this.lastKnownIp,
+    this.philipsHuePackageObject,
   }) : super(
           deviceVendor: DeviceVendor(
             VendorsAndServices.philipsHue.toString(),
           ),
         );
-
-  /// PhilipsHue communication port
-  PhilipsHuePort? philipsHuePort;
-
-  DeviceLastKnownIp? lastKnownIp;
-
-  DeviceMdnsName? deviceMdnsName;
 
   /// PhilipsHue package object require to close previews request before new one
   Device? philipsHuePackageObject;
@@ -67,7 +69,7 @@ class PhilipsHueE26Entity extends GenericLightWithBrightnessDE {
     try {
       if (newEntity.lightSwitchState!.getOrCrash() !=
               lightSwitchState!.getOrCrash() ||
-          deviceStateGRPC.getOrCrash() != DeviceStateGRPC.ack.toString()) {
+          entityStateGRPC.getOrCrash() != DeviceStateGRPC.ack.toString()) {
         final DeviceActions? actionToPreform =
             EnumHelperCbj.stringToDeviceAction(
           newEntity.lightSwitchState!.getOrCrash(),
@@ -97,14 +99,14 @@ class PhilipsHueE26Entity extends GenericLightWithBrightnessDE {
           logger.w('actionToPreform is not set correctly on PhilipsHue E26');
         }
       }
-      deviceStateGRPC = DeviceState(DeviceStateGRPC.ack.toString());
+      entityStateGRPC = EntityState(DeviceStateGRPC.ack.toString());
 
       // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
       //   entityFromTheHub: this,
       // );
       return right(unit);
     } catch (e) {
-      deviceStateGRPC = DeviceState(DeviceStateGRPC.newStateFailed.toString());
+      entityStateGRPC = EntityState(DeviceStateGRPC.newStateFailed.toString());
       // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
       //   entityFromTheHub: this,
       // );
@@ -118,7 +120,7 @@ class PhilipsHueE26Entity extends GenericLightWithBrightnessDE {
         GenericLightWithBrightnessSwitchState(DeviceActions.on.toString());
 
     try {
-      await philipsHueApiLight.turnLightOn(vendorUniqueId.getOrCrash());
+      await philipsHueApiLight.turnLightOn(entityUniqueId.getOrCrash());
 
       return right(unit);
     } catch (e) {
@@ -132,7 +134,7 @@ class PhilipsHueE26Entity extends GenericLightWithBrightnessDE {
         GenericLightWithBrightnessSwitchState(DeviceActions.off.toString());
 
     try {
-      await philipsHueApiLight.turnLightOff(vendorUniqueId.getOrCrash());
+      await philipsHueApiLight.turnLightOff(entityUniqueId.getOrCrash());
 
       return right(unit);
     } catch (e) {
@@ -155,7 +157,7 @@ class PhilipsHueE26Entity extends GenericLightWithBrightnessDE {
         GenericLightWithBrightnessBrightness(brightnessInt.toString());
 
     await philipsHueApiLight.setLightBrightness(
-      vendorUniqueId.getOrCrash(),
+      entityUniqueId.getOrCrash(),
       brightnessInt,
     );
 

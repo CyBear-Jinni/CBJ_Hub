@@ -14,36 +14,60 @@ class GenericEmptyDE extends DeviceEntityAbstract {
   /// All public field of GenericEmpty entity
   GenericEmptyDE({
     required super.uniqueId,
-    required super.vendorUniqueId,
+    required super.entityUniqueId,
     required super.deviceVendor,
-    required super.defaultName,
-    required super.deviceStateGRPC,
+    required super.cbjEntityName,
+    required super.entityOriginalName,
+    required super.deviceOriginalName,
     required super.stateMassage,
     required super.senderDeviceOs,
     required super.senderDeviceModel,
     required super.senderId,
     required super.compUuid,
+    required super.entityStateGRPC,
+    required super.powerConsumption,
+    required super.deviceUniqueId,
+    required super.devicePort,
+    required super.deviceLastKnownIp,
+    required super.deviceHostName,
+    required super.deviceMdns,
+    required super.devicesMacAddress,
+    required super.entityKey,
+    required super.requestTimeStamp,
+    required super.lastResponseFromDeviceTimeStamp,
+    required super.deviceCbjUniqueId,
     required this.emptySwitchState,
-    DevicePowerConsumption? powerConsumption,
   }) : super(
-          deviceTypes: DeviceType(DeviceTypes.emptyDevice.toString()),
+          entityTypes: EntityType(DeviceTypes.emptyDevice.toString()),
         );
 
   /// Empty instance of GenericEmptyEntity
   factory GenericEmptyDE.empty() => GenericEmptyDE(
+        deviceVendor: DeviceVendor(
+          VendorsAndServices.vendorsAndServicesNotSupported.toString(),
+        ),
         uniqueId: CoreUniqueId(),
-        vendorUniqueId: VendorUniqueId(),
-        defaultName: DeviceDefaultName('Empty device'),
-        deviceStateGRPC: DeviceState(DeviceStateGRPC.ack.toString()),
+        entityUniqueId: EntityUniqueId(''),
+        cbjEntityName: CbjEntityName('Empty device'),
+        entityOriginalName: EntityOriginalName('Missing entity original name'),
+        deviceOriginalName: DeviceOriginalName('Missing device original name'),
+        entityStateGRPC: EntityState(DeviceStateGRPC.ack.toString()),
         senderDeviceOs: DeviceSenderDeviceOs('Hub'),
         senderDeviceModel: DeviceSenderDeviceModel('Hub'),
         stateMassage: DeviceStateMassage('Test'),
         senderId: DeviceSenderId(),
-        deviceVendor: DeviceVendor(
-          VendorsAndServices.vendorsAndServicesNotSupported.toString(),
-        ),
         compUuid: DeviceCompUuid('Test'),
         powerConsumption: DevicePowerConsumption('Test'),
+        deviceUniqueId: DeviceUniqueId(''),
+        devicePort: DevicePort(''),
+        deviceLastKnownIp: DeviceLastKnownIp(''),
+        deviceHostName: DeviceHostName(''),
+        deviceMdns: DeviceMdns(''),
+        devicesMacAddress: DevicesMacAddress(''),
+        entityKey: EntityKey(''),
+        requestTimeStamp: RequestTimeStamp(''),
+        lastResponseFromDeviceTimeStamp: LastResponseFromDeviceTimeStamp(''),
+        deviceCbjUniqueId: CoreUniqueId(),
         emptySwitchState: GenericEmptySwitchState(DeviceActions.off.toString()),
       );
 
@@ -54,7 +78,7 @@ class GenericEmptyDE extends DeviceEntityAbstract {
   // /// Will return failure if any of the fields failed or return unit if fields
   // /// have legit values
   Option<CoreFailure<dynamic>> get failureOption =>
-      defaultName.value.fold((f) => some(f), (_) => none());
+      cbjEntityName.value.fold((f) => some(f), (_) => none());
   //
   // return body.failureOrUnit
   //     .andThen(todos.failureOrUnit)
@@ -87,19 +111,31 @@ class GenericEmptyDE extends DeviceEntityAbstract {
     return GenericEmptyDeviceDtos(
       deviceDtoClass: (GenericEmptyDeviceDtos).toString(),
       id: uniqueId.getOrCrash(),
-
-      vendorUniqueId: vendorUniqueId.getOrCrash(),
-      defaultName: defaultName.getOrCrash(),
-      deviceStateGRPC: deviceStateGRPC.getOrCrash(),
+      entityUniqueId: entityUniqueId.getOrCrash(),
+      cbjEntityName: cbjEntityName.getOrCrash(),
+      entityOriginalName: entityOriginalName.getOrCrash(),
+      deviceOriginalName: deviceOriginalName.getOrCrash(),
+      entityStateGRPC: entityStateGRPC.getOrCrash(),
       stateMassage: stateMassage.getOrCrash(),
       senderDeviceOs: senderDeviceOs.getOrCrash(),
       senderDeviceModel: senderDeviceModel.getOrCrash(),
       senderId: senderId.getOrCrash(),
-      deviceTypes: deviceTypes.getOrCrash(),
+      entityTypes: entityTypes.getOrCrash(),
       compUuid: compUuid.getOrCrash(),
-      emptySwitchState: emptySwitchState!.getOrCrash(),
       deviceVendor: deviceVendor.getOrCrash(),
-      // serverTimeStamp: FieldValue.serverTimestamp(),
+      powerConsumption: powerConsumption.getOrCrash(),
+      deviceUniqueId: deviceUniqueId.getOrCrash(),
+      devicePort: devicePort.getOrCrash(),
+      deviceLastKnownIp: deviceLastKnownIp.getOrCrash(),
+      deviceHostName: deviceHostName.getOrCrash(),
+      deviceMdns: deviceMdns.getOrCrash(),
+      devicesMacAddress: devicesMacAddress.getOrCrash(),
+      entityKey: entityKey.getOrCrash(),
+      requestTimeStamp: requestTimeStamp.getOrCrash(),
+      lastResponseFromDeviceTimeStamp:
+          lastResponseFromDeviceTimeStamp.getOrCrash(),
+      deviceCbjUniqueId: deviceCbjUniqueId.getOrCrash(),
+      emptySwitchState: emptySwitchState!.getOrCrash(),
     );
   }
 

@@ -64,7 +64,7 @@ class NodeRedConverter {
       iconCodePoint: SceneCbjIconCodePoint(null),
       image: SceneCbjBackgroundImage(null),
       lastDateOfExecute: SceneCbjLastDateOfExecute(null),
-      deviceStateGRPC: SceneCbjDeviceStateGRPC(
+      entityStateGRPC: SceneCbjDeviceStateGRPC(
         DeviceStateGRPC.addingNewScene.toString(),
       ),
       senderDeviceModel: SceneCbjSenderDeviceModel(null),
@@ -119,7 +119,7 @@ class NodeRedConverter {
       iconCodePoint: RoutineCbjIconCodePoint(null),
       image: RoutineCbjBackgroundImage(null),
       lastDateOfExecute: RoutineCbjLastDateOfExecute(null),
-      deviceStateGRPC: RoutineCbjDeviceStateGRPC(
+      entityStateGRPC: RoutineCbjDeviceStateGRPC(
         DeviceStateGRPC.addingNewRoutine.toString(),
       ),
       senderDeviceModel: RoutineCbjSenderDeviceModel(null),
@@ -175,7 +175,7 @@ class NodeRedConverter {
       iconCodePoint: BindingCbjIconCodePoint(null),
       image: BindingCbjBackgroundImage(null),
       lastDateOfExecute: BindingCbjLastDateOfExecute(null),
-      deviceStateGRPC: BindingCbjDeviceStateGRPC(
+      entityStateGRPC: BindingCbjDeviceStateGRPC(
         DeviceStateGRPC.addingNewBinding.toString(),
       ),
       senderDeviceModel: BindingCbjSenderDeviceModel(null),
@@ -199,7 +199,7 @@ class NodeRedConverter {
     final NodeRedMqttOutNode mqttNode = NodeRedMqttOutNode(
       brokerNodeId: brokerNodeId,
       topic: topic,
-      name: '${device.defaultName.getOrCrash()} - $property',
+      name: '${device.cbjEntityName.getOrCrash()} - $property',
     );
 
     final NodeRedFunctionNode functionForNode =

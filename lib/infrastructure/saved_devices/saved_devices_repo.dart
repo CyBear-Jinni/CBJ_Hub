@@ -120,8 +120,8 @@ class SavedDevicesRepo extends ISavedDevicesRepo {
     DeviceEntityAbstract deviceEntity,
   ) {
     for (final DeviceEntityAbstract deviceTemp in _allDevices.values) {
-      if (deviceEntity.vendorUniqueId.getOrCrash() ==
-          deviceTemp.vendorUniqueId.getOrCrash()) {
+      if (deviceEntity.entityUniqueId.getOrCrash() ==
+          deviceTemp.entityUniqueId.getOrCrash()) {
         return deviceTemp;
       }
     }
@@ -138,9 +138,9 @@ class SavedDevicesRepo extends ISavedDevicesRepo {
 
   @override
   Future<Either<LocalDbFailures, DeviceEntityAbstract>> getDeviceById(
-    String deviceUniqueId,
+    String entityUniqueId,
   ) async {
-    final DeviceEntityAbstract? device = _allDevices[deviceUniqueId];
+    final DeviceEntityAbstract? device = _allDevices[entityUniqueId];
     if (device != null) {
       return right(device);
     }

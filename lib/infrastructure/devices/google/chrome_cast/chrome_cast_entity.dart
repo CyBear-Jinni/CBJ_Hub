@@ -16,15 +16,27 @@ import 'package:dartz/dartz.dart';
 class ChromeCastEntity extends GenericSmartTvDE {
   ChromeCastEntity({
     required super.uniqueId,
-    required super.vendorUniqueId,
-    required super.defaultName,
-    required super.deviceStateGRPC,
+    required super.entityUniqueId,
+    required super.cbjEntityName,
+    required super.entityOriginalName,
+    required super.deviceOriginalName,
     required super.stateMassage,
     required super.senderDeviceOs,
     required super.senderDeviceModel,
     required super.senderId,
     required super.compUuid,
+    required super.entityStateGRPC,
     required super.powerConsumption,
+    required super.deviceUniqueId,
+    required super.devicePort,
+    required super.deviceLastKnownIp,
+    required super.deviceHostName,
+    required super.deviceMdns,
+    required super.devicesMacAddress,
+    required super.entityKey,
+    required super.requestTimeStamp,
+    required super.lastResponseFromDeviceTimeStamp,
+    required super.deviceCbjUniqueId,
     required super.smartTvSwitchState,
     required this.googlePort,
     super.openUrl,
@@ -44,7 +56,7 @@ class ChromeCastEntity extends GenericSmartTvDE {
 
   DeviceLastKnownIp? lastKnownIp;
 
-  DeviceMdnsName? deviceMdnsName;
+  DeviceMdns? deviceMdnsName;
 
   late ChromecastNodeRedApi chromecastNodeRedApi;
 
@@ -73,7 +85,7 @@ class ChromeCastEntity extends GenericSmartTvDE {
     try {
       if (newEntity.openUrl?.getOrCrash() != null &&
           (newEntity.openUrl?.getOrCrash() != openUrl?.getOrCrash() &&
-              newEntity.deviceStateGRPC.getOrCrash() !=
+              newEntity.entityStateGRPC.getOrCrash() !=
                   DeviceStateGRPC.ack.toString())) {
         (await sendUrlToDevice(newEntity.openUrl!.getOrCrash())).fold((l) {
           logger.e('Error opening url on ChromeCast');
@@ -86,7 +98,7 @@ class ChromeCastEntity extends GenericSmartTvDE {
       if (newEntity.pausePlayState?.getOrCrash() != null &&
           (newEntity.pausePlayState?.getOrCrash() !=
                   pausePlayState?.getOrCrash() &&
-              newEntity.deviceStateGRPC.getOrCrash() !=
+              newEntity.entityStateGRPC.getOrCrash() !=
                   DeviceStateGRPC.ack.toString())) {
         (await togglePausePlay(newEntity.pausePlayState!.getOrCrash())).fold(
             (l) {
@@ -97,13 +109,13 @@ class ChromeCastEntity extends GenericSmartTvDE {
         });
       }
 
-      deviceStateGRPC = DeviceState(DeviceStateGRPC.ack.toString());
+      entityStateGRPC = EntityState(DeviceStateGRPC.ack.toString());
       // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
       //   entityFromTheHub: this,
       // );
       return right(unit);
     } catch (e) {
-      deviceStateGRPC = DeviceState(DeviceStateGRPC.newStateFailed.toString());
+      entityStateGRPC = EntityState(DeviceStateGRPC.newStateFailed.toString());
       // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
       //   entityFromTheHub: this,
       // );

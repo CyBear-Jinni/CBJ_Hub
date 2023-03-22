@@ -13,7 +13,7 @@ abstract class SceneCbjDtos implements _$SceneCbjDtos {
     required String uniqueId,
     required String name,
     required String backgroundColor,
-    required String? deviceStateGRPC,
+    required String? entityStateGRPC,
     required String? senderDeviceOs,
     required String? senderDeviceModel,
     required String? senderId,
@@ -41,13 +41,12 @@ abstract class SceneCbjDtos implements _$SceneCbjDtos {
       iconCodePoint: sceneCbj.iconCodePoint.getOrCrash(),
       image: sceneCbj.image.getOrCrash(),
       lastDateOfExecute: sceneCbj.lastDateOfExecute.getOrCrash(),
-      deviceStateGRPC: sceneCbj.deviceStateGRPC.getOrCrash(),
+      entityStateGRPC: sceneCbj.entityStateGRPC.getOrCrash(),
       senderDeviceModel: sceneCbj.senderDeviceModel.getOrCrash(),
       senderDeviceOs: sceneCbj.senderDeviceOs.getOrCrash(),
       senderId: sceneCbj.senderId.getOrCrash(),
       compUuid: sceneCbj.compUuid.getOrCrash(),
       stateMassage: sceneCbj.stateMassage.getOrCrash(),
-      // serverTimeStamp: FieldValue.serverTimestamp(),
     );
   }
 
@@ -67,7 +66,7 @@ abstract class SceneCbjDtos implements _$SceneCbjDtos {
       iconCodePoint: SceneCbjIconCodePoint(iconCodePoint),
       image: SceneCbjBackgroundImage(image),
       lastDateOfExecute: SceneCbjLastDateOfExecute(lastDateOfExecute),
-      deviceStateGRPC: SceneCbjDeviceStateGRPC(deviceStateGRPC),
+      entityStateGRPC: SceneCbjDeviceStateGRPC(entityStateGRPC),
       senderDeviceModel: SceneCbjSenderDeviceModel(senderDeviceModel),
       senderDeviceOs: SceneCbjSenderDeviceOs(senderDeviceOs),
       senderId: SceneCbjSenderId(senderId),

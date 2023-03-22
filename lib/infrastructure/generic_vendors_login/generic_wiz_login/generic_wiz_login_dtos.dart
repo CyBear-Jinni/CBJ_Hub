@@ -26,8 +26,6 @@ abstract class GenericWizLoginDtos
       senderUniqueId: genericWizDE.senderUniqueId.getOrCrash(),
       loginVendor: genericWizDE.loginVendor.getOrCrash(),
       wizApiKey: genericWizDE.wizApiKey.getOrCrash(),
-
-      // serverTimeStamp: FieldValue.serverTimestamp(),
     );
   }
 

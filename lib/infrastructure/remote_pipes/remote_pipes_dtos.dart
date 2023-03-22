@@ -18,7 +18,6 @@ abstract class RemotePipesDtos implements _$RemotePipesDtos {
   factory RemotePipesDtos.fromDomain(RemotePipesEntity remotePipesDE) {
     return RemotePipesDtos(
       domainName: remotePipesDE.domainName!.getOrCrash(),
-      // serverTimeStamp: FieldValue.serverTimestamp(),
     );
   }
 

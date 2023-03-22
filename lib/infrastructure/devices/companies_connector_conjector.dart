@@ -26,6 +26,7 @@ import 'package:cbj_hub/infrastructure/devices/wiz/wiz_connector_conjector.dart'
 import 'package:cbj_hub/infrastructure/devices/xiaomi_io/xiaomi_io_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/devices/yeelight/yeelight_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
+import 'package:cbj_hub/infrastructure/generic_devices/abstract_device/abstract_company_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/system_commands/system_commands_manager_d.dart';
 import 'package:cbj_hub/injection.dart';
 import 'package:cbj_hub/utils.dart';
@@ -94,13 +95,9 @@ class CompaniesConnectorConjector {
   static void addAllDevicesToItsRepos(
     Map<String, DeviceEntityAbstract> allDevices,
   ) {
-    for (final String deviceId in allDevices.keys) {
-      final MapEntry<String, DeviceEntityAbstract> currentDeviceMapEntry =
-          MapEntry<String, DeviceEntityAbstract>(
-        deviceId,
-        allDevices[deviceId]!,
-      );
-      addDeviceToItsRepo(currentDeviceMapEntry);
+    for (final MapEntry<String, DeviceEntityAbstract> deviceId
+        in allDevices.entries) {
+      addDeviceToItsRepo(deviceId);
     }
   }
 
@@ -116,29 +113,28 @@ class CompaniesConnectorConjector {
     final String deviceVendor =
         deviceEntityAbstract.value.deviceVendor.getOrCrash();
 
+    final AbstractCompanyConnectorConjector? companyConnectorConjector =
+        vendorStringToCompanyConnectorConjector(deviceVendor);
+
+    /// TODO: convert all vendors to use setup from db method
     if (deviceVendor == VendorsAndServices.yeelight.toString()) {
       YeelightConnectorConjector.companyDevices.addEntries([devicesEntry]);
     } else if (deviceVendor == VendorsAndServices.tasmota.toString()) {
       TasmotaIpConnectorConjector.companyDevices.addEntries([devicesEntry]);
-    } else if (deviceVendor == VendorsAndServices.espHome.toString()) {
-      EspHomeConnectorConjector.companyDevices.addEntries([devicesEntry]);
-    } else if (deviceVendor ==
-        VendorsAndServices.switcherSmartHome.toString()) {
-      SwitcherConnectorConjector.companyDevices.addEntries([devicesEntry]);
     } else if (deviceVendor == VendorsAndServices.google.toString()) {
       GoogleConnectorConjector.companyDevices.addEntries([devicesEntry]);
     } else if (deviceVendor == VendorsAndServices.miHome.toString()) {
       XiaomiIoConnectorConjector.companyDevices.addEntries([devicesEntry]);
     } else if (deviceVendor == VendorsAndServices.tuyaSmart.toString()) {
       TuyaSmartConnectorConjector.companyDevices.addEntries([devicesEntry]);
-    } else if (deviceVendor == VendorsAndServices.lifx.toString()) {
-      LifxConnectorConjector.companyDevices.addEntries([devicesEntry]);
     } else if (deviceVendor == VendorsAndServices.shelly.toString()) {
       ShellyConnectorConjector.companyDevices.addEntries([devicesEntry]);
     } else if (deviceVendor == VendorsAndServices.sonoffDiy.toString()) {
       SonoffDiyConnectorConjector.companyDevices.addEntries([devicesEntry]);
     } else if (deviceVendor == VendorsAndServices.philipsHue.toString()) {
       PhilipsHueConnectorConjector.companyDevices.addEntries([devicesEntry]);
+    } else if (companyConnectorConjector != null) {
+      companyConnectorConjector.setUpDeviceFromDb(devicesEntry.value);
     } else {
       logger.w('Cannot add device entity to its repo, type not supported');
     }
@@ -413,5 +409,29 @@ class CompaniesConnectorConjector {
   /// before all of our program.
   static Future<void> notImplementedDevicesSearch() async {
     getIt<YeelightConnectorConjector>().discoverNewDevices();
+  }
+
+  static AbstractCompanyConnectorConjector?
+      vendorStringToCompanyConnectorConjector(
+    String vendorName,
+  ) {
+    //TODO: convert vendorName to type and then use switch case
+
+    if (vendorName == VendorsAndServices.espHome.toString()) {
+      return getIt<EspHomeConnectorConjector>();
+    }
+    if (vendorName == VendorsAndServices.switcherSmartHome.toString()) {
+      return getIt<SwitcherConnectorConjector>();
+    }
+
+    if (vendorName == VendorsAndServices.lifx.toString()) {
+      return getIt<LifxConnectorConjector>();
+    }
+
+    logger.w(
+      'Please add vendor to support string $vendorName to connector conjector',
+    );
+
+    return null;
   }
 }

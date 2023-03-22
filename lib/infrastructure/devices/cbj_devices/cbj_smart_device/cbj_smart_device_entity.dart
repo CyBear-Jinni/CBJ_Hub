@@ -12,17 +12,30 @@ import 'package:dartz/dartz.dart';
 class CbjSmartComputerEntity extends GenericSmartComputerDE {
   CbjSmartComputerEntity({
     required super.uniqueId,
-    required super.vendorUniqueId,
+    required super.entityUniqueId,
     required super.deviceVendor,
-    required super.defaultName,
-    required super.deviceStateGRPC,
+    required super.cbjEntityName,
+    required super.entityOriginalName,
+    required super.deviceOriginalName,
     required super.stateMassage,
     required super.senderDeviceOs,
     required super.senderDeviceModel,
     required super.senderId,
     required super.compUuid,
-    required super.smartComputerSuspendState,
+    required super.entityStateGRPC,
+    required super.powerConsumption,
+    required super.deviceUniqueId,
+    required super.devicePort,
+    required super.deviceLastKnownIp,
+    required super.deviceHostName,
+    required super.deviceMdns,
+    required super.devicesMacAddress,
+    required super.entityKey,
+    required super.requestTimeStamp,
+    required super.lastResponseFromDeviceTimeStamp,
+    required super.deviceCbjUniqueId,
     required super.smartComputerShutDownState,
+    required super.smartComputerSuspendState,
     required this.lastKnownIp,
   });
 
@@ -83,7 +96,7 @@ class CbjSmartComputerEntity extends GenericSmartComputerDE {
       smartComputerShutDownState =
           GenericSmartComputerShutdownState(DeviceActions.itIsFalse.toString());
 
-      // deviceStateGRPC = DeviceState(DeviceStateGRPC.ack.toString());
+      // entityStateGRPC = EntityState(DeviceStateGRPC.ack.toString());
       //
       // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
       //   entityFromTheHub: this,
@@ -91,7 +104,7 @@ class CbjSmartComputerEntity extends GenericSmartComputerDE {
 
       return right(unit);
     } catch (e) {
-      deviceStateGRPC = DeviceState(DeviceStateGRPC.newStateFailed.toString());
+      entityStateGRPC = EntityState(DeviceStateGRPC.newStateFailed.toString());
 
       // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
       //   entityFromTheHub: this,
@@ -109,7 +122,7 @@ class CbjSmartComputerEntity extends GenericSmartComputerDE {
 
     await CbjSmartDeviceClient.suspendCbjSmartDeviceHostDevice(
       lastKnownIp.getOrCrash(),
-      vendorUniqueId.getOrCrash(),
+      entityUniqueId.getOrCrash(),
     );
 
     return left(
@@ -127,7 +140,7 @@ class CbjSmartComputerEntity extends GenericSmartComputerDE {
 
     await CbjSmartDeviceClient.shutDownCbjSmartDeviceHostDevice(
       lastKnownIp.getOrCrash(),
-      vendorUniqueId.getOrCrash(),
+      entityUniqueId.getOrCrash(),
     );
 
     return left(

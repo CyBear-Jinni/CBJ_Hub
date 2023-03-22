@@ -11,7 +11,7 @@ class VideoGamesAreaAction {
     String brokerNodeId,
   ) async {
     final DeviceTypes deviceType = DeviceTypes.values.firstWhere(
-      (element) => element.name == deviceEntity.deviceTypes.getOrCrash(),
+      (element) => element.name == deviceEntity.entityTypes.getOrCrash(),
     );
 
     final Map<String, String> actionsList = <String, String>{};

@@ -34,7 +34,7 @@ class SavedRoomsRepo extends ISavedRoomsRepo {
         if (rooms.isEmpty) {
           final RoomEntity discoveredRoom = RoomEntity.empty().copyWith(
             uniqueId: RoomUniqueId.discoveredRoomId(),
-            defaultName: RoomDefaultName.discoveredRoomName(),
+            cbjEntityName: RoomDefaultName.discoveredRoomName(),
           );
           rooms.add(discoveredRoom);
         }
@@ -464,7 +464,7 @@ class SavedRoomsRepo extends ISavedRoomsRepo {
           discoveredRoomId,
           RoomEntity.empty().copyWith(
             uniqueId: RoomUniqueId.fromUniqueString(discoveredRoomId),
-            defaultName: RoomDefaultName.discoveredRoomName(),
+            cbjEntityName: RoomDefaultName.discoveredRoomName(),
           ),
         )
       ]);

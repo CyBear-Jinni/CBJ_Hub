@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:cbj_hub/domain/generic_devices/abstract_device/core_failures.dart';
 import 'package:cbj_hub/domain/generic_devices/abstract_device/device_entity_abstract.dart';
 import 'package:cbj_hub/domain/generic_devices/abstract_device/value_objects_core.dart';
 import 'package:cbj_hub/domain/generic_devices/generic_rgbw_light_device/generic_rgbw_light_entity.dart';
@@ -17,7 +16,6 @@ import 'package:cbj_hub/infrastructure/devices/tuya_smart/tuya_smart_switch/tuya
 import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
 import 'package:cbj_hub/infrastructure/generic_devices/abstract_device/abstract_company_connector_conjector.dart';
 import 'package:cbj_hub/utils.dart';
-import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 
 @singleton
@@ -86,18 +84,18 @@ class TuyaSmartConnectorConjector implements AbstractCompanyConnectorConjector {
             if ((savedDevice is TuyaSmartJbtA70RgbcwWfEntity ||
                     savedDevice is TuyaSmartSwitchEntity ||
                     savedDevice is TuyaSmartPlugEntity) &&
-                tuyaDevice.id == savedDevice.vendorUniqueId.getOrCrash()) {
+                tuyaDevice.id == savedDevice.entityUniqueId.getOrCrash()) {
               deviceExist = true;
               break;
             } else if ((savedDevice is GenericRgbwLightDE ||
                     savedDevice is GenericSwitchDE ||
                     savedDevice is GenericSmartPlugDE) &&
-                tuyaDevice.id == savedDevice.vendorUniqueId.getOrCrash()) {
+                tuyaDevice.id == savedDevice.entityUniqueId.getOrCrash()) {
               /// Device exist as generic and needs to get converted to non generic type for this vendor
               tempCoreUniqueId = savedDevice.uniqueId;
               break;
             } else if (tuyaDevice.id ==
-                savedDevice.vendorUniqueId.getOrCrash()) {
+                savedDevice.entityUniqueId.getOrCrash()) {
               logger.w(
                 'Tuya Mqtt device type supported but implementation is missing here',
               );
@@ -125,7 +123,7 @@ class TuyaSmartConnectorConjector implements AbstractCompanyConnectorConjector {
 
             logger.i(
               'New Tuya device got added named '
-              '${addDevice.defaultName.getOrCrash()}',
+              '${addDevice.cbjEntityName.getOrCrash()}',
             );
           }
         }
@@ -135,21 +133,6 @@ class TuyaSmartConnectorConjector implements AbstractCompanyConnectorConjector {
         await Future.delayed(const Duration(minutes: 1));
       }
     }
-  }
-
-  Future<Either<CoreFailure, Unit>> create(DeviceEntityAbstract tuyaSmart) {
-    // TODO: implement create
-    throw UnimplementedError();
-  }
-
-  Future<Either<CoreFailure, Unit>> delete(DeviceEntityAbstract tuyaSmart) {
-    // TODO: implement delete
-    throw UnimplementedError();
-  }
-
-  Future<void> initiateHubConnection() {
-    // TODO: implement initiateHubConnection
-    throw UnimplementedError();
   }
 
   Future<void> manageHubRequestsForDevice(
@@ -166,17 +149,11 @@ class TuyaSmartConnectorConjector implements AbstractCompanyConnectorConjector {
       device.executeDeviceAction(newEntity: tuyaSmartDE);
     } else {
       logger.w(
-        'TuyaSmart device type does not exist ${device?.deviceTypes.getOrCrash()}',
+        'TuyaSmart device type does not exist ${device?.entityTypes.getOrCrash()}',
       );
     }
   }
 
-  Future<Either<CoreFailure, Unit>> updateDatabase({
-    required String pathOfField,
-    required Map<String, dynamic> fieldsToUpdate,
-    String? forceUpdateLocation,
-  }) async {
-    // TODO: implement updateDatabase
-    throw UnimplementedError();
-  }
+  @override
+  Future<void> setUpDeviceFromDb(DeviceEntityAbstract deviceEntity) async {}
 }

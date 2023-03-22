@@ -227,7 +227,8 @@ class MqttServerRepository extends IMqttServerRepository {
               d.toInfrastructure().toJson();
 
           for (final String property in devicePropertyAndValues.keys) {
-            final String pt = MqttPublishPayload.bytesToStringAsString(
+            // final String pt =
+            MqttPublishPayload.bytesToStringAsString(
               (devicePropertyAndValues[property] as MqttPublishMessage)
                   .payload
                   .message,
@@ -292,8 +293,8 @@ class MqttServerRepository extends IMqttServerRepository {
   Future<List<ChangeRecord>?> readingFromMqttOnce(String topic) async {
     final MqttClientTopicFilter mqttClientTopic =
         MqttClientTopicFilter(topic, client.updates);
-    final Stream<List<MqttReceivedMessage<MqttMessage?>>> myValueStream =
-        mqttClientTopic.updates.asBroadcastStream();
+    // final Stream<List<MqttReceivedMessage<MqttMessage?>>> myValueStream =
+    mqttClientTopic.updates.asBroadcastStream();
 
     // myValueStream.listen((event) {
     //   logger.v(event);
@@ -504,13 +505,13 @@ class MqttServerRepository extends IMqttServerRepository {
       } else {
         logger.w(
           'Cant find device from app type '
-          '${entityFromTheApp.deviceTypes.getOrCrash()}',
+          '${entityFromTheApp.entityTypes.getOrCrash()}',
         );
         return;
       }
       if (gotFromApp != null && gotFromApp == true) {
-        deviceFromApp.value.deviceStateGRPC =
-            DeviceState(entityFromTheApp.deviceStateGRPC.getOrCrash());
+        deviceFromApp.value.entityStateGRPC =
+            EntityState(entityFromTheApp.entityStateGRPC.getOrCrash());
       }
 
       ConnectorStreamToMqtt.toMqttController.sink.add(deviceFromApp);
@@ -527,9 +528,9 @@ class MqttServerRepository extends IMqttServerRepository {
     required DeviceEntityAbstract entityFromTheHub,
   }) async {
     // if (entityFromTheHub is Map<String, dynamic>) {
-    // if (entityFromTheHub['deviceStateGRPC'] !=
+    // if (entityFromTheHub['entityStateGRPC'] !=
     //         DeviceStateGRPC.waitingInComp.toString() ||
-    //     entityFromTheHub['deviceStateGRPC'] !=
+    //     entityFromTheHub['entityStateGRPC'] !=
     //         DeviceStateGRPC.ack.toString()) {
     //   logger.w("Hub didn't confirmed receiving the request yet");
     //   return;

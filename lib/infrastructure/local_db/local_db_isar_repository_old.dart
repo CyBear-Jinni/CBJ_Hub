@@ -157,7 +157,7 @@ class IsarRepository extends ILocalDbRepository {
       for (final RoomsIsarModel roomIsar in roomsIsarModelFromDb) {
         final RoomEntity roomEntity = RoomEntity(
           uniqueId: RoomUniqueId.fromUniqueString(roomIsar.roomUniqueId),
-          defaultName: RoomDefaultName(roomIsar.roomDefaultName),
+          cbjEntityName: RoomDefaultName(roomIsar.roomDefaultName),
           background: RoomBackground(roomIsar.roomBackground),
           roomTypes: RoomTypes(roomIsar.roomTypes),
           roomDevicesId: RoomDevicesId(roomIsar.roomDevicesId),
@@ -193,8 +193,8 @@ class IsarRepository extends ILocalDbRepository {
 
         devices.add(
           deviceEntity
-            ..deviceStateGRPC =
-                DeviceState(DeviceStateGRPC.waitingInComp.toString()),
+            ..entityStateGRPC =
+                EntityState(DeviceStateGRPC.waitingInComp.toString()),
         );
       }
       return right(devices);
@@ -354,7 +354,7 @@ class IsarRepository extends ILocalDbRepository {
       for (final RoomEntityDtos roomEntityDtos in roomsListDto) {
         final RoomsIsarModel roomsIsarModel = RoomsIsarModel()
           ..roomUniqueId = roomEntityDtos.uniqueId
-          ..roomDefaultName = roomEntityDtos.defaultName
+          ..roomDefaultName = roomEntityDtos.cbjEntityName
           ..roomBackground = roomEntityDtos.background
           ..roomDevicesId = roomEntityDtos.roomDevicesId
           ..roomScenesId = roomEntityDtos.roomScenesId
@@ -513,7 +513,7 @@ class IsarRepository extends ILocalDbRepository {
 
         scenes.add(
           sceneEntity.copyWith(
-            deviceStateGRPC: SceneCbjDeviceStateGRPC(
+            entityStateGRPC: SceneCbjDeviceStateGRPC(
               DeviceStateGRPC.waitingInComp.toString(),
             ),
           ),
@@ -544,7 +544,7 @@ class IsarRepository extends ILocalDbRepository {
 
         routines.add(
           routineEntity.copyWith(
-            deviceStateGRPC: RoutineCbjDeviceStateGRPC(
+            entityStateGRPC: RoutineCbjDeviceStateGRPC(
               DeviceStateGRPC.waitingInComp.toString(),
             ),
           ),
@@ -575,7 +575,7 @@ class IsarRepository extends ILocalDbRepository {
 
         bindings.add(
           bindingEntity.copyWith(
-            deviceStateGRPC: BindingCbjDeviceStateGRPC(
+            entityStateGRPC: BindingCbjDeviceStateGRPC(
               DeviceStateGRPC.waitingInComp.toString(),
             ),
           ),

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:cbj_hub/domain/generic_devices/abstract_device/core_failures.dart';
 import 'package:cbj_hub/domain/generic_devices/abstract_device/device_entity_abstract.dart';
 import 'package:cbj_hub/domain/generic_devices/abstract_device/value_objects_core.dart';
 import 'package:cbj_hub/domain/generic_devices/generic_rgbw_light_device/generic_rgbw_light_entity.dart';
@@ -11,7 +10,6 @@ import 'package:cbj_hub/infrastructure/devices/shelly/shelly_light/shelly_light_
 import 'package:cbj_hub/infrastructure/devices/shelly/shelly_relay_switch/shelly_relay_switch_entity.dart';
 import 'package:cbj_hub/infrastructure/generic_devices/abstract_device/abstract_company_connector_conjector.dart';
 import 'package:cbj_hub/utils.dart';
-import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 
 @singleton
@@ -31,14 +29,14 @@ class ShellyConnectorConjector implements AbstractCompanyConnectorConjector {
     for (final DeviceEntityAbstract device in companyDevices.values) {
       if ((device is ShellyColorLightEntity ||
               device is ShellyRelaySwitchEntity) &&
-          mDnsName == device.vendorUniqueId.getOrCrash()) {
+          mDnsName == device.entityUniqueId.getOrCrash()) {
         return;
       } else if ((device is GenericRgbwLightDE || device is GenericSwitchDE) &&
-          mDnsName == device.vendorUniqueId.getOrCrash()) {
+          mDnsName == device.entityUniqueId.getOrCrash()) {
         /// Device exist as generic and needs to get converted to non generic type for this vendor
         tempCoreUniqueId = device.uniqueId;
         break;
-      } else if (mDnsName == device.vendorUniqueId.getOrCrash()) {
+      } else if (mDnsName == device.entityUniqueId.getOrCrash()) {
         logger.w(
           'Shelly device type supported but implementation is missing here',
         );
@@ -84,27 +82,6 @@ class ShellyConnectorConjector implements AbstractCompanyConnectorConjector {
     }
   }
 
-  Future<Either<CoreFailure, Unit>> updateDatabase({
-    required String pathOfField,
-    required Map<String, dynamic> fieldsToUpdate,
-    String? forceUpdateLocation,
-  }) async {
-    // TODO: implement updateDatabase
-    throw UnimplementedError();
-  }
-
-  Future<Either<CoreFailure, Unit>> create(DeviceEntityAbstract shelly) {
-    // TODO: implement create
-    throw UnimplementedError();
-  }
-
-  Future<Either<CoreFailure, Unit>> delete(DeviceEntityAbstract shelly) {
-    // TODO: implement delete
-    throw UnimplementedError();
-  }
-
-  Future<void> initiateHubConnection() {
-    // TODO: implement initiateHubConnection
-    throw UnimplementedError();
-  }
+  @override
+  Future<void> setUpDeviceFromDb(DeviceEntityAbstract deviceEntity) async {}
 }

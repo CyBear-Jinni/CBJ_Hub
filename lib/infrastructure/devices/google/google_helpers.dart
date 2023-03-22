@@ -22,14 +22,16 @@ class GoogleHelpers {
 
     final ChromeCastEntity googleDE = ChromeCastEntity(
       uniqueId: uniqueDeviceIdTemp,
-      vendorUniqueId: VendorUniqueId.fromUniqueString(mDnsName),
-      defaultName: DeviceDefaultName('Chromecast'),
-      deviceStateGRPC: DeviceState(DeviceStateGRPC.ack.toString()),
+      entityUniqueId: EntityUniqueId(mDnsName),
+      cbjEntityName: CbjEntityName('Chromecast'),
+      entityOriginalName: EntityOriginalName('Chromecast'),
+      deviceOriginalName: DeviceOriginalName('Chromecast'),
+      entityStateGRPC: EntityState(DeviceStateGRPC.ack.toString()),
       senderDeviceOs: DeviceSenderDeviceOs('Android'),
       senderDeviceModel: DeviceSenderDeviceModel('1SE'),
       senderId: DeviceSenderId(),
       compUuid: DeviceCompUuid('34asdfrsd23gggg'),
-      deviceMdnsName: DeviceMdnsName(mDnsName),
+      deviceMdnsName: DeviceMdns(mDnsName),
       lastKnownIp: DeviceLastKnownIp(ip),
       stateMassage: DeviceStateMassage('Hello World'),
       powerConsumption: DevicePowerConsumption('0'),
@@ -37,6 +39,16 @@ class GoogleHelpers {
       smartTvSwitchState: GenericSmartTvSwitchState(
         DeviceActions.actionNotSupported.toString(),
       ),
+      deviceUniqueId: DeviceUniqueId('0'),
+      devicePort: DevicePort('0'),
+      deviceLastKnownIp: DeviceLastKnownIp('0'),
+      deviceHostName: DeviceHostName('0'),
+      deviceMdns: DeviceMdns('0'),
+      devicesMacAddress: DevicesMacAddress('0'),
+      entityKey: EntityKey('0'),
+      requestTimeStamp: RequestTimeStamp('0'),
+      lastResponseFromDeviceTimeStamp: LastResponseFromDeviceTimeStamp('0'),
+      deviceCbjUniqueId: CoreUniqueId(),
     );
 
     return [googleDE];

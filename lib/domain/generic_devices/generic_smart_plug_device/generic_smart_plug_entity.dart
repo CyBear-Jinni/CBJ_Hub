@@ -14,46 +14,69 @@ class GenericSmartPlugDE extends DeviceEntityAbstract {
   /// All public field of GenericSmartPlug entity
   GenericSmartPlugDE({
     required super.uniqueId,
-    required super.vendorUniqueId,
+    required super.entityUniqueId,
     required super.deviceVendor,
-    required super.defaultName,
-    required super.deviceStateGRPC,
+    required super.cbjEntityName,
+    required super.entityOriginalName,
+    required super.deviceOriginalName,
     required super.stateMassage,
     required super.senderDeviceOs,
     required super.senderDeviceModel,
     required super.senderId,
     required super.compUuid,
+    required super.entityStateGRPC,
+    required super.powerConsumption,
+    required super.deviceUniqueId,
+    required super.devicePort,
+    required super.deviceLastKnownIp,
+    required super.deviceHostName,
+    required super.deviceMdns,
+    required super.devicesMacAddress,
+    required super.entityKey,
+    required super.requestTimeStamp,
+    required super.lastResponseFromDeviceTimeStamp,
+    required super.deviceCbjUniqueId,
     required this.smartPlugState,
-    DevicePowerConsumption? powerConsumption,
   }) : super(
-          deviceTypes: DeviceType(DeviceTypes.smartPlug.toString()),
+          entityTypes: EntityType(DeviceTypes.smartPlug.toString()),
         );
 
   /// Empty instance of GenericSmartPlugEntity
   factory GenericSmartPlugDE.empty() => GenericSmartPlugDE(
         uniqueId: CoreUniqueId(),
-        vendorUniqueId: VendorUniqueId(),
-        defaultName: DeviceDefaultName(''),
-        deviceStateGRPC: DeviceState(''),
+        entityUniqueId: EntityUniqueId(''),
+        cbjEntityName: CbjEntityName(''),
+        entityOriginalName: EntityOriginalName(''),
+        deviceOriginalName: DeviceOriginalName(''),
+        entityStateGRPC: EntityState(''),
         senderDeviceOs: DeviceSenderDeviceOs(''),
         senderDeviceModel: DeviceSenderDeviceModel(''),
         stateMassage: DeviceStateMassage(''),
         senderId: DeviceSenderId(),
         deviceVendor: DeviceVendor(''),
+        deviceUniqueId: DeviceUniqueId(''),
+        devicePort: DevicePort(''),
+        deviceLastKnownIp: DeviceLastKnownIp(''),
+        deviceHostName: DeviceHostName(''),
+        deviceMdns: DeviceMdns(''),
         compUuid: DeviceCompUuid(''),
         powerConsumption: DevicePowerConsumption(''),
+        devicesMacAddress: DevicesMacAddress(''),
+        entityKey: EntityKey(''),
+        requestTimeStamp: RequestTimeStamp(''),
+        lastResponseFromDeviceTimeStamp: LastResponseFromDeviceTimeStamp(''),
+        deviceCbjUniqueId: CoreUniqueId(),
         smartPlugState: GenericSmartPlugState(DeviceActions.off.toString()),
       );
 
   /// State of the smartPlug on/off
   GenericSmartPlugState? smartPlugState;
-  DevicePowerConsumption? powerConsumption;
 
   //
   // /// Will return failure if any of the fields failed or return unit if fields
   // /// have legit values
   Option<CoreFailure<dynamic>> get failureOption =>
-      defaultName.value.fold((f) => some(f), (_) => none());
+      cbjEntityName.value.fold((f) => some(f), (_) => none());
   //
   // return body.failureOrUnit
   //     .andThen(todos.failureOrUnit)
@@ -86,18 +109,31 @@ class GenericSmartPlugDE extends DeviceEntityAbstract {
     return GenericSmartPlugDeviceDtos(
       deviceDtoClass: (GenericSmartPlugDeviceDtos).toString(),
       id: uniqueId.getOrCrash(),
-      vendorUniqueId: vendorUniqueId.getOrCrash(),
-      defaultName: defaultName.getOrCrash(),
-      deviceStateGRPC: deviceStateGRPC.getOrCrash(),
+      entityUniqueId: entityUniqueId.getOrCrash(),
+      cbjEntityName: cbjEntityName.getOrCrash(),
+      entityOriginalName: entityOriginalName.getOrCrash(),
+      deviceOriginalName: deviceOriginalName.getOrCrash(),
+      entityStateGRPC: entityStateGRPC.getOrCrash(),
       stateMassage: stateMassage.getOrCrash(),
       senderDeviceOs: senderDeviceOs.getOrCrash(),
       senderDeviceModel: senderDeviceModel.getOrCrash(),
       senderId: senderId.getOrCrash(),
-      deviceTypes: deviceTypes.getOrCrash(),
+      entityTypes: entityTypes.getOrCrash(),
       compUuid: compUuid.getOrCrash(),
-      smartPlugState: smartPlugState!.getOrCrash(),
       deviceVendor: deviceVendor.getOrCrash(),
-      // serverTimeStamp: FieldValue.serverTimestamp(),
+      powerConsumption: powerConsumption.getOrCrash(),
+      deviceUniqueId: deviceUniqueId.getOrCrash(),
+      devicePort: devicePort.getOrCrash(),
+      deviceLastKnownIp: deviceLastKnownIp.getOrCrash(),
+      deviceHostName: deviceHostName.getOrCrash(),
+      deviceMdns: deviceMdns.getOrCrash(),
+      devicesMacAddress: devicesMacAddress.getOrCrash(),
+      entityKey: entityKey.getOrCrash(),
+      requestTimeStamp: requestTimeStamp.getOrCrash(),
+      lastResponseFromDeviceTimeStamp:
+          lastResponseFromDeviceTimeStamp.getOrCrash(),
+      deviceCbjUniqueId: deviceCbjUniqueId.getOrCrash(),
+      smartPlugState: smartPlugState!.getOrCrash(),
     );
   }
 

@@ -17,11 +17,11 @@ class PhilipsHueApiLight {
   late Client client;
   late Bridge bridge;
 
-  Future<String> turnLightOn(String deviceUniqueId) async {
+  Future<String> turnLightOn(String entityUniqueId) async {
     final List<Light> lights = await bridge.lights();
 
     for (final Light light in lights) {
-      if (light.uniqueId != null && light.uniqueId == deviceUniqueId) {
+      if (light.uniqueId != null && light.uniqueId == entityUniqueId) {
         final state = lightStateForColorOnly(light).rebuild(
           (s) => s..on = true,
         );
@@ -56,11 +56,11 @@ class PhilipsHueApiLight {
   }
 
   Future<String> setLightBrightness(
-      String deviceUniqueId, int brightness) async {
+      String entityUniqueId, int brightness) async {
     final List<Light> lights = await bridge.lights();
 
     for (final Light light in lights) {
-      if (light.uniqueId != null && light.uniqueId == deviceUniqueId) {
+      if (light.uniqueId != null && light.uniqueId == entityUniqueId) {
         final state = lightStateForColorOnly(light).rebuild(
           (s) => s..brightness = brightness,
         );

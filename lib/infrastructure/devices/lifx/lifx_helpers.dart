@@ -17,13 +17,16 @@ class LifxHelpers {
     } else {
       uniqueDeviceIdTemp = CoreUniqueId();
     }
+    final String deviceName =
+        lifxDevice.label != '' ? lifxDevice.label : 'Lifx test 2';
+
     final LifxWhiteEntity lifxDE = LifxWhiteEntity(
       uniqueId: uniqueDeviceIdTemp,
-      vendorUniqueId: VendorUniqueId.fromUniqueString(lifxDevice.id),
-      defaultName: DeviceDefaultName(
-        lifxDevice.label != '' ? lifxDevice.label : 'Lifx test 2',
-      ),
-      deviceStateGRPC: DeviceState(DeviceStateGRPC.ack.toString()),
+      entityUniqueId: EntityUniqueId(lifxDevice.id),
+      cbjEntityName: CbjEntityName(deviceName),
+      entityOriginalName: EntityOriginalName(deviceName),
+      deviceOriginalName: DeviceOriginalName(deviceName),
+      entityStateGRPC: EntityState(DeviceStateGRPC.ack.toString()),
       senderDeviceOs: DeviceSenderDeviceOs('Lifx'),
       senderDeviceModel: DeviceSenderDeviceModel('Cloud'),
       senderId: DeviceSenderId(),
@@ -33,6 +36,16 @@ class LifxHelpers {
       lightSwitchState: GenericLightSwitchState(
         (lifxDevice.power == LIFXPower.on).toString(),
       ),
+      deviceUniqueId: DeviceUniqueId('0'),
+      devicePort: DevicePort('0'),
+      deviceLastKnownIp: DeviceLastKnownIp('0'),
+      deviceHostName: DeviceHostName('0'),
+      deviceMdns: DeviceMdns('0'),
+      devicesMacAddress: DevicesMacAddress('0'),
+      entityKey: EntityKey('0'),
+      requestTimeStamp: RequestTimeStamp('0'),
+      lastResponseFromDeviceTimeStamp: LastResponseFromDeviceTimeStamp('0'),
+      deviceCbjUniqueId: CoreUniqueId(),
     );
 
     return lifxDE;

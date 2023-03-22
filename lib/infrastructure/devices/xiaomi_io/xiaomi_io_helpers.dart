@@ -1,7 +1,6 @@
 import 'package:cbj_hub/domain/generic_devices/abstract_device/device_entity_abstract.dart';
 import 'package:cbj_hub/domain/generic_devices/abstract_device/value_objects_core.dart';
 import 'package:cbj_hub/domain/generic_devices/generic_rgbw_light_device/generic_rgbw_light_value_objects.dart';
-import 'package:cbj_hub/infrastructure/devices/xiaomi_io/xiaomi_io_device_value_objects.dart';
 import 'package:cbj_hub/infrastructure/devices/xiaomi_io/xiaomi_io_gpx3021gl/xiaomi_io_gpx3021gl_entity.dart';
 import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
 import 'package:yeedart/yeedart.dart';
@@ -19,24 +18,28 @@ class XiaomiIoHelpers {
       uniqueDeviceIdTemp = CoreUniqueId();
     }
 
+    final String deviceName =
+        xiaomiIoDevice.name != null && xiaomiIoDevice.name != ''
+            ? xiaomiIoDevice.name!
+            : 'XiaomiIo test 2';
     final XiaomiIoGpx4021GlEntity xiaomiIoDE = XiaomiIoGpx4021GlEntity(
       uniqueId: uniqueDeviceIdTemp,
-      vendorUniqueId:
-          VendorUniqueId.fromUniqueString(xiaomiIoDevice.id.toString()),
-      defaultName: DeviceDefaultName(
-        xiaomiIoDevice.name != '' ? xiaomiIoDevice.name : 'XiaomiIo test 2',
-      ),
-      deviceStateGRPC: DeviceState(DeviceStateGRPC.ack.toString()),
+      entityUniqueId: EntityUniqueId(xiaomiIoDevice.id.toString()),
+      cbjEntityName: CbjEntityName(deviceName),
+      entityOriginalName: EntityOriginalName(deviceName),
+      deviceOriginalName: DeviceOriginalName(deviceName),
+      entityStateGRPC: EntityState(DeviceStateGRPC.ack.toString()),
       senderDeviceOs: DeviceSenderDeviceOs('xiaomi_io'),
       senderDeviceModel: DeviceSenderDeviceModel('1SE'),
       senderId: DeviceSenderId(),
       compUuid: DeviceCompUuid('34asdfrsd23gggg'),
-      deviceMdnsName: DeviceMdnsName('yeelink-light-colora_miap9C52'),
-      lastKnownIp: DeviceLastKnownIp(xiaomiIoDevice.address.address),
+      deviceMdns: DeviceMdns('yeelink-light-colora_miap9C52'),
+      deviceLastKnownIp: DeviceLastKnownIp(xiaomiIoDevice.address.address),
       stateMassage: DeviceStateMassage('Hello World'),
       powerConsumption: DevicePowerConsumption('0'),
-      xiaomiIoDeviceId: XiaomiIoDeviceId(xiaomiIoDevice.id.toString()),
-      xiaomiIoPort: XiaomiIoPort(xiaomiIoDevice.port.toString()),
+      deviceUniqueId: DeviceUniqueId(xiaomiIoDevice.id.toString()),
+      devicePort: DevicePort(xiaomiIoDevice.port.toString()),
+      deviceCbjUniqueId: CoreUniqueId(),
       lightSwitchState:
           GenericRgbwLightSwitchState(xiaomiIoDevice.powered.toString()),
       lightColorTemperature: GenericRgbwLightColorTemperature(
@@ -48,6 +51,11 @@ class XiaomiIoHelpers {
       lightColorHue: GenericRgbwLightColorHue('0.0'),
       lightColorSaturation: GenericRgbwLightColorSaturation('1.0'),
       lightColorValue: GenericRgbwLightColorValue('1.0'),
+      deviceHostName: DeviceHostName('0'),
+      devicesMacAddress: DevicesMacAddress('0'),
+      entityKey: EntityKey('0'),
+      requestTimeStamp: RequestTimeStamp('0'),
+      lastResponseFromDeviceTimeStamp: LastResponseFromDeviceTimeStamp('0'),
     );
 
     return xiaomiIoDE;

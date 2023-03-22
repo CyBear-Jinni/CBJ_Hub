@@ -20,21 +20,30 @@ class HpHelpers {
     }
     final HpPrinterEntity lgDE = HpPrinterEntity(
       uniqueId: uniqueDeviceIdTemp,
-      vendorUniqueId: VendorUniqueId.fromUniqueString(mDnsName),
-      defaultName: DeviceDefaultName(mDnsName),
-      deviceStateGRPC: DeviceState(DeviceStateGRPC.ack.toString()),
+      entityUniqueId: EntityUniqueId(mDnsName),
+      cbjEntityName: CbjEntityName(mDnsName),
+      entityOriginalName: EntityOriginalName(mDnsName),
+      deviceOriginalName: DeviceOriginalName(mDnsName),
+      entityStateGRPC: EntityState(DeviceStateGRPC.ack.toString()),
       senderDeviceOs: DeviceSenderDeviceOs('HP'),
       senderDeviceModel: DeviceSenderDeviceModel('UP7550PVG'),
       senderId: DeviceSenderId(),
       compUuid: DeviceCompUuid('34asdfrsd23gggg'),
-      deviceMdnsName: DeviceMdnsName(mDnsName),
-      lastKnownIp: DeviceLastKnownIp(ip),
+      deviceMdns: DeviceMdns(mDnsName),
+      deviceLastKnownIp: DeviceLastKnownIp(ip),
       stateMassage: DeviceStateMassage('Hello World'),
       powerConsumption: DevicePowerConsumption('0'),
       printerSwitchState: GenericPrinterSwitchState(
         DeviceActions.actionNotSupported.toString(),
       ),
       devicePort: DevicePort(port),
+      deviceUniqueId: DeviceUniqueId('0'),
+      deviceHostName: DeviceHostName('0'),
+      devicesMacAddress: DevicesMacAddress('0'),
+      entityKey: EntityKey('0'),
+      requestTimeStamp: RequestTimeStamp('0'),
+      lastResponseFromDeviceTimeStamp: LastResponseFromDeviceTimeStamp('0'),
+      deviceCbjUniqueId: CoreUniqueId(),
     );
 
     return [lgDE];

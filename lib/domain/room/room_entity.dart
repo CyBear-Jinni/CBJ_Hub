@@ -11,7 +11,7 @@ part 'room_entity.freezed.dart';
 abstract class RoomEntity implements _$RoomEntity {
   factory RoomEntity({
     required RoomUniqueId uniqueId,
-    required RoomDefaultName defaultName,
+    required RoomDefaultName cbjEntityName,
     required RoomBackground background,
     required RoomTypes roomTypes,
     required RoomDevicesId roomDevicesId,
@@ -30,7 +30,7 @@ abstract class RoomEntity implements _$RoomEntity {
 
   factory RoomEntity.empty() => RoomEntity(
         uniqueId: RoomUniqueId(),
-        defaultName: RoomDefaultName('Empty Room Name'),
+        cbjEntityName: RoomDefaultName('Empty Room Name'),
         background: RoomBackground(
           'https://live.staticflickr.com/5220/5486044345_f67abff3e9_h.jpg',
         ),
@@ -97,13 +97,13 @@ abstract class RoomEntity implements _$RoomEntity {
   }
 
   Option<RoomFailure<dynamic>> get failureOption {
-    return defaultName.value.fold((f) => some(f), (_) => none());
+    return cbjEntityName.value.fold((f) => some(f), (_) => none());
   }
 
   RoomEntityDtos toInfrastructure() {
     return RoomEntityDtos(
       uniqueId: uniqueId.getOrCrash(),
-      defaultName: defaultName.getOrCrash(),
+      cbjEntityName: cbjEntityName.getOrCrash(),
       background: background.getOrCrash(),
       roomTypes: roomTypes.getOrCrash(),
       roomDevicesId: roomDevicesId.getOrCrash(),

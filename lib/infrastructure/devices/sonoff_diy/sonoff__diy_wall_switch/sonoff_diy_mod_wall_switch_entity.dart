@@ -14,35 +14,37 @@ import 'package:dartz/dartz.dart';
 class SonoffDiyRelaySwitchEntity extends GenericSwitchDE {
   SonoffDiyRelaySwitchEntity({
     required super.uniqueId,
-    required super.vendorUniqueId,
-    required super.defaultName,
-    required super.deviceStateGRPC,
+    required super.entityUniqueId,
+    required super.cbjEntityName,
+    required super.entityOriginalName,
+    required super.deviceOriginalName,
     required super.stateMassage,
     required super.senderDeviceOs,
     required super.senderDeviceModel,
     required super.senderId,
     required super.compUuid,
+    required super.entityStateGRPC,
     required super.powerConsumption,
+    required super.deviceUniqueId,
+    required super.devicePort,
+    required super.deviceLastKnownIp,
+    required super.deviceHostName,
+    required super.deviceMdns,
+    required super.devicesMacAddress,
+    required super.entityKey,
+    required super.requestTimeStamp,
+    required super.lastResponseFromDeviceTimeStamp,
+    required super.deviceCbjUniqueId,
     required super.switchState,
-    required this.deviceMdnsName,
-    required this.devicePort,
-    required this.lastKnownIp,
-    required String hostName,
   }) : super(
           deviceVendor: DeviceVendor(VendorsAndServices.sonoffDiy.toString()),
         ) {
     sonoffDiyRelaySwitch = SonoffDiyApiWallSwitch(
-      ipAddress: lastKnownIp.getOrCrash(),
-      hostName: hostName,
+      ipAddress: deviceLastKnownIp.getOrCrash(),
+      hostName: deviceHostName.getOrCrash(),
       port: int.parse(devicePort.getOrCrash()),
     );
   }
-
-  DeviceLastKnownIp lastKnownIp;
-
-  DeviceMdnsName deviceMdnsName;
-
-  DevicePort devicePort;
 
   late SonoffDiyApiWallSwitch sonoffDiyRelaySwitch;
 
@@ -60,7 +62,7 @@ class SonoffDiyRelaySwitchEntity extends GenericSwitchDE {
 
     try {
       if (newEntity.switchState!.getOrCrash() != switchState!.getOrCrash() ||
-          deviceStateGRPC.getOrCrash() != DeviceStateGRPC.ack.toString()) {
+          entityStateGRPC.getOrCrash() != DeviceStateGRPC.ack.toString()) {
         final DeviceActions? actionToPreform =
             EnumHelperCbj.stringToDeviceAction(
           newEntity.switchState!.getOrCrash(),
@@ -92,13 +94,13 @@ class SonoffDiyRelaySwitchEntity extends GenericSwitchDE {
           );
         }
       }
-      deviceStateGRPC = DeviceState(DeviceStateGRPC.ack.toString());
+      entityStateGRPC = EntityState(DeviceStateGRPC.ack.toString());
       // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
       //   entityFromTheHub: this,
       // );
       return right(unit);
     } catch (e) {
-      deviceStateGRPC = DeviceState(DeviceStateGRPC.newStateFailed.toString());
+      entityStateGRPC = EntityState(DeviceStateGRPC.newStateFailed.toString());
       // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
       //   entityFromTheHub: this,
       // );

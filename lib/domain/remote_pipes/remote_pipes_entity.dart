@@ -25,8 +25,6 @@ abstract class RemotePipesEntity implements _$RemotePipesEntity {
   RemotePipesDtos toInfrastructure() {
     return RemotePipesDtos(
       domainName: domainName!.getOrCrash(),
-
-      // serverTimeStamp: FieldValue.serverTimestamp(),
     );
   }
 }

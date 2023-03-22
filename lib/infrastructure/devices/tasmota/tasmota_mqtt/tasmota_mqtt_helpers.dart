@@ -52,9 +52,11 @@ class TasmotaMqttHelpers {
         supportedStatesOfDevice.contains('OFF')) {
       return TasmotaMqttLedEntity(
         uniqueId: uniqueDeviceIdTemp,
-        vendorUniqueId: VendorUniqueId.fromUniqueString(mac),
-        defaultName: DeviceDefaultName(name),
-        deviceStateGRPC: DeviceState(DeviceStateGRPC.ack.toString()),
+        entityUniqueId: EntityUniqueId(mac),
+        cbjEntityName: CbjEntityName(name),
+        entityOriginalName: EntityOriginalName(name),
+        deviceOriginalName: DeviceOriginalName(name),
+        entityStateGRPC: EntityState(DeviceStateGRPC.ack.toString()),
         senderDeviceOs: DeviceSenderDeviceOs('TasmotaMqtt'),
         senderDeviceModel: DeviceSenderDeviceModel('LED'),
         senderId: DeviceSenderId(),
@@ -63,6 +65,16 @@ class TasmotaMqttHelpers {
         powerConsumption: DevicePowerConsumption('0'),
         lightSwitchState: GenericLightSwitchState(deviceActions.toString()),
         tasmotaMqttDeviceTopicName: TasmotaMqttDeviceTopicName(deviceTopic),
+        deviceUniqueId: DeviceUniqueId('0'),
+        devicePort: DevicePort('0'),
+        deviceLastKnownIp: DeviceLastKnownIp('0'),
+        deviceHostName: DeviceHostName('0'),
+        deviceMdns: DeviceMdns('0'),
+        devicesMacAddress: DevicesMacAddress('0'),
+        entityKey: EntityKey('0'),
+        requestTimeStamp: RequestTimeStamp('0'),
+        lastResponseFromDeviceTimeStamp: LastResponseFromDeviceTimeStamp('0'),
+        deviceCbjUniqueId: CoreUniqueId(),
       );
     }
 

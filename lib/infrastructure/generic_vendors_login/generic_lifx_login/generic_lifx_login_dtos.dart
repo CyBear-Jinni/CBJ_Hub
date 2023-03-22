@@ -26,8 +26,6 @@ abstract class GenericLifxLoginDtos
       senderUniqueId: genericLifxDE.senderUniqueId.getOrCrash(),
       loginVendor: genericLifxDE.loginVendor.getOrCrash(),
       lifxApiKey: genericLifxDE.lifxApiKey.getOrCrash(),
-
-      // serverTimeStamp: FieldValue.serverTimestamp(),
     );
   }
 

@@ -8,7 +8,6 @@ import 'package:cbj_hub/domain/generic_devices/generic_blinds_device/generic_bli
 import 'package:cbj_hub/domain/generic_devices/generic_blinds_device/generic_blinds_value_objects.dart';
 import 'package:cbj_hub/domain/mqtt_server/i_mqtt_server_repository.dart';
 import 'package:cbj_hub/infrastructure/devices/switcher/switcher_api/switcher_api_object.dart';
-import 'package:cbj_hub/infrastructure/devices/switcher/switcher_device_value_objects.dart';
 import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
 import 'package:cbj_hub/injection.dart';
 import 'package:cbj_hub/utils.dart';
@@ -17,53 +16,77 @@ import 'package:dartz/dartz.dart';
 class SwitcherRunnerEntity extends GenericBlindsDE {
   SwitcherRunnerEntity({
     required super.uniqueId,
-    required VendorUniqueId vendorUniqueId,
-    required DeviceDefaultName defaultName,
-    required super.deviceStateGRPC,
+    required super.entityUniqueId,
+    required super.cbjEntityName,
+    required super.entityOriginalName,
+    required super.deviceOriginalName,
+    required super.entityStateGRPC,
     required super.stateMassage,
     required super.senderDeviceOs,
     required super.senderDeviceModel,
     required super.senderId,
     required super.compUuid,
-    required DevicePowerConsumption powerConsumption,
+    required super.powerConsumption,
+    required super.deviceUniqueId,
+    required super.deviceLastKnownIp,
+    required super.deviceHostName,
+    required super.deviceMdns,
+    required super.devicesMacAddress,
+    required super.entityKey,
+    required super.requestTimeStamp,
+    required super.lastResponseFromDeviceTimeStamp,
+    required super.deviceCbjUniqueId,
     required super.blindsSwitchState,
-    required this.switcherMacAddress,
-    required this.lastKnownIp,
-    this.switcherPort,
+    required super.devicePort,
   }) : super(
-          vendorUniqueId: vendorUniqueId,
-          defaultName: defaultName,
           deviceVendor:
               DeviceVendor(VendorsAndServices.switcherSmartHome.toString()),
-          powerConsumption: powerConsumption,
         ) {
-    switcherPort ??=
-        SwitcherPort(SwitcherApiObject.switcherTcpPort2.toString());
     switcherObject = SwitcherApiObject(
       deviceType: SwitcherDevicesTypes.switcherRunner,
-      deviceId: vendorUniqueId.getOrCrash(),
-      switcherIp: lastKnownIp.getOrCrash(),
-      switcherName: defaultName.getOrCrash()!,
-      macAddress: switcherMacAddress.getOrCrash(),
-      port: int.parse(switcherPort!.getOrCrash()),
+      deviceId: entityUniqueId.getOrCrash(),
+      switcherIp: deviceLastKnownIp.getOrCrash(),
+      switcherName: cbjEntityName.getOrCrash()!,
+      macAddress: devicesMacAddress.getOrCrash(),
+      port: int.parse(devicePort.getOrCrash()),
       powerConsumption: powerConsumption.getOrCrash(),
     );
   }
 
-  SwitcherMacAddress switcherMacAddress;
-
-  /// Switcher communication port
-  SwitcherPort? switcherPort;
-
-  DeviceLastKnownIp lastKnownIp;
+  factory SwitcherRunnerEntity.fromGeneric(GenericBlindsDE genericDevice) {
+    return SwitcherRunnerEntity(
+      uniqueId: genericDevice.uniqueId,
+      entityUniqueId: genericDevice.entityUniqueId,
+      cbjEntityName: genericDevice.cbjEntityName,
+      entityOriginalName: genericDevice.entityOriginalName,
+      deviceOriginalName: genericDevice.deviceOriginalName,
+      stateMassage: genericDevice.stateMassage,
+      senderDeviceOs: genericDevice.senderDeviceOs,
+      senderDeviceModel: genericDevice.senderDeviceModel,
+      senderId: genericDevice.senderId,
+      compUuid: genericDevice.compUuid,
+      entityStateGRPC: genericDevice.entityStateGRPC,
+      powerConsumption: genericDevice.powerConsumption,
+      deviceUniqueId: genericDevice.deviceUniqueId,
+      devicePort: genericDevice.devicePort,
+      deviceLastKnownIp: genericDevice.deviceLastKnownIp,
+      deviceHostName: genericDevice.deviceHostName,
+      deviceMdns: genericDevice.deviceMdns,
+      devicesMacAddress: genericDevice.devicesMacAddress,
+      entityKey: genericDevice.entityKey,
+      requestTimeStamp: genericDevice.requestTimeStamp,
+      lastResponseFromDeviceTimeStamp:
+          genericDevice.lastResponseFromDeviceTimeStamp,
+      deviceCbjUniqueId: genericDevice.deviceCbjUniqueId,
+      blindsSwitchState: genericDevice.blindsSwitchState,
+    );
+  }
 
   /// Switcher package object require to close previews request before new one
   SwitcherApiObject? switcherObject;
 
   String? autoShutdown;
   String? electricCurrent;
-  String? lastDataUpdate;
-  String? macAddress;
   String? remainingTime;
 
   /// Please override the following methods
@@ -78,7 +101,7 @@ class SwitcherRunnerEntity extends GenericBlindsDE {
     }
 
     try {
-      if (newEntity.deviceStateGRPC.getOrCrash() !=
+      if (newEntity.entityStateGRPC.getOrCrash() !=
           DeviceStateGRPC.ack.toString()) {
         if (newEntity.blindsSwitchState!.getOrCrash() !=
             blindsSwitchState!.getOrCrash()) {
@@ -112,7 +135,7 @@ class SwitcherRunnerEntity extends GenericBlindsDE {
             logger.e('actionToPreform is not set correctly on Switcher Runner');
           }
         }
-        deviceStateGRPC = DeviceState(DeviceStateGRPC.ack.toString());
+        entityStateGRPC = EntityState(DeviceStateGRPC.ack.toString());
 
         getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
           entityFromTheHub: this,
@@ -120,7 +143,7 @@ class SwitcherRunnerEntity extends GenericBlindsDE {
       }
       return right(unit);
     } catch (e) {
-      deviceStateGRPC = DeviceState(DeviceStateGRPC.newStateFailed.toString());
+      entityStateGRPC = EntityState(DeviceStateGRPC.newStateFailed.toString());
 
       getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
         entityFromTheHub: this,

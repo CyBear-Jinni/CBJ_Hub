@@ -34,7 +34,7 @@ class RoutineCbjEntity with _$RoutineCbjEntity {
     required RoutineCbjSenderDeviceModel senderDeviceModel,
     required RoutineCbjSenderId senderId,
     required RoutineCbjCompUuid compUuid,
-    required RoutineCbjDeviceStateGRPC deviceStateGRPC,
+    required RoutineCbjDeviceStateGRPC entityStateGRPC,
 
     /// Repeat type, at a specific time/ interval/ iterval between times
     required RoutineCbjRepeatType repeateType,
@@ -62,7 +62,7 @@ class RoutineCbjEntity with _$RoutineCbjEntity {
       iconCodePoint: iconCodePoint.getOrCrash(),
       image: image.getOrCrash(),
       lastDateOfExecute: lastDateOfExecute.getOrCrash(),
-      deviceStateGRPC: deviceStateGRPC.getOrCrash(),
+      entityStateGRPC: entityStateGRPC.getOrCrash(),
       senderDeviceModel: senderDeviceModel.getOrCrash(),
       senderDeviceOs: senderDeviceOs.getOrCrash(),
       senderId: senderId.getOrCrash(),
@@ -72,7 +72,6 @@ class RoutineCbjEntity with _$RoutineCbjEntity {
       repeateDateDays: repeateDateDays.getOrCrash(),
       repeateDateHour: repeateDateHour.getOrCrash(),
       repeateDateMinute: repeateDateMinute.getOrCrash(),
-      // serverTimeStamp: FieldValue.serverTimestamp(),
     );
   }
 }
