@@ -44,7 +44,7 @@ class AreaTypeWithDeviceTypePreset {
       case AreaPurposesTypes.boardGames:
         // TODO: Handle this case.
         break;
-      case AreaPurposesTypes.childrensRoom:
+      case AreaPurposesTypes.childrenRoom:
         // TODO: Handle this case.
         break;
       case AreaPurposesTypes.cinemaRoom:
@@ -133,7 +133,7 @@ class AreaTypeWithDeviceTypePreset {
       case AreaPurposesTypes.boardGames:
         color = Colors.brown;
         break;
-      case AreaPurposesTypes.childrensRoom:
+      case AreaPurposesTypes.childrenRoom:
         color = Colors.lightBlueAccent;
         break;
       case AreaPurposesTypes.cinemaRoom:

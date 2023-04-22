@@ -28,7 +28,10 @@ class NodeRedFunctionNode extends NodeRedVisualNodeAbstract {
     const String function =
         '''msg.payload = JSON.parse(msg.payload); return msg;''';
     return NodeRedFunctionNode(
-        funcString: function, wires: wires, name: 'Input to json');
+      funcString: function,
+      wires: wires,
+      name: 'Input to json',
+    );
   }
 
   String funcString;

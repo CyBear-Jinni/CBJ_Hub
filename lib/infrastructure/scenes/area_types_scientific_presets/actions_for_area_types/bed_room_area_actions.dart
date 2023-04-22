@@ -9,22 +9,22 @@ class BedRoomAreaAction {
     DeviceEntityAbstract deviceEntity,
     String brokerNodeId,
   ) async {
-    final DeviceTypes deviceType = DeviceTypes.values.firstWhere(
+    final EntityTypes deviceType = EntityTypes.values.firstWhere(
       (element) => element.name == deviceEntity.entityTypes.getOrCrash(),
     );
     final Map<String, String> actionsList = <String, String>{};
 
     switch (deviceType) {
-      case DeviceTypes.AirConditioner:
+      case EntityTypes.AirConditioner:
         // TODO: Turn on on sleep mode?.
         break;
-      case DeviceTypes.babyMonitor:
+      case EntityTypes.babyMonitor:
         // TODO: Open and ready.
         break;
-      case DeviceTypes.bed:
+      case EntityTypes.bed:
         // TODO: Change angle to be straight for sleep (not with angle for reading).
         break;
-      case DeviceTypes.blinds:
+      case EntityTypes.blinds:
         actionsList.addEntries([
           CommonDevicesScenesPresetsForDevices.blindsDownPreset(
             deviceEntity,
@@ -32,42 +32,42 @@ class BedRoomAreaAction {
           ),
         ]);
         break;
-      case DeviceTypes.boiler:
+      case EntityTypes.boiler:
         break;
-      case DeviceTypes.browserApp:
+      case EntityTypes.browserApp:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.button:
+      case EntityTypes.button:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.buttonWithLight:
+      case EntityTypes.buttonWithLight:
         // TODO: Turn off button light for better sleep? or turn on so that it will be easy to find the button at the dart.
         break;
-      case DeviceTypes.cctLight:
+      case EntityTypes.cctLight:
         // TODO: Turn off dim light in case it turned on in the night.
         break;
-      case DeviceTypes.coffeeMachine:
+      case EntityTypes.coffeeMachine:
         // TODO: Turn off.
         break;
-      case DeviceTypes.computerApp:
+      case EntityTypes.computerApp:
         // TODO: Turn sleep mode.
         break;
-      case DeviceTypes.dimmableLight:
+      case EntityTypes.dimmableLight:
         // TODO: Turn off dim light in case it turned on in the night.
         break;
-      case DeviceTypes.dishwasher:
+      case EntityTypes.dishwasher:
         // TODO: Turn off.
         break;
-      case DeviceTypes.hub:
+      case EntityTypes.hub:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.humiditySensor:
+      case EntityTypes.humiditySensor:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.kettle:
+      case EntityTypes.kettle:
         // TODO: Turn off.
         break;
-      case DeviceTypes.light:
+      case EntityTypes.light:
         actionsList.addEntries([
           CommonDevicesScenesPresetsForDevices.lightOffPreset(
             deviceEntity,
@@ -75,40 +75,40 @@ class BedRoomAreaAction {
           ),
         ]);
         break;
-      case DeviceTypes.lightSensor:
+      case EntityTypes.lightSensor:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.microphone:
+      case EntityTypes.microphone:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.motionSensor:
+      case EntityTypes.motionSensor:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.oven:
+      case EntityTypes.oven:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.oxygenSensor:
+      case EntityTypes.oxygenSensor:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.phoneApp:
+      case EntityTypes.phoneApp:
         // TODO: Put phone on sleep mode, gray screen as well as quite and maybe set alarm clock for the morning.
         break;
-      case DeviceTypes.printer:
+      case EntityTypes.printer:
         // TODO: Postpone maintenance.
         break;
-      case DeviceTypes.printerWithScanner:
+      case EntityTypes.printerWithScanner:
         // TODO: Postpone maintenance.
         break;
-      case DeviceTypes.refrigerator:
+      case EntityTypes.refrigerator:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.rgbLights:
+      case EntityTypes.rgbLights:
         // TODO: Turn off and dim light in case it turned on in the night.
         break;
-      case DeviceTypes.rgbcctLights:
+      case EntityTypes.rgbcctLights:
         // TODO: Turn off and dim light in case it turned on in the night.
         break;
-      case DeviceTypes.rgbwLights:
+      case EntityTypes.rgbwLights:
         actionsList.addEntries([
           CommonDevicesScenesPresetsForDevices.rgbwLightOffPreset(
             deviceEntity,
@@ -116,13 +116,13 @@ class BedRoomAreaAction {
           ),
         ]);
         break;
-      case DeviceTypes.scanner:
+      case EntityTypes.scanner:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.securityCamera:
+      case EntityTypes.securityCamera:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.smartPlug:
+      case EntityTypes.smartPlug:
         actionsList.addEntries([
           CommonDevicesScenesPresetsForDevices.smartPlugOffPreset(
             deviceEntity,
@@ -130,10 +130,10 @@ class BedRoomAreaAction {
           ),
         ]);
         break;
-      case DeviceTypes.smartSpeakers:
+      case EntityTypes.smartSpeakers:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.smartTV:
+      case EntityTypes.smartTV:
         actionsList.addEntries([
           CommonDevicesScenesPresetsForDevices.smartTvOffPreset(
             deviceEntity,
@@ -141,22 +141,22 @@ class BedRoomAreaAction {
           ),
         ]);
         break;
-      case DeviceTypes.smartWatch:
+      case EntityTypes.smartWatch:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.smartWaterBottle:
+      case EntityTypes.smartWaterBottle:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.smokeDetector:
+      case EntityTypes.smokeDetector:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.smokeSensor:
+      case EntityTypes.smokeSensor:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.soundSensor:
+      case EntityTypes.soundSensor:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.switch_:
+      case EntityTypes.switch_:
         actionsList.addEntries([
           CommonDevicesScenesPresetsForDevices.switchOffPreset(
             deviceEntity,
@@ -164,37 +164,46 @@ class BedRoomAreaAction {
           ),
         ]);
         break;
-      case DeviceTypes.teapot:
+      case EntityTypes.teapot:
         // TODO: Turn off.
         break;
-      case DeviceTypes.temperatureSensor:
+      case EntityTypes.temperatureSensor:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.toaster:
+      case EntityTypes.toaster:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.smartTypeNotSupported:
+      case EntityTypes.smartTypeNotSupported:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.vacuumCleaner:
+      case EntityTypes.vacuumCleaner:
         // TODO: Turn off.
         break;
-      case DeviceTypes.washingMachine:
+      case EntityTypes.washingMachine:
         // TODO: Turn off.
         break;
-      case DeviceTypes.emptyDevice:
+      case EntityTypes.emptyEntity:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.pingDevice:
+      case EntityTypes.pingEntity:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.smartComputer:
+      case EntityTypes.smartComputer:
         actionsList.addEntries([
           CommonDevicesScenesPresetsForDevices.smartComputerSuspend(
             deviceEntity,
             brokerNodeId,
           ),
         ]);
+        break;
+      case EntityTypes.playerEntity:
+        // TODO: Handle this case.
+        break;
+      case EntityTypes.routerEntity:
+        // TODO: Handle this case.
+        break;
+      case EntityTypes.voiceAssistant:
+        // TODO: Handle this case.
         break;
     }
     return right(actionsList);

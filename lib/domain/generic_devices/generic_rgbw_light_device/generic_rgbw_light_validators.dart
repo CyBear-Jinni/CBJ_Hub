@@ -44,7 +44,7 @@ Either<CoreFailure<String>, String> validateGenericRgbwLightStringIsDouble(
 /// Return all the valid actions for rgbw light
 List<String> rgbwLightAllValidActions() {
   return [
-    DeviceActions.off.toString(),
-    DeviceActions.on.toString(),
+    EntityActions.off.toString(),
+    EntityActions.on.toString(),
   ];
 }

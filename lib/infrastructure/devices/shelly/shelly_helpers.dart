@@ -28,6 +28,9 @@ class ShellyHelpers {
     final List<DeviceEntityAbstract> deviceEntityList = [];
 
     try {
+      // TODO: shelly duo bulbe needs type that as the time of writing is
+      // not supported, bulb + brightness + white temperature (not rgb).
+      // Lets create new type and add it.
       if (mDnsName.contains('colorbulb')) {
         final ShellyApiColorBulb shellyApiDeviceAbstract = ShellyApiColorBulb(
           lastKnownIp: ip,
@@ -71,7 +74,7 @@ class ShellyHelpers {
           cbjEntityName: CbjEntityName(mDnsName),
           entityOriginalName: EntityOriginalName(mDnsName),
           deviceOriginalName: DeviceOriginalName(mDnsName),
-          entityStateGRPC: EntityState(DeviceStateGRPC.ack.toString()),
+          entityStateGRPC: EntityState(EntityStateGRPC.ack.toString()),
           senderDeviceOs: DeviceSenderDeviceOs('Shelly'),
           senderDeviceModel: DeviceSenderDeviceModel('d1'),
           senderId: DeviceSenderId(),
@@ -101,6 +104,66 @@ class ShellyHelpers {
           deviceCbjUniqueId: CoreUniqueId(),
         );
         deviceEntityList.add(shellyColorLightEntity);
+      } else if (mDnsName.contains('BulbDuo')) {
+        final ShellyApiColorBulb shellyApiDeviceAbstract = ShellyApiColorBulb(
+          lastKnownIp: ip,
+          mDnsName: mDnsName,
+          hostName: uniqueDeviceIdTemp.getOrCrash(),
+        );
+
+        final String status = await shellyApiDeviceAbstract.getStatus();
+        dynamic responseAsJson = json.decode(status);
+
+        final String mac = responseAsJson['mac'] as String;
+
+        dynamic bulbLightProp = responseAsJson['lights'][0];
+
+        shellyApiDeviceAbstract.bulbeMode = ShellyBulbeMode.white;
+
+        final int brightness = bulbLightProp['brightness'] as int;
+
+        final int currentBrightness = brightness;
+
+        final int temp = bulbLightProp['temp'] as int;
+
+        final bool isOn = bulbLightProp['ison'] as bool;
+
+        final ShellyColorLightEntity shellyColorLightEntity =
+            ShellyColorLightEntity(
+          uniqueId: uniqueDeviceIdTemp,
+          entityUniqueId: EntityUniqueId(mDnsName),
+          cbjEntityName: CbjEntityName(mDnsName),
+          entityOriginalName: EntityOriginalName(mDnsName),
+          deviceOriginalName: DeviceOriginalName(mDnsName),
+          entityStateGRPC: EntityState(EntityStateGRPC.ack.toString()),
+          senderDeviceOs: DeviceSenderDeviceOs('Shelly'),
+          senderDeviceModel: DeviceSenderDeviceModel('d1'),
+          senderId: DeviceSenderId(),
+          compUuid: DeviceCompUuid(mac),
+          stateMassage: DeviceStateMassage('Hello World'),
+          powerConsumption: DevicePowerConsumption('0'),
+          lightSwitchState: GenericRgbwLightSwitchState(isOn ? 'on' : 'off'),
+          lightColorTemperature:
+              GenericRgbwLightColorTemperature(temp.toString()),
+          lightBrightness:
+              GenericRgbwLightBrightness(currentBrightness.toString()),
+          lightColorAlpha: GenericRgbwLightColorAlpha('1.0'),
+          lightColorHue: GenericRgbwLightColorHue('0'),
+          lightColorSaturation: GenericRgbwLightColorSaturation('0'),
+          lightColorValue: GenericRgbwLightColorValue('0'),
+          devicePort: DevicePort(port),
+          deviceHostName: DeviceHostName(mDnsName.toLowerCase()),
+          deviceMdns: DeviceMdns(mDnsName),
+          deviceLastKnownIp: DeviceLastKnownIp(ip),
+          bulbeMode: shellyApiDeviceAbstract,
+          deviceUniqueId: DeviceUniqueId('0'),
+          devicesMacAddress: DevicesMacAddress('0'),
+          entityKey: EntityKey('0'),
+          requestTimeStamp: RequestTimeStamp('0'),
+          lastResponseFromDeviceTimeStamp: LastResponseFromDeviceTimeStamp('0'),
+          deviceCbjUniqueId: CoreUniqueId(),
+        );
+        deviceEntityList.add(shellyColorLightEntity);
       } else if (mDnsName.contains('shelly1-C45BBE78005D')) {
         final ShellyRelaySwitchEntity shellyRelaySwitchEntity =
             ShellyRelaySwitchEntity(
@@ -109,7 +172,7 @@ class ShellyHelpers {
           cbjEntityName: CbjEntityName(mDnsName),
           entityOriginalName: EntityOriginalName(mDnsName),
           deviceOriginalName: DeviceOriginalName(mDnsName),
-          entityStateGRPC: EntityState(DeviceStateGRPC.ack.toString()),
+          entityStateGRPC: EntityState(EntityStateGRPC.ack.toString()),
           senderDeviceOs: DeviceSenderDeviceOs('Shelly'),
           senderDeviceModel: DeviceSenderDeviceModel('d1'),
           senderId: DeviceSenderId(),

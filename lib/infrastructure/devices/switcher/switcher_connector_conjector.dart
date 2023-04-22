@@ -17,7 +17,8 @@ import 'package:injectable/injectable.dart';
 
 @singleton
 class SwitcherConnectorConjector implements AbstractCompanyConnectorConjector {
-  static Map<String, DeviceEntityAbstract> companyDevices = {};
+  @override
+  Map<String, DeviceEntityAbstract> companyDevices = {};
 
   Future<void> addOnlyNewSwitcherDevice(
     SwitcherApiObject switcherApiObject,
@@ -66,6 +67,7 @@ class SwitcherConnectorConjector implements AbstractCompanyConnectorConjector {
     // logger.v('New switcher devices name:${switcherApiObject.switcherName}');
   }
 
+  @override
   Future<void> manageHubRequestsForDevice(
     DeviceEntityAbstract switcherDE,
   ) async {
@@ -75,7 +77,7 @@ class SwitcherConnectorConjector implements AbstractCompanyConnectorConjector {
     // if (device == null) {
     //   setTheSameDeviceFromAllDevices(switcherDE);
     //   device =
-    //   companyDevices[switcherDE.getDeviceId()];
+    //   companyDevices[switcherDE.entityUniqueId.getOrCrash();
     // }
 
     if (device != null &&

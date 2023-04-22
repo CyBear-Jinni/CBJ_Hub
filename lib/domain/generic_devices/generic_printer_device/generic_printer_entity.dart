@@ -38,7 +38,7 @@ class GenericPrinterDE extends DeviceEntityAbstract {
     required super.deviceCbjUniqueId,
     required this.printerSwitchState,
   }) : super(
-          entityTypes: EntityType(DeviceTypes.printer.toString()),
+          entityTypes: EntityType(EntityTypes.printer.toString()),
         );
 
   /// Empty instance of GenericPrinterEntity
@@ -67,7 +67,7 @@ class GenericPrinterDE extends DeviceEntityAbstract {
         lastResponseFromDeviceTimeStamp: LastResponseFromDeviceTimeStamp(''),
         deviceCbjUniqueId: CoreUniqueId(),
         printerSwitchState:
-            GenericPrinterSwitchState(DeviceActions.off.toString()),
+            GenericPrinterSwitchState(EntityActions.off.toString()),
       );
 
   /// State of the printer on/off

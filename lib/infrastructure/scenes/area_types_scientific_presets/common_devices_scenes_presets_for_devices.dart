@@ -21,7 +21,7 @@ class CommonDevicesScenesPresetsForDevices {
   ) {
     final String property =
         GenericLightDE.empty().getListOfPropertiesToChange()[0];
-    final String action = DeviceActions.on.toString();
+    final String action = EntityActions.on.toString();
 
     return NodeRedConverter.convertToNodeString(
       device: deviceEntity,
@@ -37,7 +37,7 @@ class CommonDevicesScenesPresetsForDevices {
   ) {
     final String property =
         GenericLightDE.empty().getListOfPropertiesToChange()[0];
-    final String action = DeviceActions.off.toString();
+    final String action = EntityActions.off.toString();
 
     return NodeRedConverter.convertToNodeString(
       device: deviceEntity,
@@ -55,7 +55,7 @@ class CommonDevicesScenesPresetsForDevices {
   ) {
     final String property =
         GenericBlindsDE.empty().getListOfPropertiesToChange()[0];
-    final String action = DeviceActions.moveUp.toString();
+    final String action = EntityActions.moveUp.toString();
 
     return NodeRedConverter.convertToNodeString(
       device: deviceEntity,
@@ -71,7 +71,7 @@ class CommonDevicesScenesPresetsForDevices {
   ) {
     final String property =
         GenericBlindsDE.empty().getListOfPropertiesToChange()[0];
-    final String action = DeviceActions.stop.toString();
+    final String action = EntityActions.stop.toString();
 
     return NodeRedConverter.convertToNodeString(
       device: deviceEntity,
@@ -87,7 +87,7 @@ class CommonDevicesScenesPresetsForDevices {
   ) {
     final String property =
         GenericBlindsDE.empty().getListOfPropertiesToChange()[0];
-    final String action = DeviceActions.moveDown.toString();
+    final String action = EntityActions.moveDown.toString();
 
     return NodeRedConverter.convertToNodeString(
       device: deviceEntity,
@@ -105,7 +105,7 @@ class CommonDevicesScenesPresetsForDevices {
   ) {
     final String property =
         GenericBoilerDE.empty().getListOfPropertiesToChange()[0];
-    final String action = DeviceActions.on.toString();
+    final String action = EntityActions.on.toString();
 
     return NodeRedConverter.convertToNodeString(
       device: deviceEntity,
@@ -121,7 +121,7 @@ class CommonDevicesScenesPresetsForDevices {
   ) {
     final String property =
         GenericBoilerDE.empty().getListOfPropertiesToChange()[0];
-    final String action = DeviceActions.off.toString();
+    final String action = EntityActions.off.toString();
 
     return NodeRedConverter.convertToNodeString(
       device: deviceEntity,
@@ -146,7 +146,7 @@ class CommonDevicesScenesPresetsForDevices {
   ) {
     final String property =
         GenericSwitchDE.empty().getListOfPropertiesToChange()[0];
-    final String action = DeviceActions.on.toString();
+    final String action = EntityActions.on.toString();
 
     return NodeRedConverter.convertToNodeString(
       device: deviceEntity,
@@ -162,7 +162,7 @@ class CommonDevicesScenesPresetsForDevices {
   ) {
     final String property =
         GenericSwitchDE.empty().getListOfPropertiesToChange()[0];
-    final String action = DeviceActions.off.toString();
+    final String action = EntityActions.off.toString();
 
     return NodeRedConverter.convertToNodeString(
       device: deviceEntity,
@@ -183,7 +183,7 @@ class CommonDevicesScenesPresetsForDevices {
   ) {
     final String property =
         GenericRgbwLightDE.empty().getListOfPropertiesToChange()[0];
-    final String action = DeviceActions.on.toString();
+    final String action = EntityActions.on.toString();
 
     return NodeRedConverter.convertToNodeString(
       device: deviceEntity,
@@ -199,7 +199,7 @@ class CommonDevicesScenesPresetsForDevices {
   ) {
     final String property =
         GenericRgbwLightDE.empty().getListOfPropertiesToChange()[0];
-    final String action = DeviceActions.off.toString();
+    final String action = EntityActions.off.toString();
 
     return NodeRedConverter.convertToNodeString(
       device: deviceEntity,
@@ -283,7 +283,7 @@ class CommonDevicesScenesPresetsForDevices {
   ) {
     final String property =
         GenericSmartTvDE.empty().getListOfPropertiesToChange()[0];
-    final String action = DeviceActions.off.toString();
+    final String action = EntityActions.off.toString();
 
     return NodeRedConverter.convertToNodeString(
       device: deviceEntity,
@@ -299,7 +299,7 @@ class CommonDevicesScenesPresetsForDevices {
   ) {
     final String property =
         GenericSmartTvDE.empty().getListOfPropertiesToChange()[0];
-    final String action = DeviceActions.on.toString();
+    final String action = EntityActions.on.toString();
 
     return NodeRedConverter.convertToNodeString(
       device: deviceEntity,
@@ -343,7 +343,7 @@ class CommonDevicesScenesPresetsForDevices {
   ) {
     final String property =
         GenericSmartPlugDE.empty().getListOfPropertiesToChange()[0];
-    final String action = DeviceActions.on.toString();
+    final String action = EntityActions.on.toString();
 
     return NodeRedConverter.convertToNodeString(
       device: deviceEntity,
@@ -359,7 +359,7 @@ class CommonDevicesScenesPresetsForDevices {
   ) {
     final String property =
         GenericSmartPlugDE.empty().getListOfPropertiesToChange()[0];
-    final String action = DeviceActions.off.toString();
+    final String action = EntityActions.off.toString();
 
     return NodeRedConverter.convertToNodeString(
       device: deviceEntity,
@@ -375,7 +375,7 @@ class CommonDevicesScenesPresetsForDevices {
   ) {
     final String property =
         GenericSmartComputerDE.empty().getListOfPropertiesToChange()[0];
-    final String action = DeviceActions.suspend.toString();
+    final String action = EntityActions.suspend.toString();
 
     return NodeRedConverter.convertToNodeString(
       device: deviceEntity,

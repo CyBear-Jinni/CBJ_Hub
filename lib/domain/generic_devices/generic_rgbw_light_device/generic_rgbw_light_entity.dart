@@ -44,7 +44,7 @@ class GenericRgbwLightDE extends DeviceEntityAbstract {
     required this.lightColorValue,
     required this.lightBrightness,
   }) : super(
-          entityTypes: EntityType(DeviceTypes.rgbwLights.toString()),
+          entityTypes: EntityType(EntityTypes.rgbwLights.toString()),
         );
 
   /// Empty instance of GenericLightEntity
@@ -73,7 +73,7 @@ class GenericRgbwLightDE extends DeviceEntityAbstract {
         lastResponseFromDeviceTimeStamp: LastResponseFromDeviceTimeStamp(''),
         deviceCbjUniqueId: CoreUniqueId(),
         lightSwitchState:
-            GenericRgbwLightSwitchState(DeviceActions.off.toString()),
+            GenericRgbwLightSwitchState(EntityActions.off.toString()),
         lightColorTemperature: GenericRgbwLightColorTemperature(''),
         lightBrightness: GenericRgbwLightBrightness(''),
         lightColorAlpha: GenericRgbwLightColorAlpha(''),

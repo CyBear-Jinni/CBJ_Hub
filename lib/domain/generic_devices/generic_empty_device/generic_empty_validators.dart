@@ -11,6 +11,6 @@ Either<CoreFailure<String>, String> validateGenericEmptyStateNotEmpty(
 /// Return all the valid actions for blinds
 List<String> emptyDeviceAllValidActions() {
   return [
-    DeviceActions.actionNotSupported.toString(),
+    EntityActions.actionNotSupported.toString(),
   ];
 }

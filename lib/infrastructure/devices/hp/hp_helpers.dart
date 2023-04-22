@@ -24,7 +24,7 @@ class HpHelpers {
       cbjEntityName: CbjEntityName(mDnsName),
       entityOriginalName: EntityOriginalName(mDnsName),
       deviceOriginalName: DeviceOriginalName(mDnsName),
-      entityStateGRPC: EntityState(DeviceStateGRPC.ack.toString()),
+      entityStateGRPC: EntityState(EntityStateGRPC.ack.toString()),
       senderDeviceOs: DeviceSenderDeviceOs('HP'),
       senderDeviceModel: DeviceSenderDeviceModel('UP7550PVG'),
       senderId: DeviceSenderId(),
@@ -34,7 +34,7 @@ class HpHelpers {
       stateMassage: DeviceStateMassage('Hello World'),
       powerConsumption: DevicePowerConsumption('0'),
       printerSwitchState: GenericPrinterSwitchState(
-        DeviceActions.actionNotSupported.toString(),
+        EntityActions.actionNotSupported.toString(),
       ),
       devicePort: DevicePort(port),
       deviceUniqueId: DeviceUniqueId('0'),

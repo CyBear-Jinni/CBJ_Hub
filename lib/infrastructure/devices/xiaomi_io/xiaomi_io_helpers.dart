@@ -28,7 +28,7 @@ class XiaomiIoHelpers {
       cbjEntityName: CbjEntityName(deviceName),
       entityOriginalName: EntityOriginalName(deviceName),
       deviceOriginalName: DeviceOriginalName(deviceName),
-      entityStateGRPC: EntityState(DeviceStateGRPC.ack.toString()),
+      entityStateGRPC: EntityState(EntityStateGRPC.ack.toString()),
       senderDeviceOs: DeviceSenderDeviceOs('xiaomi_io'),
       senderDeviceModel: DeviceSenderDeviceModel('1SE'),
       senderId: DeviceSenderId(),

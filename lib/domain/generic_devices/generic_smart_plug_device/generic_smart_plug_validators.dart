@@ -11,7 +11,7 @@ Either<CoreFailure<String>, String> validateGenericSmartPlugStateNotEmpty(
 /// Return all the valid actions for light
 List<String> lightAllValidActions() {
   return [
-    DeviceActions.off.toString(),
-    DeviceActions.on.toString(),
+    EntityActions.off.toString(),
+    EntityActions.on.toString(),
   ];
 }

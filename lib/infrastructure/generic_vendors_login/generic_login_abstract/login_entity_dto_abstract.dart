@@ -1,8 +1,10 @@
 import 'package:cbj_hub/domain/vendors/login_abstract/login_entity_abstract.dart';
 import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
 import 'package:cbj_hub/infrastructure/generic_vendors_login/generic_esphome_login/generic_esphome_login_dtos.dart';
+import 'package:cbj_hub/infrastructure/generic_vendors_login/generic_ewelink_login/generic_ewelink_login_dtos.dart';
 import 'package:cbj_hub/infrastructure/generic_vendors_login/generic_lifx_login/generic_lifx_login_dtos.dart';
 import 'package:cbj_hub/infrastructure/generic_vendors_login/generic_tuya_login/generic_tuya_login_dtos.dart';
+import 'package:cbj_hub/infrastructure/generic_vendors_login/generic_xiaomi_mi_login/generic_xiaomi_mi_login_dtos.dart';
 import 'package:cbj_hub/utils.dart';
 
 class LoginEntityDtoAbstract {
@@ -25,6 +27,11 @@ class LoginEntityDtoAbstract {
         jsonLoginDtoClass == VendorsAndServices.smartLife.toString() ||
         jsonLoginDtoClass == VendorsAndServices.jinvooSmart.toString()) {
       loginEntityDtoAbstract = GenericTuyaLoginDtos.fromJson(json);
+    } else if (jsonLoginDtoClass == VendorsAndServices.xiaomiMi.toString()) {
+      loginEntityDtoAbstract = GenericXiaomiMiLoginDtos.fromJson(json);
+    } else if (jsonLoginDtoClass ==
+        VendorsAndServices.sonoffEweLink.toString()) {
+      loginEntityDtoAbstract = GenericEwelinkLoginDtos.fromJson(json);
     } else {
       throw 'DtoClassTypeDoesNotExist';
     }

@@ -21,7 +21,7 @@ class HubAppServer extends CbjHubServiceBase {
   Stream<MapEntry<String, String>> streamOfChanges() async* {}
 
   @override
-  Stream<RequestsAndStatusFromHub> clientTransferDevices(
+  Stream<RequestsAndStatusFromHub> clientTransferEntities(
     ServiceCall call,
     Stream<ClientStatusRequests> request,
   ) async* {
@@ -37,7 +37,7 @@ class HubAppServer extends CbjHubServiceBase {
       yield* HubRequestsToApp.streamRequestsToApp.map((dynamic entityDto) {
         if (entityDto is DeviceEntityDtoAbstract) {
           return RequestsAndStatusFromHub(
-            sendingType: SendingType.deviceType,
+            sendingType: SendingType.entityType,
             allRemoteCommands: DeviceHelper.convertDtoToJsonString(entityDto),
           );
         } else if (entityDto is RoomEntityDtos) {
@@ -75,7 +75,7 @@ class HubAppServer extends CbjHubServiceBase {
     logger.i('Hub info got requested');
 
     final CbjHubIno cbjHubIno = CbjHubIno(
-      deviceName: 'cbj Hub',
+      entityName: 'cbj Hub',
       protoLastGenDate: hubServerProtocGenDate,
       dartSdkVersion: Platform.version,
     );
@@ -92,7 +92,7 @@ class HubAppServer extends CbjHubServiceBase {
   }
 
   @override
-  Stream<ClientStatusRequests> hubTransferDevices(
+  Stream<ClientStatusRequests> hubTransferEntities(
     ServiceCall call,
     Stream<RequestsAndStatusFromHub> request,
   ) async* {

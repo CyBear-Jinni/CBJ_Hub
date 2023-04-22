@@ -46,7 +46,7 @@ class TasmotaMqttHelpers {
     /// dn = Device Name (Tasmotac)
     final String name = getValueFromMqttResult(pt, 'dn')!;
 
-    const DeviceActions deviceActions = DeviceActions.actionNotSupported;
+    const EntityActions deviceActions = EntityActions.actionNotSupported;
 
     if (supportedStatesOfDevice.contains('ON') &&
         supportedStatesOfDevice.contains('OFF')) {
@@ -56,7 +56,7 @@ class TasmotaMqttHelpers {
         cbjEntityName: CbjEntityName(name),
         entityOriginalName: EntityOriginalName(name),
         deviceOriginalName: DeviceOriginalName(name),
-        entityStateGRPC: EntityState(DeviceStateGRPC.ack.toString()),
+        entityStateGRPC: EntityState(EntityStateGRPC.ack.toString()),
         senderDeviceOs: DeviceSenderDeviceOs('TasmotaMqtt'),
         senderDeviceModel: DeviceSenderDeviceModel('LED'),
         senderId: DeviceSenderId(),

@@ -21,6 +21,9 @@ class Connector {
   static Future<void> startConnector() async {
     ConnectorStreamToMqtt.toMqttStream.listen((entityForMqtt) async {
       if (entityForMqtt.value is DeviceEntityAbstract) {
+        /// Data will probably arrive to the function
+        /// updateAllDevicesReposWithDeviceChanges where we listen to request from
+        /// the mqtt with this path
         await getIt<IMqttServerRepository>()
             .publishDeviceEntity(entityForMqtt.value as DeviceEntityAbstract);
       } else if (entityForMqtt.value is RoomEntity) {
@@ -108,7 +111,7 @@ class Connector {
               .add(savedDeviceWithSameIdAsMqtt);
 
           if (property == 'entityStateGRPC' &&
-              propertyValueString == DeviceStateGRPC.ack.toString()) {
+              propertyValueString == EntityStateGRPC.ack.toString()) {
             final Map<String, RoomEntity> rooms =
                 await getIt<ISavedRoomsRepo>().getAllRooms();
 

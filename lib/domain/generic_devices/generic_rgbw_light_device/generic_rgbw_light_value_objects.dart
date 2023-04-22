@@ -8,9 +8,9 @@ class GenericRgbwLightSwitchState extends ValueObjectCore<String> {
   factory GenericRgbwLightSwitchState(String? input) {
     assert(input != null);
     if (input!.toLowerCase() == true.toString()) {
-      input = DeviceActions.on.toString();
+      input = EntityActions.on.toString();
     } else if (input.toLowerCase() == false.toString()) {
-      input = DeviceActions.off.toString();
+      input = EntityActions.off.toString();
     }
     return GenericRgbwLightSwitchState._(
       validateGenericRgbwLightStateNotEmpty(input),

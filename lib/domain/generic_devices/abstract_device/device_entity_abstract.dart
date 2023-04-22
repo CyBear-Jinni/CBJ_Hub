@@ -111,12 +111,12 @@ abstract class DeviceEntityAbstract {
   String getDeviceId();
 
   /// Copy with device state to waiting or ack
-  DeviceEntityAbstract copyWithDeviceState(DeviceStateGRPC entityStateGRPC) {
+  DeviceEntityAbstract copyWithDeviceState(EntityStateGRPC entityStateGRPC) {
     return this;
   }
 
   /// Copy with device action
-  DeviceEntityAbstract copyWithDeviceAction(DeviceActions deviceActions) {
+  DeviceEntityAbstract copyWithDeviceAction(EntityActions deviceActions) {
     return this;
   }
 
@@ -172,14 +172,14 @@ class DeviceEntityNotAbstract extends DeviceEntityAbstract {
             VendorsAndServices.vendorsAndServicesNotSupported.toString(),
           ),
           entityStateGRPC:
-              EntityState(DeviceTypes.smartTypeNotSupported.toString()),
+              EntityState(EntityTypes.smartTypeNotSupported.toString()),
           compUuid: DeviceCompUuid(const Uuid().v1()),
           cbjEntityName: CbjEntityName('Cbj entity Name is empty'),
           entityOriginalName:
               EntityOriginalName('Entity original name is empty'),
           deviceOriginalName: DeviceOriginalName(
               'Device original name that entity is exists on is empty'),
-          entityTypes: EntityType(DeviceTypes.light.toString()),
+          entityTypes: EntityType(EntityTypes.light.toString()),
           senderDeviceModel: DeviceSenderDeviceModel('a'),
           senderDeviceOs: DeviceSenderDeviceOs('b'),
           senderId: DeviceSenderId(),

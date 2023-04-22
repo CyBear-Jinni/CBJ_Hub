@@ -35,7 +35,7 @@ class RemotePipesClient {
     grpcDartKeepAliveWorkaround(HubRequestsToApp.streamRequestsToApp);
 
     try {
-      response = stub!.hubTransferDevices(
+      response = stub!.hubTransferEntities(
         /// Transfer all requests from hub to the remote pipes->app
         HubRequestsToApp.streamRequestsToApp.map((dynamic entityDtoToSend) {
           if (entityDtoToSend is DeviceEntityDtoAbstract) {
@@ -43,7 +43,7 @@ class RemotePipesClient {
               grpcDartKeepAliveWorkaround(HubRequestsToApp.streamRequestsToApp);
             }
             return RequestsAndStatusFromHub(
-              sendingType: SendingType.deviceType,
+              sendingType: SendingType.entityType,
               allRemoteCommands:
                   DeviceHelper.convertDtoToJsonString(entityDtoToSend),
             );

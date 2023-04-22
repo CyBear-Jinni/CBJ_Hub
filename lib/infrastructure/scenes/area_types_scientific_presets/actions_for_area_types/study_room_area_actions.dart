@@ -9,23 +9,23 @@ class StudyRoomAreaAction {
     DeviceEntityAbstract deviceEntity,
     String brokerNodeId,
   ) async {
-    final DeviceTypes deviceType = DeviceTypes.values.firstWhere(
+    final EntityTypes deviceType = EntityTypes.values.firstWhere(
       (element) => element.name == deviceEntity.entityTypes.getOrCrash(),
     );
 
     final Map<String, String> actionsList = <String, String>{};
 
     switch (deviceType) {
-      case DeviceTypes.AirConditioner:
+      case EntityTypes.AirConditioner:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.babyMonitor:
+      case EntityTypes.babyMonitor:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.bed:
+      case EntityTypes.bed:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.blinds:
+      case EntityTypes.blinds:
         actionsList.addEntries([
           CommonDevicesScenesPresetsForDevices.blindsUpPreset(
             deviceEntity,
@@ -33,42 +33,42 @@ class StudyRoomAreaAction {
           ),
         ]);
         break;
-      case DeviceTypes.boiler:
+      case EntityTypes.boiler:
         break;
-      case DeviceTypes.browserApp:
+      case EntityTypes.browserApp:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.button:
+      case EntityTypes.button:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.buttonWithLight:
+      case EntityTypes.buttonWithLight:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.cctLight:
+      case EntityTypes.cctLight:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.coffeeMachine:
+      case EntityTypes.coffeeMachine:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.computerApp:
+      case EntityTypes.computerApp:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.dimmableLight:
+      case EntityTypes.dimmableLight:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.dishwasher:
+      case EntityTypes.dishwasher:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.hub:
+      case EntityTypes.hub:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.humiditySensor:
+      case EntityTypes.humiditySensor:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.kettle:
+      case EntityTypes.kettle:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.light:
+      case EntityTypes.light:
         actionsList.addEntries([
           CommonDevicesScenesPresetsForDevices.lightOnPreset(
             deviceEntity,
@@ -76,40 +76,40 @@ class StudyRoomAreaAction {
           ),
         ]);
         break;
-      case DeviceTypes.lightSensor:
+      case EntityTypes.lightSensor:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.microphone:
+      case EntityTypes.microphone:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.motionSensor:
+      case EntityTypes.motionSensor:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.oven:
+      case EntityTypes.oven:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.oxygenSensor:
+      case EntityTypes.oxygenSensor:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.phoneApp:
+      case EntityTypes.phoneApp:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.printer:
+      case EntityTypes.printer:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.printerWithScanner:
+      case EntityTypes.printerWithScanner:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.refrigerator:
+      case EntityTypes.refrigerator:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.rgbLights:
+      case EntityTypes.rgbLights:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.rgbcctLights:
+      case EntityTypes.rgbcctLights:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.rgbwLights:
+      case EntityTypes.rgbwLights:
         actionsList.addEntries([
           CommonDevicesScenesPresetsForDevices.rgbLightWhitePreset(
             deviceEntity,
@@ -129,18 +129,18 @@ class StudyRoomAreaAction {
           ),
         ]);
         return right(actionsList);
-      case DeviceTypes.scanner:
+      case EntityTypes.scanner:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.securityCamera:
+      case EntityTypes.securityCamera:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.smartPlug:
+      case EntityTypes.smartPlug:
         break;
-      case DeviceTypes.smartSpeakers:
+      case EntityTypes.smartSpeakers:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.smartTV:
+      case EntityTypes.smartTV:
         actionsList.addEntries([
           CommonDevicesScenesPresetsForDevices.smartTvOffPreset(
             deviceEntity,
@@ -148,22 +148,22 @@ class StudyRoomAreaAction {
           ),
         ]);
         break;
-      case DeviceTypes.smartWatch:
+      case EntityTypes.smartWatch:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.smartWaterBottle:
+      case EntityTypes.smartWaterBottle:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.smokeDetector:
+      case EntityTypes.smokeDetector:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.smokeSensor:
+      case EntityTypes.smokeSensor:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.soundSensor:
+      case EntityTypes.soundSensor:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.switch_:
+      case EntityTypes.switch_:
         actionsList.addEntries([
           CommonDevicesScenesPresetsForDevices.switchOnPreset(
             deviceEntity,
@@ -171,31 +171,40 @@ class StudyRoomAreaAction {
           ),
         ]);
         break;
-      case DeviceTypes.teapot:
+      case EntityTypes.teapot:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.temperatureSensor:
+      case EntityTypes.temperatureSensor:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.toaster:
+      case EntityTypes.toaster:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.smartTypeNotSupported:
+      case EntityTypes.smartTypeNotSupported:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.emptyDevice:
+      case EntityTypes.emptyEntity:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.pingDevice:
+      case EntityTypes.pingEntity:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.vacuumCleaner:
+      case EntityTypes.vacuumCleaner:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.washingMachine:
+      case EntityTypes.washingMachine:
         // TODO: Handle this case.
         break;
-      case DeviceTypes.smartComputer:
+      case EntityTypes.smartComputer:
+        // TODO: Handle this case.
+        break;
+      case EntityTypes.playerEntity:
+        // TODO: Handle this case.
+        break;
+      case EntityTypes.routerEntity:
+        // TODO: Handle this case.
+        break;
+      case EntityTypes.voiceAssistant:
         // TODO: Handle this case.
         break;
     }

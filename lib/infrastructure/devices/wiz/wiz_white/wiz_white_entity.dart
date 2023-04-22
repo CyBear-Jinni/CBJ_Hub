@@ -58,20 +58,20 @@ class WizWhiteEntity extends GenericLightDE {
     try {
       if (newEntity.lightSwitchState!.getOrCrash() !=
               lightSwitchState!.getOrCrash() ||
-          entityStateGRPC.getOrCrash() != DeviceStateGRPC.ack.toString()) {
-        final DeviceActions? actionToPreform =
+          entityStateGRPC.getOrCrash() != EntityStateGRPC.ack.toString()) {
+        final EntityActions? actionToPreform =
             EnumHelperCbj.stringToDeviceAction(
           newEntity.lightSwitchState!.getOrCrash(),
         );
 
-        if (actionToPreform == DeviceActions.on) {
+        if (actionToPreform == EntityActions.on) {
           (await turnOnLight()).fold((l) {
             logger.e('Error turning Wiz light on');
             throw l;
           }, (r) {
             logger.i('Wiz light turn on success');
           });
-        } else if (actionToPreform == DeviceActions.off) {
+        } else if (actionToPreform == EntityActions.off) {
           (await turnOffLight()).fold((l) {
             logger.e('Error turning Wiz light off');
             throw l;
@@ -82,13 +82,13 @@ class WizWhiteEntity extends GenericLightDE {
           logger.w('actionToPreform is not set correctly on Wiz White');
         }
       }
-      entityStateGRPC = EntityState(DeviceStateGRPC.ack.toString());
+      entityStateGRPC = EntityState(EntityStateGRPC.ack.toString());
       // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
       //   entityFromTheHub: this,
       // );
       return right(unit);
     } catch (e) {
-      entityStateGRPC = EntityState(DeviceStateGRPC.newStateFailed.toString());
+      entityStateGRPC = EntityState(EntityStateGRPC.newStateFailed.toString());
       // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
       //   entityFromTheHub: this,
       // );
@@ -98,7 +98,7 @@ class WizWhiteEntity extends GenericLightDE {
 
   @override
   Future<Either<CoreFailure, Unit>> turnOnLight() async {
-    lightSwitchState = GenericLightSwitchState(DeviceActions.on.toString());
+    lightSwitchState = GenericLightSwitchState(EntityActions.on.toString());
     try {
       // final setStateBodyResponse =
       //     await WizConnectorConjector.wizClient?.setState(
@@ -121,7 +121,7 @@ class WizWhiteEntity extends GenericLightDE {
 
   @override
   Future<Either<CoreFailure, Unit>> turnOffLight() async {
-    lightSwitchState = GenericLightSwitchState(DeviceActions.off.toString());
+    lightSwitchState = GenericLightSwitchState(EntityActions.off.toString());
 
     try {
       // final setStateBodyResponse =

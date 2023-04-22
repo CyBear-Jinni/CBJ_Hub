@@ -31,7 +31,8 @@ class TasmotaMqttConnectorConjector
   //       .publishMessage('cmnd/$tasmotaMqttTopic/SetOption19', '0');
   // }
 
-  static Map<String, DeviceEntityAbstract> companyDevices = {};
+  @override
+  Map<String, DeviceEntityAbstract> companyDevices = {};
 
   Future<void> discoverNewDevices() async {
     getIt<IMqttServerRepository>()
@@ -89,11 +90,12 @@ class TasmotaMqttConnectorConjector
     });
   }
 
+  @override
   Future<void> manageHubRequestsForDevice(
     DeviceEntityAbstract tasmotaMqttDE,
   ) async {
     final DeviceEntityAbstract? device =
-        companyDevices[tasmotaMqttDE.getDeviceId()];
+        companyDevices[tasmotaMqttDE.entityUniqueId.getOrCrash()];
 
     if (device is TasmotaMqttLedEntity) {
       device.executeDeviceAction(newEntity: tasmotaMqttDE);

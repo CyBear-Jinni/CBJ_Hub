@@ -38,7 +38,7 @@ class GenericEmptyDE extends DeviceEntityAbstract {
     required super.deviceCbjUniqueId,
     required this.emptySwitchState,
   }) : super(
-          entityTypes: EntityType(DeviceTypes.emptyDevice.toString()),
+          entityTypes: EntityType(EntityTypes.emptyEntity.toString()),
         );
 
   /// Empty instance of GenericEmptyEntity
@@ -51,7 +51,7 @@ class GenericEmptyDE extends DeviceEntityAbstract {
         cbjEntityName: CbjEntityName('Empty device'),
         entityOriginalName: EntityOriginalName('Missing entity original name'),
         deviceOriginalName: DeviceOriginalName('Missing device original name'),
-        entityStateGRPC: EntityState(DeviceStateGRPC.ack.toString()),
+        entityStateGRPC: EntityState(EntityStateGRPC.ack.toString()),
         senderDeviceOs: DeviceSenderDeviceOs('Hub'),
         senderDeviceModel: DeviceSenderDeviceModel('Hub'),
         stateMassage: DeviceStateMassage('Test'),
@@ -68,7 +68,7 @@ class GenericEmptyDE extends DeviceEntityAbstract {
         requestTimeStamp: RequestTimeStamp(''),
         lastResponseFromDeviceTimeStamp: LastResponseFromDeviceTimeStamp(''),
         deviceCbjUniqueId: CoreUniqueId(),
-        emptySwitchState: GenericEmptySwitchState(DeviceActions.off.toString()),
+        emptySwitchState: GenericEmptySwitchState(EntityActions.off.toString()),
       );
 
   /// State of the empty on/off

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cbj_hub/domain/generic_devices/abstract_device/device_entity_abstract.dart';
 import 'package:cbj_hub/domain/generic_devices/abstract_device/value_objects_core.dart';
+import 'package:cbj_hub/domain/generic_devices/generic_dimmable_light_device/generic_dimmable_light_entity.dart';
 import 'package:cbj_hub/domain/generic_devices/generic_light_device/generic_light_entity.dart';
 import 'package:cbj_hub/domain/vendors/lifx_login/generic_lifx_login_entity.dart';
 import 'package:cbj_hub/infrastructure/devices/companies_connector_conjector.dart';
@@ -20,9 +21,10 @@ class LifxConnectorConjector implements AbstractCompanyConnectorConjector {
     return 'Success';
   }
 
-  static Map<String, DeviceEntityAbstract> companyDevices = {};
+  @override
+  Map<String, DeviceEntityAbstract> companyDevices = {};
 
-  static LIFXClient? lifxClient;
+  LIFXClient? lifxClient;
 
   Future<void> _discoverNewDevices() async {
     while (true) {
@@ -81,6 +83,7 @@ class LifxConnectorConjector implements AbstractCompanyConnectorConjector {
     }
   }
 
+  @override
   Future<void> manageHubRequestsForDevice(
     DeviceEntityAbstract lifxDE,
   ) async {
@@ -98,7 +101,7 @@ class LifxConnectorConjector implements AbstractCompanyConnectorConjector {
   Future<void> setUpDeviceFromDb(DeviceEntityAbstract deviceEntity) async {
     DeviceEntityAbstract? nonGenericDevice;
 
-    if (deviceEntity is GenericLightDE) {
+    if (deviceEntity is GenericDimmableLightDE) {
       nonGenericDevice = LifxWhiteEntity.fromGeneric(deviceEntity);
     }
 

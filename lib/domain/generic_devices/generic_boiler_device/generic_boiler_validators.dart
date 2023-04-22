@@ -11,7 +11,7 @@ Either<CoreFailure<String>, String> validateGenericBoilerStateNotEmpty(
 /// Return all the valid actions for blinds
 List<String> boilerAllValidActions() {
   return [
-    DeviceActions.off.toString(),
-    DeviceActions.on.toString(),
+    EntityActions.off.toString(),
+    EntityActions.on.toString(),
   ];
 }

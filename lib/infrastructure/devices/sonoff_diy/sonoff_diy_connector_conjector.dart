@@ -13,8 +13,8 @@ import 'package:injectable/injectable.dart';
 @singleton
 class SonoffDiyConnectorConjector implements AbstractCompanyConnectorConjector {
   static const List<String> mdnsTypes = ['_ewelink._tcp'];
-
-  static Map<String, DeviceEntityAbstract> companyDevices = {};
+  @override
+  Map<String, DeviceEntityAbstract> companyDevices = {};
 
   /// Add new devices to [companyDevices] if not exist
   Future<void> addNewDeviceByMdnsName({
@@ -65,11 +65,12 @@ class SonoffDiyConnectorConjector implements AbstractCompanyConnectorConjector {
     logger.v('New Sonoff diy devices name:$mDnsName');
   }
 
+  @override
   Future<void> manageHubRequestsForDevice(
     DeviceEntityAbstract sonoffDiyDE,
   ) async {
     final DeviceEntityAbstract? device =
-        companyDevices[sonoffDiyDE.getDeviceId()];
+        companyDevices[sonoffDiyDE.entityUniqueId.getOrCrash()];
 
     if (device is SonoffDiyRelaySwitchEntity) {
       device.executeDeviceAction(newEntity: sonoffDiyDE);

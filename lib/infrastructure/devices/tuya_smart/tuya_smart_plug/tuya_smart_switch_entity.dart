@@ -60,13 +60,13 @@ class TuyaSmartPlugEntity extends GenericSmartPlugDE {
     try {
       if (newEntity.smartPlugState!.getOrCrash() !=
               smartPlugState!.getOrCrash() ||
-          entityStateGRPC.getOrCrash() != DeviceStateGRPC.ack.toString()) {
-        final DeviceActions? actionToPreform =
+          entityStateGRPC.getOrCrash() != EntityStateGRPC.ack.toString()) {
+        final EntityActions? actionToPreform =
             EnumHelperCbj.stringToDeviceAction(
           newEntity.smartPlugState!.getOrCrash(),
         );
 
-        if (actionToPreform == DeviceActions.on) {
+        if (actionToPreform == EntityActions.on) {
           (await turnOnLight()).fold(
             (l) {
               logger.e('Error turning Tuya plug on\n$l');
@@ -76,7 +76,7 @@ class TuyaSmartPlugEntity extends GenericSmartPlugDE {
               logger.i('Tuya plug turn on success');
             },
           );
-        } else if (actionToPreform == DeviceActions.off) {
+        } else if (actionToPreform == EntityActions.off) {
           (await turnOffLight()).fold(
             (l) {
               logger.e('Error turning Tuya off\n$l');
@@ -92,13 +92,13 @@ class TuyaSmartPlugEntity extends GenericSmartPlugDE {
           );
         }
       }
-      entityStateGRPC = EntityState(DeviceStateGRPC.ack.toString());
+      entityStateGRPC = EntityState(EntityStateGRPC.ack.toString());
       // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
       //   entityFromTheHub: this,
       // );
       return right(unit);
     } catch (e) {
-      entityStateGRPC = EntityState(DeviceStateGRPC.newStateFailed.toString());
+      entityStateGRPC = EntityState(EntityStateGRPC.newStateFailed.toString());
       // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
       //   entityFromTheHub: this,
       // );
@@ -107,7 +107,7 @@ class TuyaSmartPlugEntity extends GenericSmartPlugDE {
   }
 
   Future<Either<CoreFailure, Unit>> turnOnLight() async {
-    smartPlugState = GenericSmartPlugState(DeviceActions.on.toString());
+    smartPlugState = GenericSmartPlugState(EntityActions.on.toString());
     try {
       final String requestResponse = await cloudTuya.turnOn(
         entityUniqueId.getOrCrash(),
@@ -119,7 +119,7 @@ class TuyaSmartPlugEntity extends GenericSmartPlugDE {
   }
 
   Future<Either<CoreFailure, Unit>> turnOffLight() async {
-    smartPlugState = GenericSmartPlugState(DeviceActions.off.toString());
+    smartPlugState = GenericSmartPlugState(EntityActions.off.toString());
 
     try {
       final String requestResponse = await cloudTuya.turnOff(

@@ -1,6 +1,7 @@
 import 'package:cbj_hub/domain/generic_devices/abstract_device/device_entity_abstract.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
+// ignore: implementation_imports
 import 'package:mqtt_client/src/observable/src/records.dart';
 
 abstract class IMqttServerRepository {

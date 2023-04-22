@@ -66,13 +66,13 @@ class TuyaSmartJbtA70RgbcwWfEntity extends GenericRgbwLightDE {
     try {
       if (newEntity.lightSwitchState!.getOrCrash() !=
               lightSwitchState!.getOrCrash() ||
-          entityStateGRPC.getOrCrash() != DeviceStateGRPC.ack.toString()) {
-        final DeviceActions? actionToPreform =
+          entityStateGRPC.getOrCrash() != EntityStateGRPC.ack.toString()) {
+        final EntityActions? actionToPreform =
             EnumHelperCbj.stringToDeviceAction(
           newEntity.lightSwitchState!.getOrCrash(),
         );
 
-        if (actionToPreform == DeviceActions.on) {
+        if (actionToPreform == EntityActions.on) {
           (await turnOnLight()).fold(
             (l) {
               logger.e('Error turning Tuya light on\n$l');
@@ -80,10 +80,10 @@ class TuyaSmartJbtA70RgbcwWfEntity extends GenericRgbwLightDE {
             },
             (r) {
               logger.d('Tuya light turn on success');
-              entityStateGRPC = EntityState(DeviceStateGRPC.ack.toString());
+              entityStateGRPC = EntityState(EntityStateGRPC.ack.toString());
             },
           );
-        } else if (actionToPreform == DeviceActions.off) {
+        } else if (actionToPreform == EntityActions.off) {
           (await turnOffLight()).fold(
             (l) {
               logger.e('Error turning Tuya light off\n$l');
@@ -91,7 +91,7 @@ class TuyaSmartJbtA70RgbcwWfEntity extends GenericRgbwLightDE {
             },
             (r) {
               logger.d('Tuya light turn off success');
-              entityStateGRPC = EntityState(DeviceStateGRPC.ack.toString());
+              entityStateGRPC = EntityState(EntityStateGRPC.ack.toString());
             },
           );
         } else {
@@ -104,7 +104,7 @@ class TuyaSmartJbtA70RgbcwWfEntity extends GenericRgbwLightDE {
 
       if (newEntity.lightColorTemperature.getOrCrash() !=
               lightColorTemperature.getOrCrash() ||
-          entityStateGRPC.getOrCrash() != DeviceStateGRPC.ack.toString()) {
+          entityStateGRPC.getOrCrash() != EntityStateGRPC.ack.toString()) {
         (await changeColorTemperature(
           lightColorTemperatureNewValue:
               newEntity.lightColorTemperature.getOrCrash(),
@@ -127,7 +127,7 @@ class TuyaSmartJbtA70RgbcwWfEntity extends GenericRgbwLightDE {
               lightColorSaturation.getOrCrash() ||
           newEntity.lightColorValue.getOrCrash() !=
               lightColorValue.getOrCrash() ||
-          entityStateGRPC.getOrCrash() != DeviceStateGRPC.ack.toString()) {
+          entityStateGRPC.getOrCrash() != EntityStateGRPC.ack.toString()) {
         (await changeColorHsv(
           lightColorAlphaNewValue: newEntity.lightColorAlpha.getOrCrash(),
           lightColorHueNewValue: newEntity.lightColorHue.getOrCrash(),
@@ -158,13 +158,13 @@ class TuyaSmartJbtA70RgbcwWfEntity extends GenericRgbwLightDE {
           },
         );
       }
-      entityStateGRPC = EntityState(DeviceStateGRPC.ack.toString());
+      entityStateGRPC = EntityState(EntityStateGRPC.ack.toString());
       // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
       //   entityFromTheHub: this,
       // );
       return right(unit);
     } catch (e) {
-      entityStateGRPC = EntityState(DeviceStateGRPC.newStateFailed.toString());
+      entityStateGRPC = EntityState(EntityStateGRPC.newStateFailed.toString());
       // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
       //   entityFromTheHub: this,
       // );
@@ -174,7 +174,7 @@ class TuyaSmartJbtA70RgbcwWfEntity extends GenericRgbwLightDE {
 
   @override
   Future<Either<CoreFailure, Unit>> turnOnLight() async {
-    lightSwitchState = GenericRgbwLightSwitchState(DeviceActions.on.toString());
+    lightSwitchState = GenericRgbwLightSwitchState(EntityActions.on.toString());
     try {
       final String requestResponse = await cloudTuya.turnOn(
         entityUniqueId.getOrCrash(),
@@ -188,7 +188,7 @@ class TuyaSmartJbtA70RgbcwWfEntity extends GenericRgbwLightDE {
   @override
   Future<Either<CoreFailure, Unit>> turnOffLight() async {
     lightSwitchState =
-        GenericRgbwLightSwitchState(DeviceActions.off.toString());
+        GenericRgbwLightSwitchState(EntityActions.off.toString());
 
     try {
       final String requestResponse = await cloudTuya.turnOff(

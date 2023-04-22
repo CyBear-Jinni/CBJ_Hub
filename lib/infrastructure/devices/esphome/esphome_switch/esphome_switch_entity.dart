@@ -65,7 +65,7 @@ class EspHomeSwitchEntity extends GenericSwitchDE {
       lastResponseFromDeviceTimeStamp:
           genericDevice.lastResponseFromDeviceTimeStamp,
       deviceCbjUniqueId: genericDevice.deviceCbjUniqueId,
-      switchState: GenericSwitchSwitchState('off'),
+      switchState: genericDevice.switchState,
     );
   }
 
@@ -83,20 +83,20 @@ class EspHomeSwitchEntity extends GenericSwitchDE {
 
     try {
       if (newEntity.switchState!.getOrCrash() != switchState!.getOrCrash() ||
-          entityStateGRPC.getOrCrash() != DeviceStateGRPC.ack.toString()) {
-        final DeviceActions? actionToPreform =
+          entityStateGRPC.getOrCrash() != EntityStateGRPC.ack.toString()) {
+        final EntityActions? actionToPreform =
             EnumHelperCbj.stringToDeviceAction(
           newEntity.switchState!.getOrCrash(),
         );
 
-        if (actionToPreform == DeviceActions.on) {
+        if (actionToPreform == EntityActions.on) {
           (await turnOnSwitch()).fold((l) {
             logger.e('Error turning ESPHome switch on');
             throw l;
           }, (r) {
             logger.i('ESPHome switch turn on success');
           });
-        } else if (actionToPreform == DeviceActions.off) {
+        } else if (actionToPreform == EntityActions.off) {
           (await turnOffSwitch()).fold((l) {
             logger.e('Error turning ESPHome switch off');
             throw l;
@@ -107,13 +107,13 @@ class EspHomeSwitchEntity extends GenericSwitchDE {
           logger.e('actionToPreform is not set correctly ESPHome switch');
         }
       }
-      entityStateGRPC = EntityState(DeviceStateGRPC.ack.toString());
+      entityStateGRPC = EntityState(EntityStateGRPC.ack.toString());
       // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
       //   entityFromTheHub: this,
       // );
       return right(unit);
     } catch (e) {
-      entityStateGRPC = EntityState(DeviceStateGRPC.newStateFailed.toString());
+      entityStateGRPC = EntityState(EntityStateGRPC.newStateFailed.toString());
       //
       // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
       //   entityFromTheHub: this,
@@ -125,7 +125,7 @@ class EspHomeSwitchEntity extends GenericSwitchDE {
 
   @override
   Future<Either<CoreFailure, Unit>> turnOnSwitch() async {
-    switchState = GenericSwitchSwitchState(DeviceActions.on.toString());
+    switchState = GenericSwitchSwitchState(EntityActions.on.toString());
     try {
       final String nodeRedApiBaseTopic =
           getIt<IMqttServerRepository>().getNodeRedApiBaseTopic();
@@ -145,7 +145,7 @@ class EspHomeSwitchEntity extends GenericSwitchDE {
 
   @override
   Future<Either<CoreFailure, Unit>> turnOffSwitch() async {
-    switchState = GenericSwitchSwitchState(DeviceActions.off.toString());
+    switchState = GenericSwitchSwitchState(EntityActions.off.toString());
 
     try {
       final String nodeRedApiBaseTopic =

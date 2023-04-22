@@ -59,20 +59,20 @@ class LgWebosTvEntity extends GenericSmartTvDE {
     try {
       if (newEntity.lightSwitchState!.getOrCrash() !=
               smartTvSwitchState!.getOrCrash() ||
-          entityStateGRPC.getOrCrash() != DeviceStateGRPC.ack.toString()) {
-        final DeviceActions? actionToPreform =
+          entityStateGRPC.getOrCrash() != EntityStateGRPC.ack.toString()) {
+        final EntityActions? actionToPreform =
             EnumHelperCbj.stringToDeviceAction(
           newEntity.lightSwitchState!.getOrCrash(),
         );
 
-        if (actionToPreform == DeviceActions.on) {
+        if (actionToPreform == EntityActions.on) {
           (await turnOnSmartTv()).fold((l) {
             logger.e('Error turning WebOs on');
             throw l;
           }, (r) {
             logger.i('WebOs turn on success');
           });
-        } else if (actionToPreform == DeviceActions.off) {
+        } else if (actionToPreform == EntityActions.off) {
           (await turnOffSmartTv()).fold((l) {
             logger.e('Error turning WebOs off');
             throw l;
@@ -83,14 +83,14 @@ class LgWebosTvEntity extends GenericSmartTvDE {
           logger.e('actionToPreform is not set correctly on WebOs');
         }
       }
-      entityStateGRPC = EntityState(DeviceStateGRPC.ack.toString());
+      entityStateGRPC = EntityState(EntityStateGRPC.ack.toString());
 
       // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
       //   entityFromTheHub: this,
       // );
       return right(unit);
     } catch (e) {
-      entityStateGRPC = EntityState(DeviceStateGRPC.newStateFailed.toString());
+      entityStateGRPC = EntityState(EntityStateGRPC.newStateFailed.toString());
       // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
       //   entityFromTheHub: this,
       // );

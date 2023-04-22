@@ -53,6 +53,40 @@ class ShellyColorLightEntity extends GenericRgbwLightDE {
         );
   }
 
+  factory ShellyColorLightEntity.fromGeneric(GenericRgbwLightDE genericDevice) {
+    return ShellyColorLightEntity(
+      uniqueId: genericDevice.uniqueId,
+      entityUniqueId: genericDevice.entityUniqueId,
+      cbjEntityName: genericDevice.cbjEntityName,
+      entityOriginalName: genericDevice.entityOriginalName,
+      deviceOriginalName: genericDevice.deviceOriginalName,
+      stateMassage: genericDevice.stateMassage,
+      senderDeviceOs: genericDevice.senderDeviceOs,
+      senderDeviceModel: genericDevice.senderDeviceModel,
+      senderId: genericDevice.senderId,
+      compUuid: genericDevice.compUuid,
+      entityStateGRPC: genericDevice.entityStateGRPC,
+      powerConsumption: genericDevice.powerConsumption,
+      deviceUniqueId: genericDevice.deviceUniqueId,
+      devicePort: genericDevice.devicePort,
+      deviceLastKnownIp: genericDevice.deviceLastKnownIp,
+      deviceHostName: genericDevice.deviceHostName,
+      deviceMdns: genericDevice.deviceMdns,
+      devicesMacAddress: genericDevice.devicesMacAddress,
+      entityKey: genericDevice.entityKey,
+      requestTimeStamp: genericDevice.requestTimeStamp,
+      lastResponseFromDeviceTimeStamp:
+          genericDevice.lastResponseFromDeviceTimeStamp,
+      lightSwitchState: genericDevice.lightSwitchState,
+      deviceCbjUniqueId: genericDevice.deviceCbjUniqueId,
+      lightBrightness: genericDevice.lightBrightness,
+      lightColorTemperature: genericDevice.lightColorTemperature,
+      lightColorAlpha: genericDevice.lightColorAlpha,
+      lightColorHue: genericDevice.lightColorHue,
+      lightColorSaturation: genericDevice.lightColorSaturation,
+      lightColorValue: genericDevice.lightColorValue,
+    );
+  }
   late ShellyApiColorBulb shellyColorBulb;
 
   @override
@@ -68,25 +102,25 @@ class ShellyColorLightEntity extends GenericRgbwLightDE {
     }
 
     try {
-      // if (entityStateGRPC.getOrCrash() == DeviceStateGRPC.ack.toString()) {
+      // if (entityStateGRPC.getOrCrash() == EntityStateGRPC.ack.toString()) {
       //   return right(unit);
       // }
 
       if (newEntity.lightSwitchState!.getOrCrash() !=
           lightSwitchState!.getOrCrash()) {
-        final DeviceActions? actionToPreform =
+        final EntityActions? actionToPreform =
             EnumHelperCbj.stringToDeviceAction(
           newEntity.lightSwitchState!.getOrCrash(),
         );
 
-        if (actionToPreform == DeviceActions.on) {
+        if (actionToPreform == EntityActions.on) {
           (await turnOnLight()).fold((l) {
             logger.e('Error turning Shelly light on');
             throw l;
           }, (r) {
             logger.i('Shelly light turn on success');
           });
-        } else if (actionToPreform == DeviceActions.off) {
+        } else if (actionToPreform == EntityActions.off) {
           (await turnOffLight()).fold((l) {
             logger.e('Error turning Shelly light off');
             throw l;
@@ -152,13 +186,13 @@ class ShellyColorLightEntity extends GenericRgbwLightDE {
           },
         );
       }
-      entityStateGRPC = EntityState(DeviceStateGRPC.ack.toString());
+      entityStateGRPC = EntityState(EntityStateGRPC.ack.toString());
       // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
       //   entityFromTheHub: this,
       // );
       return right(unit);
     } catch (e) {
-      entityStateGRPC = EntityState(DeviceStateGRPC.newStateFailed.toString());
+      entityStateGRPC = EntityState(EntityStateGRPC.newStateFailed.toString());
       // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
       //   entityFromTheHub: this,
       // );
@@ -168,7 +202,7 @@ class ShellyColorLightEntity extends GenericRgbwLightDE {
 
   @override
   Future<Either<CoreFailure, Unit>> turnOnLight() async {
-    lightSwitchState = GenericRgbwLightSwitchState(DeviceActions.on.toString());
+    lightSwitchState = GenericRgbwLightSwitchState(EntityActions.on.toString());
 
     try {
       logger.v('Turn on Shelly device');
@@ -182,7 +216,7 @@ class ShellyColorLightEntity extends GenericRgbwLightDE {
   @override
   Future<Either<CoreFailure, Unit>> turnOffLight() async {
     lightSwitchState =
-        GenericRgbwLightSwitchState(DeviceActions.off.toString());
+        GenericRgbwLightSwitchState(EntityActions.off.toString());
 
     try {
       logger.v('Turn off Shelly device');

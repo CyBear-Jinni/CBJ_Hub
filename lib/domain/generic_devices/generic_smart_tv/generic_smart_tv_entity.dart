@@ -42,7 +42,7 @@ class GenericSmartTvDE extends DeviceEntityAbstract {
     this.skip,
     this.volume,
   }) : super(
-          entityTypes: EntityType(DeviceTypes.smartTV.toString()),
+          entityTypes: EntityType(EntityTypes.smartTV.toString()),
         );
 
   /// Empty instance of GenericSmartTvEntity
@@ -71,7 +71,7 @@ class GenericSmartTvDE extends DeviceEntityAbstract {
         lastResponseFromDeviceTimeStamp: LastResponseFromDeviceTimeStamp(''),
         deviceCbjUniqueId: CoreUniqueId(),
         smartTvSwitchState:
-            GenericSmartTvSwitchState(DeviceActions.off.toString()),
+            GenericSmartTvSwitchState(EntityActions.off.toString()),
       );
 
   /// State of the smartTv on/off

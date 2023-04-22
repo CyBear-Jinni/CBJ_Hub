@@ -5,6 +5,7 @@ import 'package:cbj_hub/domain/generic_devices/abstract_device/device_entity_abs
 import 'package:cbj_hub/domain/generic_devices/abstract_device/value_objects_core.dart';
 import 'package:cbj_hub/domain/generic_devices/generic_blinds_device/generic_blinds_entity.dart';
 import 'package:cbj_hub/domain/generic_devices/generic_boiler_device/generic_boiler_entity.dart';
+import 'package:cbj_hub/domain/generic_devices/generic_dimmable_light_device/generic_dimmable_light_entity.dart';
 import 'package:cbj_hub/domain/generic_devices/generic_light_device/generic_light_entity.dart';
 import 'package:cbj_hub/domain/generic_devices/generic_rgbw_light_device/generic_rgbw_light_entity.dart';
 import 'package:cbj_hub/domain/generic_devices/generic_smart_computer_device/generic_smart_computer_entity.dart';
@@ -20,6 +21,7 @@ import 'package:cbj_hub/utils.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
+// ignore: implementation_imports
 import 'package:mqtt_client/src/observable/src/records.dart';
 
 @LazySingleton(as: IMqttServerRepository)
@@ -429,6 +431,15 @@ class MqttServerRepository extends IMqttServerRepository {
           savedDeviceEntity.uniqueId.getOrCrash(),
           savedDeviceEntity,
         );
+      } else if (savedDeviceEntity is GenericDimmableLightDE &&
+          entityFromTheApp is GenericDimmableLightDE) {
+        savedDeviceEntity.lightSwitchState = entityFromTheApp.lightSwitchState;
+        savedDeviceEntity.lightBrightness = entityFromTheApp.lightBrightness;
+
+        deviceFromApp = MapEntry(
+          savedDeviceEntity.uniqueId.getOrCrash(),
+          savedDeviceEntity,
+        );
       } else if (savedDeviceEntity is GenericRgbwLightDE &&
           entityFromTheApp is GenericRgbwLightDE) {
         savedDeviceEntity.lightSwitchState = entityFromTheApp.lightSwitchState;
@@ -529,9 +540,9 @@ class MqttServerRepository extends IMqttServerRepository {
   }) async {
     // if (entityFromTheHub is Map<String, dynamic>) {
     // if (entityFromTheHub['entityStateGRPC'] !=
-    //         DeviceStateGRPC.waitingInComp.toString() ||
+    //         EntityStateGRPC.waitingInComp.toString() ||
     //     entityFromTheHub['entityStateGRPC'] !=
-    //         DeviceStateGRPC.ack.toString()) {
+    //         EntityStateGRPC.ack.toString()) {
     //   logger.w("Hub didn't confirmed receiving the request yet");
     //   return;
     // }

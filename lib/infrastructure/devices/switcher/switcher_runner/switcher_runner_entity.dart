@@ -102,29 +102,29 @@ class SwitcherRunnerEntity extends GenericBlindsDE {
 
     try {
       if (newEntity.entityStateGRPC.getOrCrash() !=
-          DeviceStateGRPC.ack.toString()) {
+          EntityStateGRPC.ack.toString()) {
         if (newEntity.blindsSwitchState!.getOrCrash() !=
             blindsSwitchState!.getOrCrash()) {
-          final DeviceActions? actionToPreform =
+          final EntityActions? actionToPreform =
               EnumHelperCbj.stringToDeviceAction(
             newEntity.blindsSwitchState!.getOrCrash(),
           );
 
-          if (actionToPreform == DeviceActions.moveUp) {
+          if (actionToPreform == EntityActions.moveUp) {
             (await moveUpBlinds()).fold((l) {
               logger.e('Error turning blinds up');
               throw l;
             }, (r) {
               logger.i('Blinds up success');
             });
-          } else if (actionToPreform == DeviceActions.stop) {
+          } else if (actionToPreform == EntityActions.stop) {
             (await stopBlinds()).fold((l) {
               logger.e('Error stopping blinds');
               throw l;
             }, (r) {
               logger.i('Blinds stop success');
             });
-          } else if (actionToPreform == DeviceActions.moveDown) {
+          } else if (actionToPreform == EntityActions.moveDown) {
             (await moveDownBlinds()).fold((l) {
               logger.e('Error turning blinds down');
               throw l;
@@ -135,7 +135,7 @@ class SwitcherRunnerEntity extends GenericBlindsDE {
             logger.e('actionToPreform is not set correctly on Switcher Runner');
           }
         }
-        entityStateGRPC = EntityState(DeviceStateGRPC.ack.toString());
+        entityStateGRPC = EntityState(EntityStateGRPC.ack.toString());
 
         getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
           entityFromTheHub: this,
@@ -143,7 +143,7 @@ class SwitcherRunnerEntity extends GenericBlindsDE {
       }
       return right(unit);
     } catch (e) {
-      entityStateGRPC = EntityState(DeviceStateGRPC.newStateFailed.toString());
+      entityStateGRPC = EntityState(EntityStateGRPC.newStateFailed.toString());
 
       getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
         entityFromTheHub: this,
@@ -155,7 +155,7 @@ class SwitcherRunnerEntity extends GenericBlindsDE {
   @override
   Future<Either<CoreFailure, Unit>> moveUpBlinds() async {
     blindsSwitchState =
-        GenericBlindsSwitchState(DeviceActions.moveUp.toString());
+        GenericBlindsSwitchState(EntityActions.moveUp.toString());
 
     try {
       await switcherObject!.setPosition(pos: 100);
@@ -168,7 +168,7 @@ class SwitcherRunnerEntity extends GenericBlindsDE {
 
   @override
   Future<Either<CoreFailure, Unit>> stopBlinds() async {
-    blindsSwitchState = GenericBlindsSwitchState(DeviceActions.stop.toString());
+    blindsSwitchState = GenericBlindsSwitchState(EntityActions.stop.toString());
 
     try {
       await switcherObject!.stopBlinds();
@@ -181,7 +181,7 @@ class SwitcherRunnerEntity extends GenericBlindsDE {
   @override
   Future<Either<CoreFailure, Unit>> moveDownBlinds() async {
     blindsSwitchState =
-        GenericBlindsSwitchState(DeviceActions.moveDown.toString());
+        GenericBlindsSwitchState(EntityActions.moveDown.toString());
 
     try {
       await switcherObject!.setPosition();

@@ -18,7 +18,8 @@ import 'package:injectable/injectable.dart';
 class EspHomeConnectorConjector implements AbstractCompanyConnectorConjector {
   static const List<String> mdnsTypes = ['_esphomelib._tcp'];
 
-  static Map<String, DeviceEntityAbstract> companyDevices = {};
+  @override
+  Map<String, DeviceEntityAbstract> companyDevices = {};
 
   static String? espHomeDevicePass;
 
@@ -44,7 +45,7 @@ class EspHomeConnectorConjector implements AbstractCompanyConnectorConjector {
   }) async {
     if (espHomeDevicePass == null) {
       logger.w('ESPHome device got found but missing a password, please add '
-          'password for it in the app UI');
+          'password for it in the app');
       return;
     }
 
@@ -74,6 +75,7 @@ class EspHomeConnectorConjector implements AbstractCompanyConnectorConjector {
     getIt<ISavedDevicesRepo>().saveAndActivateSmartDevicesToDb();
   }
 
+  @override
   Future<void> manageHubRequestsForDevice(
     DeviceEntityAbstract espHomeDE,
   ) async {

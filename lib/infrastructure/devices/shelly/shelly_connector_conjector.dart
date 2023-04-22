@@ -16,7 +16,8 @@ import 'package:injectable/injectable.dart';
 class ShellyConnectorConjector implements AbstractCompanyConnectorConjector {
   static const List<String> mdnsTypes = ['_http._tcp'];
 
-  static Map<String, DeviceEntityAbstract> companyDevices = {};
+  @override
+  Map<String, DeviceEntityAbstract> companyDevices = {};
 
   /// Add new devices to [companyDevices] if not exist
   Future<void> addNewDeviceByMdnsName({
@@ -61,17 +62,19 @@ class ShellyConnectorConjector implements AbstractCompanyConnectorConjector {
           CompaniesConnectorConjector.addDiscoverdDeviceToHub(entityAsDevice);
 
       final MapEntry<String, DeviceEntityAbstract> deviceAsEntry =
-          MapEntry(deviceToAdd.uniqueId.getOrCrash(), deviceToAdd);
+          MapEntry(deviceToAdd.entityUniqueId.getOrCrash(), deviceToAdd);
 
       companyDevices.addEntries([deviceAsEntry]);
     }
     logger.v('New shelly devices name:$mDnsName');
   }
 
+  @override
   Future<void> manageHubRequestsForDevice(
     DeviceEntityAbstract shellyDE,
   ) async {
-    final DeviceEntityAbstract? device = companyDevices[shellyDE.getDeviceId()];
+    final DeviceEntityAbstract? device =
+        companyDevices[shellyDE.entityUniqueId.getOrCrash()];
 
     if (device is ShellyColorLightEntity) {
       device.executeDeviceAction(newEntity: shellyDE);
@@ -83,5 +86,20 @@ class ShellyConnectorConjector implements AbstractCompanyConnectorConjector {
   }
 
   @override
-  Future<void> setUpDeviceFromDb(DeviceEntityAbstract deviceEntity) async {}
+  Future<void> setUpDeviceFromDb(DeviceEntityAbstract deviceEntity) async {
+    DeviceEntityAbstract? nonGenericDevice;
+
+    if (deviceEntity is GenericRgbwLightDE) {
+      nonGenericDevice = ShellyColorLightEntity.fromGeneric(deviceEntity);
+    }
+
+    if (nonGenericDevice == null) {
+      logger.w('Switcher device could not get loaded from the server');
+      return;
+    }
+
+    companyDevices.addEntries([
+      MapEntry(nonGenericDevice.entityUniqueId.getOrCrash(), nonGenericDevice),
+    ]);
+  }
 }

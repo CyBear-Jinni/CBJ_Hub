@@ -12,7 +12,6 @@ import 'package:cbj_hub/domain/room/room_entity.dart';
 import 'package:cbj_hub/domain/rooms/i_saved_rooms_repo.dart';
 import 'package:cbj_hub/domain/routine/i_routine_cbj_repository.dart';
 import 'package:cbj_hub/domain/routine/routine_cbj_entity.dart';
-import 'package:cbj_hub/domain/routine/value_objects_routine_cbj.dart';
 import 'package:cbj_hub/domain/saved_devices/i_saved_devices_repo.dart';
 import 'package:cbj_hub/domain/scene/i_scene_cbj_repository.dart';
 import 'package:cbj_hub/domain/scene/scene_cbj_entity.dart';
@@ -123,12 +122,12 @@ class AppCommunicationRepository extends IAppCommunicationRepository {
     request.listen((event) async {
       logger.i('Got From App');
 
-      if (event.sendingType == SendingType.deviceType) {
+      if (event.sendingType == SendingType.entityType) {
         final DeviceEntityAbstract deviceEntityFromApp =
             DeviceHelper.convertJsonStringToDomain(event.allRemoteCommands);
 
         deviceEntityFromApp.entityStateGRPC =
-            EntityState(DeviceStateGRPC.waitingInComp.toString());
+            EntityState(EntityStateGRPC.waitingInComp.toString());
 
         getIt<IMqttServerRepository>().postToHubMqtt(
           entityFromTheApp: deviceEntityFromApp,
@@ -178,13 +177,13 @@ class AppCommunicationRepository extends IAppCommunicationRepository {
         final String sceneStateGrpcTemp =
             sceneCbj.entityStateGRPC.getOrCrash()!;
 
-        sceneCbj.copyWith(
-          entityStateGRPC: SceneCbjDeviceStateGRPC(
-            DeviceStateGRPC.waitingInComp.toString(),
-          ),
-        );
+        // sceneCbj.copyWith(
+        //   entityStateGRPC: SceneCbjDeviceStateGRPC(
+        //     EntityStateGRPC.waitingInComp.toString(),
+        //   ),
+        // );
 
-        if (sceneStateGrpcTemp == DeviceStateGRPC.addingNewScene.toString()) {
+        if (sceneStateGrpcTemp == EntityStateGRPC.addingNewScene.toString()) {
           getIt<ISceneCbjRepository>().addNewSceneAndSaveInDb(sceneCbj);
         } else {
           getIt<ISceneCbjRepository>().activateScene(sceneCbj);
@@ -199,14 +198,14 @@ class AppCommunicationRepository extends IAppCommunicationRepository {
         final String routineStateGrpcTemp =
             routineCbj.entityStateGRPC.getOrCrash()!;
 
-        routineCbj.copyWith(
-          entityStateGRPC: RoutineCbjDeviceStateGRPC(
-            DeviceStateGRPC.waitingInComp.toString(),
-          ),
-        );
+        // routineCbj.copyWith(
+        //   entityStateGRPC: RoutineCbjDeviceStateGRPC(
+        //     EntityStateGRPC.waitingInComp.toString(),
+        //   ),
+        // );
 
         if (routineStateGrpcTemp ==
-            DeviceStateGRPC.addingNewRoutine.toString()) {
+            EntityStateGRPC.addingNewRoutine.toString()) {
           getIt<IRoutineCbjRepository>()
               .addNewRoutineAndSaveItToLocalDb(routineCbj);
         } else {
@@ -303,9 +302,9 @@ class AppCommunicationRepository extends IAppCommunicationRepository {
       });
     } else {
       logger.w("Can't find smart devices in the local DB, sending empty");
-      final DeviceEntityAbstract emptyDevice = GenericEmptyDE.empty();
+      final DeviceEntityAbstract emptyEntity = GenericEmptyDE.empty();
       HubRequestsToApp.streamRequestsToApp.sink
-          .add(emptyDevice.toInfrastructure());
+          .add(emptyEntity.toInfrastructure());
     }
   }
 
@@ -333,7 +332,7 @@ class AppCommunicationRepository extends IAppCommunicationRepository {
         firstNodeId: SceneCbjFirstNodeId(null),
         lastDateOfExecute: SceneCbjLastDateOfExecute(null),
         entityStateGRPC:
-            SceneCbjDeviceStateGRPC(DeviceStateGRPC.ack.toString()),
+            SceneCbjDeviceStateGRPC(EntityStateGRPC.ack.toString()),
         senderDeviceModel: SceneCbjSenderDeviceModel(null),
         senderDeviceOs: SceneCbjSenderDeviceOs(null),
         senderId: SceneCbjSenderId(null),

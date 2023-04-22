@@ -11,7 +11,8 @@ import 'package:injectable/injectable.dart';
 
 @singleton
 class LgConnectorConjector implements AbstractCompanyConnectorConjector {
-  static Map<String, DeviceEntityAbstract> companyDevices = {};
+  @override
+  Map<String, DeviceEntityAbstract> companyDevices = {};
 
   static const List<String> mdnsTypes = [
     '_hap._tcp',
@@ -63,7 +64,7 @@ class LgConnectorConjector implements AbstractCompanyConnectorConjector {
           CompaniesConnectorConjector.addDiscoverdDeviceToHub(entityAsDevice);
 
       final MapEntry<String, DeviceEntityAbstract> deviceAsEntry =
-          MapEntry(deviceToAdd.uniqueId.getOrCrash(), deviceToAdd);
+          MapEntry(deviceToAdd.entityUniqueId.getOrCrash(), deviceToAdd);
 
       companyDevices.addEntries([deviceAsEntry]);
       logger.i(
@@ -72,8 +73,10 @@ class LgConnectorConjector implements AbstractCompanyConnectorConjector {
     }
   }
 
+  @override
   Future<void> manageHubRequestsForDevice(DeviceEntityAbstract lgDE) async {
-    final DeviceEntityAbstract? device = companyDevices[lgDE.getDeviceId()];
+    final DeviceEntityAbstract? device =
+        companyDevices[lgDE.entityUniqueId.getOrCrash()];
 
     if (device is LgWebosTvEntity) {
       device.executeDeviceAction(newEntity: lgDE);

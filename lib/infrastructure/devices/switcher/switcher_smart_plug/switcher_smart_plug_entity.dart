@@ -104,15 +104,15 @@ class SwitcherSmartPlugEntity extends GenericSmartPlugDE {
 
     try {
       if (newEntity.entityStateGRPC.getOrCrash() !=
-          DeviceStateGRPC.ack.toString()) {
+          EntityStateGRPC.ack.toString()) {
         if (newEntity.smartPlugState!.getOrCrash() !=
             smartPlugState!.getOrCrash()) {
-          final DeviceActions? actionToPreform =
+          final EntityActions? actionToPreform =
               EnumHelperCbj.stringToDeviceAction(
             newEntity.smartPlugState!.getOrCrash(),
           );
 
-          if (actionToPreform == DeviceActions.on) {
+          if (actionToPreform == EntityActions.on) {
             (await turnOnSmartPlug()).fold(
               (l) {
                 logger.e('Error turning smart plug on');
@@ -122,7 +122,7 @@ class SwitcherSmartPlugEntity extends GenericSmartPlugDE {
                 logger.i('Smart plug turn on success');
               },
             );
-          } else if (actionToPreform == DeviceActions.off) {
+          } else if (actionToPreform == EntityActions.off) {
             (await turnOffSmartPlug()).fold(
               (l) {
                 logger.e('Error turning smart plug off');
@@ -138,7 +138,7 @@ class SwitcherSmartPlugEntity extends GenericSmartPlugDE {
             );
           }
         }
-        entityStateGRPC = EntityState(DeviceStateGRPC.ack.toString());
+        entityStateGRPC = EntityState(EntityStateGRPC.ack.toString());
 
         getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
           entityFromTheHub: this,
@@ -146,7 +146,7 @@ class SwitcherSmartPlugEntity extends GenericSmartPlugDE {
       }
       return right(unit);
     } catch (e) {
-      entityStateGRPC = EntityState(DeviceStateGRPC.newStateFailed.toString());
+      entityStateGRPC = EntityState(EntityStateGRPC.newStateFailed.toString());
 
       getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
         entityFromTheHub: this,
@@ -158,7 +158,7 @@ class SwitcherSmartPlugEntity extends GenericSmartPlugDE {
 
   @override
   Future<Either<CoreFailure, Unit>> turnOnSmartPlug() async {
-    smartPlugState = GenericSmartPlugState(DeviceActions.on.toString());
+    smartPlugState = GenericSmartPlugState(EntityActions.on.toString());
 
     try {
       await switcherObject!.turnOn();
@@ -173,7 +173,7 @@ class SwitcherSmartPlugEntity extends GenericSmartPlugDE {
 
   @override
   Future<Either<CoreFailure, Unit>> turnOffSmartPlug() async {
-    smartPlugState = GenericSmartPlugState(DeviceActions.off.toString());
+    smartPlugState = GenericSmartPlugState(EntityActions.off.toString());
 
     try {
       await switcherObject!.turnOff();

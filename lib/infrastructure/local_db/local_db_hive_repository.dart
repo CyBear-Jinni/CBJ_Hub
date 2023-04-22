@@ -20,12 +20,16 @@ import 'package:cbj_hub/domain/scene/scene_cbj_entity.dart';
 import 'package:cbj_hub/domain/scene/value_objects_scene_cbj.dart';
 import 'package:cbj_hub/domain/vendors/esphome_login/generic_esphome_login_entity.dart';
 import 'package:cbj_hub/domain/vendors/esphome_login/generic_esphome_login_value_objects.dart';
+import 'package:cbj_hub/domain/vendors/ewelink_login/generic_ewelink_login_entity.dart';
+import 'package:cbj_hub/domain/vendors/ewelink_login/generic_ewelink_login_value_objects.dart';
 import 'package:cbj_hub/domain/vendors/lifx_login/generic_lifx_login_entity.dart';
 import 'package:cbj_hub/domain/vendors/lifx_login/generic_lifx_login_value_objects.dart';
 import 'package:cbj_hub/domain/vendors/login_abstract/login_entity_abstract.dart';
 import 'package:cbj_hub/domain/vendors/login_abstract/value_login_objects_core.dart';
 import 'package:cbj_hub/domain/vendors/tuya_login/generic_tuya_login_entity.dart';
 import 'package:cbj_hub/domain/vendors/tuya_login/generic_tuya_login_value_objects.dart';
+import 'package:cbj_hub/domain/vendors/xiaomi_mi_login/generic_xiaomi_mi_login_entity.dart';
+import 'package:cbj_hub/domain/vendors/xiaomi_mi_login/generic_xiaomi_mi_login_value_objects.dart';
 import 'package:cbj_hub/infrastructure/bindings/binding_cbj_dtos.dart';
 import 'package:cbj_hub/infrastructure/devices/companies_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/devices/device_helper/device_helper.dart';
@@ -33,6 +37,7 @@ import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub
 import 'package:cbj_hub/infrastructure/local_db/hive_objects/bindings_hive_model.dart';
 import 'package:cbj_hub/infrastructure/local_db/hive_objects/devices_hive_model.dart';
 import 'package:cbj_hub/infrastructure/local_db/hive_objects/esphome_vendor_credentials_hive_model.dart';
+import 'package:cbj_hub/infrastructure/local_db/hive_objects/ewelink_vendor_credentials_hive_model.dart';
 import 'package:cbj_hub/infrastructure/local_db/hive_objects/hub_entity_hive_model.dart';
 import 'package:cbj_hub/infrastructure/local_db/hive_objects/lifx_vendor_credentials_hive_model.dart';
 import 'package:cbj_hub/infrastructure/local_db/hive_objects/remote_pipes_hive_model.dart';
@@ -40,6 +45,7 @@ import 'package:cbj_hub/infrastructure/local_db/hive_objects/rooms_hive_model.da
 import 'package:cbj_hub/infrastructure/local_db/hive_objects/routines_hive_model.dart';
 import 'package:cbj_hub/infrastructure/local_db/hive_objects/scenes_hive_model.dart';
 import 'package:cbj_hub/infrastructure/local_db/hive_objects/tuya_vendor_credentials_hive_model.dart';
+import 'package:cbj_hub/infrastructure/local_db/hive_objects/xiaomi_mi_vendor_credentials_hive_model.dart';
 import 'package:cbj_hub/infrastructure/room/room_entity_dtos.dart';
 import 'package:cbj_hub/infrastructure/routines/routine_cbj_dtos.dart';
 import 'package:cbj_hub/infrastructure/scenes/scene_cbj_dtos.dart';
@@ -56,11 +62,6 @@ class HiveRepository extends ILocalDbRepository {
   @override
   Future<void> initializeDb() async {
     String? localDbPath = await getIt<SystemCommandsManager>().getLocalDbPath();
-
-    if (localDbPath == null) {
-      logger.e('Cant find local DB path');
-      localDbPath = '/';
-    }
 
     if (localDbPath[localDbPath.length - 1] == '/') {
       localDbPath = localDbPath.substring(0, localDbPath.length - 1);
@@ -81,6 +82,8 @@ class HiveRepository extends ILocalDbRepository {
     Hive.registerAdapter(TuyaVendorCredentialsHiveModelAdapter());
     Hive.registerAdapter(LifxVendorCredentialsHiveModelAdapter());
     Hive.registerAdapter(EspHomeVendorCredentialsHiveModelAdapter());
+    Hive.registerAdapter(XiaomiMiVendorCredentialsHiveModelAdapter());
+    Hive.registerAdapter(EwelinkVendorCredentialsHiveModelAdapter());
 
     /// Delay inorder for the Hive boxes to initialize
     /// In case you got the following error:
@@ -103,6 +106,8 @@ class HiveRepository extends ILocalDbRepository {
   Box<TuyaVendorCredentialsHiveModel>? jinvooSmartVendorCredentialsBox;
   Box<LifxVendorCredentialsHiveModel>? lifxVendorCredentialsBox;
   Box<EspHomeVendorCredentialsHiveModel>? espHomeVendorCredentialsBox;
+  Box<XiaomiMiVendorCredentialsHiveModel>? xiaomiMiVendorCredentialsBox;
+  Box<EwelinkVendorCredentialsHiveModel>? ewelinkVendorCredentialsBox;
 
   @override
   Future<void> loadFromDb() async {
@@ -209,7 +214,7 @@ class HiveRepository extends ILocalDbRepository {
           lifxVendorCredentialsModelFromDb = lifxVendorCredentialsBox!.values
               .toList()
               .cast<LifxVendorCredentialsHiveModel>();
-      await espHomeVendorCredentialsBox?.close();
+      await lifxVendorCredentialsBox?.close();
 
       (await getLifxVendorLoginCredentials(
         lifxVendorCredentialsModelFromDb: lifxVendorCredentialsModelFromDb,
@@ -247,6 +252,64 @@ class HiveRepository extends ILocalDbRepository {
 
         logger.i(
           'ESPHome device password got found in DB',
+        );
+      });
+    }
+
+    /// Xiaomi Mi
+    {
+      await xiaomiMiVendorCredentialsBox?.close();
+
+      xiaomiMiVendorCredentialsBox =
+          await Hive.openBox<XiaomiMiVendorCredentialsHiveModel>(
+        xiaomiMiVendorCredentialsBoxName,
+      );
+
+      final List<XiaomiMiVendorCredentialsHiveModel>
+          xiaomiMiVendorCredentialsModelFromDb = xiaomiMiVendorCredentialsBox!
+              .values
+              .toList()
+              .cast<XiaomiMiVendorCredentialsHiveModel>();
+      await xiaomiMiVendorCredentialsBox?.close();
+
+      (await getXiaomiMiVendorLoginCredentials(
+        xiaomiMiVendorCredentialsModelFromDb:
+            xiaomiMiVendorCredentialsModelFromDb,
+      ))
+          .fold((l) {}, (r) {
+        CompaniesConnectorConjector.setVendorLoginCredentials(r);
+
+        logger.i(
+          'Xiaomi Mi device password got found in DB',
+        );
+      });
+    }
+
+    /// eWeLink
+    {
+      await ewelinkVendorCredentialsBox?.close();
+
+      ewelinkVendorCredentialsBox =
+          await Hive.openBox<EwelinkVendorCredentialsHiveModel>(
+        ewelinkVendorCredentialsBoxName,
+      );
+
+      final List<EwelinkVendorCredentialsHiveModel>
+          ewelinkVendorCredentialsModelFromDb = ewelinkVendorCredentialsBox!
+              .values
+              .toList()
+              .cast<EwelinkVendorCredentialsHiveModel>();
+      await ewelinkVendorCredentialsBox?.close();
+
+      (await getEwelinkVendorLoginCredentials(
+        ewelinkVendorCredentialsModelFromDb:
+            ewelinkVendorCredentialsModelFromDb,
+      ))
+          .fold((l) {}, (r) {
+        CompaniesConnectorConjector.setVendorLoginCredentials(r);
+
+        logger.i(
+          'EweLink account email and password got found in DB',
         );
       });
     }
@@ -315,7 +378,7 @@ class HiveRepository extends ILocalDbRepository {
         devices.add(
           deviceEntity
             ..entityStateGRPC =
-                EntityState(DeviceStateGRPC.waitingInComp.toString()),
+                EntityState(EntityStateGRPC.waitingInComp.toString()),
         );
       }
       return right(devices);
@@ -379,9 +442,9 @@ class HiveRepository extends ILocalDbRepository {
         );
         return right(genericTuyaLoginDE);
       }
-      logger.i(
-        "Didn't find any Tuya in the local DB",
-      );
+      // logger.i(
+      //   "Didn't find any Tuya in the local DB",
+      // );
     } catch (e) {
       logger.e('Local DB hive error while getting Tuya vendor: $e');
     }
@@ -412,9 +475,9 @@ class HiveRepository extends ILocalDbRepository {
         );
         return right(genericLifxLoginDE);
       }
-      logger.i(
-        "Didn't find any Lifx in the local DB",
-      );
+      // logger.i(
+      //   "Didn't find any Lifx in the local DB",
+      // );
     } catch (e) {
       logger.e('Local DB hive error while getting Lifx vendor: $e');
     }
@@ -448,11 +511,88 @@ class HiveRepository extends ILocalDbRepository {
         );
         return right(genericEspHomeLoginDE);
       }
-      logger.i(
-        "Didn't find any ESPHome in the local DB",
-      );
+      // logger.i(
+      //   "Didn't find any ESPHome in the local DB",
+      // );
     } catch (e) {
       logger.e('Local DB hive error while getting ESPHome vendor: $e');
+    }
+    return left(const LocalDbFailures.unexpected());
+  }
+
+  @override
+  Future<Either<LocalDbFailures, GenericXiaomiMiLoginDE>>
+      getXiaomiMiVendorLoginCredentials({
+    required List<XiaomiMiVendorCredentialsHiveModel>
+        xiaomiMiVendorCredentialsModelFromDb,
+  }) async {
+    try {
+      if (xiaomiMiVendorCredentialsModelFromDb.isNotEmpty) {
+        final XiaomiMiVendorCredentialsHiveModel firstXiaomiMiVendorFromDB =
+            xiaomiMiVendorCredentialsModelFromDb[0];
+
+        final String? senderUniqueId = firstXiaomiMiVendorFromDB.senderUniqueId;
+        final String xiaomiMiAccountEmail =
+            firstXiaomiMiVendorFromDB.xiaomiMiAccountEmail;
+        final String xiaomiMiAccountPass =
+            firstXiaomiMiVendorFromDB.xiaomiMiAccountPass;
+
+        final GenericXiaomiMiLoginDE genericXiaomiMiLoginDE =
+            GenericXiaomiMiLoginDE(
+          senderUniqueId: CoreLoginSenderId.fromUniqueString(senderUniqueId),
+          xiaomiMiAccountEmail:
+              GenericXiaomiMiAccountEmail(xiaomiMiAccountEmail),
+          xiaomiMiAccountPass: GenericXiaomiMiAccountPass(xiaomiMiAccountPass),
+        );
+
+        logger.i(
+          'Xiaomi Mi got returned from local storage',
+        );
+        return right(genericXiaomiMiLoginDE);
+      }
+      // logger.i(
+      //   "Didn't find any Xiaomi Mi in the local DB",
+      // );
+    } catch (e) {
+      logger.e('Local DB hive error while getting Xiaomi Mi vendor: $e');
+    }
+    return left(const LocalDbFailures.unexpected());
+  }
+
+  @override
+  Future<Either<LocalDbFailures, GenericEwelinkLoginDE>>
+      getEwelinkVendorLoginCredentials({
+    required List<EwelinkVendorCredentialsHiveModel>
+        ewelinkVendorCredentialsModelFromDb,
+  }) async {
+    try {
+      if (ewelinkVendorCredentialsModelFromDb.isNotEmpty) {
+        final EwelinkVendorCredentialsHiveModel firstEwelinkVendorFromDB =
+            ewelinkVendorCredentialsModelFromDb[0];
+
+        final String? senderUniqueId = firstEwelinkVendorFromDB.senderUniqueId;
+        final String ewelinkAccountEmail =
+            firstEwelinkVendorFromDB.ewelinkAccountEmail;
+        final String ewelinkAccountPass =
+            firstEwelinkVendorFromDB.ewelinkAccountPass;
+
+        final GenericEwelinkLoginDE genericEwelinkLoginDE =
+            GenericEwelinkLoginDE(
+          senderUniqueId: CoreLoginSenderId.fromUniqueString(senderUniqueId),
+          ewelinkAccountEmail: GenericEwelinkAccountEmail(ewelinkAccountEmail),
+          ewelinkAccountPass: GenericEwelinkAccountPass(ewelinkAccountPass),
+        );
+
+        logger.i(
+          'EweLink got returned from local storage',
+        );
+        return right(genericEwelinkLoginDE);
+      }
+      // logger.i(
+      //   "Didn't find any Xiaomi Mi in the local DB",
+      // );
+    } catch (e) {
+      logger.e('Local DB hive error while getting Xiaomi Mi vendor: $e');
     }
     return left(const LocalDbFailures.unexpected());
   }
@@ -600,6 +740,16 @@ class HiveRepository extends ILocalDbRepository {
         espHomeLoginDE: loginEntityAbstract,
         vendorCredentialsBoxName: espHomeVendorCredentialsBoxName,
       );
+    } else if (loginEntityAbstract is GenericXiaomiMiLoginDE) {
+      saveXiaomiMiVendorCredentials(
+        xiaomiMiLoginDE: loginEntityAbstract,
+        vendorCredentialsBoxName: xiaomiMiVendorCredentialsBoxName,
+      );
+    } else if (loginEntityAbstract is GenericEwelinkLoginDE) {
+      saveEwelinkVendorCredentials(
+        ewelinkLoginDE: loginEntityAbstract,
+        vendorCredentialsBoxName: ewelinkVendorCredentialsBoxName,
+      );
     } else {
       logger.e(
         'Please implement save function for this login type '
@@ -743,6 +893,79 @@ class HiveRepository extends ILocalDbRepository {
     return right(unit);
   }
 
+  Future<Either<LocalDbFailures, Unit>> saveXiaomiMiVendorCredentials({
+    required GenericXiaomiMiLoginDE xiaomiMiLoginDE,
+    required String vendorCredentialsBoxName,
+  }) async {
+    try {
+      final Box<XiaomiMiVendorCredentialsHiveModel>
+          xiaomiMiVendorCredentialsBox =
+          await Hive.openBox<XiaomiMiVendorCredentialsHiveModel>(
+        vendorCredentialsBoxName,
+      );
+
+      final XiaomiMiVendorCredentialsHiveModel xiaomiMiVendorCredentialsModel =
+          XiaomiMiVendorCredentialsHiveModel()
+            ..senderUniqueId = xiaomiMiLoginDE.senderUniqueId.getOrCrash()
+            ..xiaomiMiAccountEmail =
+                xiaomiMiLoginDE.xiaomiMiAccountEmail.getOrCrash()
+            ..xiaomiMiAccountPass =
+                xiaomiMiLoginDE.xiaomiMiAccountPass.getOrCrash();
+
+      if (xiaomiMiVendorCredentialsBox.isNotEmpty) {
+        await xiaomiMiVendorCredentialsBox.putAt(
+            0, xiaomiMiVendorCredentialsModel);
+      } else {
+        xiaomiMiVendorCredentialsBox.add(xiaomiMiVendorCredentialsModel);
+      }
+
+      await xiaomiMiVendorCredentialsBox.close();
+      logger.i(
+        'Xiaomi Mi vendor credentials saved to local storage',
+      );
+    } catch (e) {
+      logger.e('Error saving Xiaomi Mi vendor credentials to local storage');
+      return left(const LocalDbFailures.unexpected());
+    }
+    return right(unit);
+  }
+
+  Future<Either<LocalDbFailures, Unit>> saveEwelinkVendorCredentials({
+    required GenericEwelinkLoginDE ewelinkLoginDE,
+    required String vendorCredentialsBoxName,
+  }) async {
+    try {
+      final Box<EwelinkVendorCredentialsHiveModel> ewelinkVendorCredentialsBox =
+          await Hive.openBox<EwelinkVendorCredentialsHiveModel>(
+        vendorCredentialsBoxName,
+      );
+
+      final EwelinkVendorCredentialsHiveModel ewelinkVendorCredentialsModel =
+          EwelinkVendorCredentialsHiveModel()
+            ..senderUniqueId = ewelinkLoginDE.senderUniqueId.getOrCrash()
+            ..ewelinkAccountEmail =
+                ewelinkLoginDE.ewelinkAccountEmail.getOrCrash()
+            ..ewelinkAccountPass =
+                ewelinkLoginDE.ewelinkAccountPass.getOrCrash();
+
+      if (ewelinkVendorCredentialsBox.isNotEmpty) {
+        await ewelinkVendorCredentialsBox.putAt(
+            0, ewelinkVendorCredentialsModel);
+      } else {
+        ewelinkVendorCredentialsBox.add(ewelinkVendorCredentialsModel);
+      }
+
+      await ewelinkVendorCredentialsBox.close();
+      logger.i(
+        'EweLink vendor credentials saved to local storage',
+      );
+    } catch (e) {
+      logger.e('Error saving EweLink vendor credentials to local storage');
+      return left(const LocalDbFailures.unexpected());
+    }
+    return right(unit);
+  }
+
   Future<void> deleteAllSavedRooms() async {
     await saveRoomsToDb(roomsList: []);
   }
@@ -770,7 +993,7 @@ class HiveRepository extends ILocalDbRepository {
         scenes.add(
           sceneEntity.copyWith(
             entityStateGRPC: SceneCbjDeviceStateGRPC(
-              DeviceStateGRPC.waitingInComp.toString(),
+              EntityStateGRPC.waitingInComp.toString(),
             ),
           ),
         );
@@ -804,7 +1027,7 @@ class HiveRepository extends ILocalDbRepository {
         routines.add(
           routineEntity.copyWith(
             entityStateGRPC: RoutineCbjDeviceStateGRPC(
-              DeviceStateGRPC.waitingInComp.toString(),
+              EntityStateGRPC.waitingInComp.toString(),
             ),
           ),
         );
@@ -838,7 +1061,7 @@ class HiveRepository extends ILocalDbRepository {
         bindings.add(
           bindingEntity.copyWith(
             entityStateGRPC: BindingCbjDeviceStateGRPC(
-              DeviceStateGRPC.waitingInComp.toString(),
+              EntityStateGRPC.waitingInComp.toString(),
             ),
           ),
         );

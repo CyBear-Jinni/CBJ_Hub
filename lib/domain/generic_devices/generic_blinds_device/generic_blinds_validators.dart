@@ -11,8 +11,8 @@ Either<CoreFailure<String>, String> validateGenericBlindsStateNotEmpty(
 /// Return all the valid actions for blinds
 List<String> blindsAllValidActions() {
   return [
-    DeviceActions.moveUp.toString(),
-    DeviceActions.stop.toString(),
-    DeviceActions.moveDown.toString(),
+    EntityActions.moveUp.toString(),
+    EntityActions.stop.toString(),
+    EntityActions.moveDown.toString(),
   ];
 }

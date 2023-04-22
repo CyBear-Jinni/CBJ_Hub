@@ -62,13 +62,13 @@ class ShellyRelaySwitchEntity extends GenericSwitchDE {
 
     try {
       if (newEntity.switchState!.getOrCrash() != switchState!.getOrCrash() ||
-          entityStateGRPC.getOrCrash() != DeviceStateGRPC.ack.toString()) {
-        final DeviceActions? actionToPreform =
+          entityStateGRPC.getOrCrash() != EntityStateGRPC.ack.toString()) {
+        final EntityActions? actionToPreform =
             EnumHelperCbj.stringToDeviceAction(
           newEntity.switchState!.getOrCrash(),
         );
 
-        if (actionToPreform == DeviceActions.on) {
+        if (actionToPreform == EntityActions.on) {
           (await turnOnSwitch()).fold(
             (l) {
               logger.e('Error turning Shelly switch on\n$l');
@@ -78,7 +78,7 @@ class ShellyRelaySwitchEntity extends GenericSwitchDE {
               logger.i('Shelly switch turn on success');
             },
           );
-        } else if (actionToPreform == DeviceActions.off) {
+        } else if (actionToPreform == EntityActions.off) {
           (await turnOffSwitch()).fold(
             (l) {
               logger.e('Error turning Shelly off\n$l');
@@ -94,13 +94,13 @@ class ShellyRelaySwitchEntity extends GenericSwitchDE {
           );
         }
       }
-      entityStateGRPC = EntityState(DeviceStateGRPC.ack.toString());
+      entityStateGRPC = EntityState(EntityStateGRPC.ack.toString());
       // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
       //   entityFromTheHub: this,
       // );
       return right(unit);
     } catch (e) {
-      entityStateGRPC = EntityState(DeviceStateGRPC.newStateFailed.toString());
+      entityStateGRPC = EntityState(EntityStateGRPC.newStateFailed.toString());
       // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
       //   entityFromTheHub: this,
       // );
@@ -110,7 +110,7 @@ class ShellyRelaySwitchEntity extends GenericSwitchDE {
 
   @override
   Future<Either<CoreFailure, Unit>> turnOnSwitch() async {
-    switchState = GenericSwitchSwitchState(DeviceActions.on.toString());
+    switchState = GenericSwitchSwitchState(EntityActions.on.toString());
 
     try {
       logger.v('Turn on Shelly device');
@@ -123,7 +123,7 @@ class ShellyRelaySwitchEntity extends GenericSwitchDE {
 
   @override
   Future<Either<CoreFailure, Unit>> turnOffSwitch() async {
-    switchState = GenericSwitchSwitchState(DeviceActions.off.toString());
+    switchState = GenericSwitchSwitchState(EntityActions.off.toString());
 
     try {
       logger.v('Turn off Shelly device');

@@ -7,7 +7,6 @@ import 'package:cbj_hub/domain/generic_devices/generic_smart_tv/generic_smart_tv
 import 'package:cbj_hub/domain/generic_devices/generic_smart_tv/generic_smart_tv_value_objects.dart';
 import 'package:cbj_hub/domain/mqtt_server/i_mqtt_server_repository.dart';
 import 'package:cbj_hub/infrastructure/devices/google/chromecast_node_red_api/chromecast_node_red_api.dart';
-import 'package:cbj_hub/infrastructure/devices/google/google_device_value_objects.dart';
 import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
 import 'package:cbj_hub/injection.dart';
 import 'package:cbj_hub/utils.dart';
@@ -38,7 +37,6 @@ class ChromeCastEntity extends GenericSmartTvDE {
     required super.lastResponseFromDeviceTimeStamp,
     required super.deviceCbjUniqueId,
     required super.smartTvSwitchState,
-    required this.googlePort,
     super.openUrl,
     super.pausePlayState,
     super.skip,
@@ -51,8 +49,34 @@ class ChromeCastEntity extends GenericSmartTvDE {
     setUpNodeRedApi();
   }
 
-  /// Google communication port 8009 for chromecast
-  GooglePort? googlePort;
+  factory ChromeCastEntity.fromGeneric(GenericSmartTvDE genericDevice) {
+    return ChromeCastEntity(
+      uniqueId: genericDevice.uniqueId,
+      entityUniqueId: genericDevice.entityUniqueId,
+      cbjEntityName: genericDevice.cbjEntityName,
+      entityOriginalName: genericDevice.entityOriginalName,
+      deviceOriginalName: genericDevice.deviceOriginalName,
+      stateMassage: genericDevice.stateMassage,
+      senderDeviceOs: genericDevice.senderDeviceOs,
+      senderDeviceModel: genericDevice.senderDeviceModel,
+      senderId: genericDevice.senderId,
+      compUuid: genericDevice.compUuid,
+      entityStateGRPC: genericDevice.entityStateGRPC,
+      powerConsumption: genericDevice.powerConsumption,
+      deviceUniqueId: genericDevice.deviceUniqueId,
+      devicePort: genericDevice.devicePort,
+      deviceLastKnownIp: genericDevice.deviceLastKnownIp,
+      deviceHostName: genericDevice.deviceHostName,
+      deviceMdns: genericDevice.deviceMdns,
+      devicesMacAddress: genericDevice.devicesMacAddress,
+      entityKey: genericDevice.entityKey,
+      requestTimeStamp: genericDevice.requestTimeStamp,
+      lastResponseFromDeviceTimeStamp:
+          genericDevice.lastResponseFromDeviceTimeStamp,
+      deviceCbjUniqueId: genericDevice.deviceCbjUniqueId,
+      smartTvSwitchState: genericDevice.smartTvSwitchState,
+    );
+  }
 
   DeviceLastKnownIp? lastKnownIp;
 
@@ -86,7 +110,7 @@ class ChromeCastEntity extends GenericSmartTvDE {
       if (newEntity.openUrl?.getOrCrash() != null &&
           (newEntity.openUrl?.getOrCrash() != openUrl?.getOrCrash() &&
               newEntity.entityStateGRPC.getOrCrash() !=
-                  DeviceStateGRPC.ack.toString())) {
+                  EntityStateGRPC.ack.toString())) {
         (await sendUrlToDevice(newEntity.openUrl!.getOrCrash())).fold((l) {
           logger.e('Error opening url on ChromeCast');
           throw l;
@@ -99,7 +123,7 @@ class ChromeCastEntity extends GenericSmartTvDE {
           (newEntity.pausePlayState?.getOrCrash() !=
                   pausePlayState?.getOrCrash() &&
               newEntity.entityStateGRPC.getOrCrash() !=
-                  DeviceStateGRPC.ack.toString())) {
+                  EntityStateGRPC.ack.toString())) {
         (await togglePausePlay(newEntity.pausePlayState!.getOrCrash())).fold(
             (l) {
           logger.e('Error toggle pause or play on ChromeCast');
@@ -109,13 +133,13 @@ class ChromeCastEntity extends GenericSmartTvDE {
         });
       }
 
-      entityStateGRPC = EntityState(DeviceStateGRPC.ack.toString());
+      entityStateGRPC = EntityState(EntityStateGRPC.ack.toString());
       // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
       //   entityFromTheHub: this,
       // );
       return right(unit);
     } catch (e) {
-      entityStateGRPC = EntityState(DeviceStateGRPC.newStateFailed.toString());
+      entityStateGRPC = EntityState(EntityStateGRPC.newStateFailed.toString());
       // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
       //   entityFromTheHub: this,
       // );
@@ -183,17 +207,17 @@ class ChromeCastEntity extends GenericSmartTvDE {
   Future<Either<CoreFailure, Unit>> togglePausePlay(
     String toggleNewState,
   ) async {
-    if (toggleNewState == DeviceActions.pause.toString()) {
+    if (toggleNewState == EntityActions.pause.toString()) {
       return togglePause();
-    } else if (toggleNewState == DeviceActions.play.toString()) {
+    } else if (toggleNewState == EntityActions.play.toString()) {
       return togglePlay();
-    } else if (toggleNewState == DeviceActions.stop.toString()) {
+    } else if (toggleNewState == EntityActions.stop.toString()) {
       return toggleStop();
-    } else if (toggleNewState == DeviceActions.skipPreviousVid.toString()) {
+    } else if (toggleNewState == EntityActions.skipPreviousVid.toString()) {
       return queuePrev();
-    } else if (toggleNewState == DeviceActions.skipNextVid.toString()) {
+    } else if (toggleNewState == EntityActions.skipNextVid.toString()) {
       return queueNext();
-    } else if (toggleNewState == DeviceActions.close.toString()) {
+    } else if (toggleNewState == EntityActions.close.toString()) {
       return closeApp();
     }
     return left(const CoreFailure.unexpected());
@@ -203,7 +227,7 @@ class ChromeCastEntity extends GenericSmartTvDE {
   Future<Either<CoreFailure, Unit>> togglePause() async {
     try {
       pausePlayState =
-          GenericSmartTvPausePlayState(DeviceActions.pause.toString());
+          GenericSmartTvPausePlayState(EntityActions.pause.toString());
 
       final String nodeRedApiBaseTopic =
           getIt<IMqttServerRepository>().getNodeRedApiBaseTopic();
@@ -226,7 +250,7 @@ class ChromeCastEntity extends GenericSmartTvDE {
   Future<Either<CoreFailure, Unit>> togglePlay() async {
     try {
       pausePlayState =
-          GenericSmartTvPausePlayState(DeviceActions.play.toString());
+          GenericSmartTvPausePlayState(EntityActions.play.toString());
 
       final String nodeRedApiBaseTopic =
           getIt<IMqttServerRepository>().getNodeRedApiBaseTopic();
@@ -249,7 +273,7 @@ class ChromeCastEntity extends GenericSmartTvDE {
   Future<Either<CoreFailure, Unit>> toggleStop() async {
     try {
       pausePlayState =
-          GenericSmartTvPausePlayState(DeviceActions.stop.toString());
+          GenericSmartTvPausePlayState(EntityActions.stop.toString());
 
       final String nodeRedApiBaseTopic =
           getIt<IMqttServerRepository>().getNodeRedApiBaseTopic();
@@ -272,7 +296,7 @@ class ChromeCastEntity extends GenericSmartTvDE {
   Future<Either<CoreFailure, Unit>> queuePrev() async {
     try {
       pausePlayState = GenericSmartTvPausePlayState(
-        DeviceActions.skipPreviousVid.toString(),
+        EntityActions.skipPreviousVid.toString(),
       );
 
       final String nodeRedApiBaseTopic =
@@ -296,7 +320,7 @@ class ChromeCastEntity extends GenericSmartTvDE {
   Future<Either<CoreFailure, Unit>> queueNext() async {
     try {
       pausePlayState =
-          GenericSmartTvPausePlayState(DeviceActions.skipNextVid.toString());
+          GenericSmartTvPausePlayState(EntityActions.skipNextVid.toString());
 
       final String nodeRedApiBaseTopic =
           getIt<IMqttServerRepository>().getNodeRedApiBaseTopic();
@@ -319,7 +343,7 @@ class ChromeCastEntity extends GenericSmartTvDE {
   Future<Either<CoreFailure, Unit>> closeApp() async {
     try {
       pausePlayState =
-          GenericSmartTvPausePlayState(DeviceActions.close.toString());
+          GenericSmartTvPausePlayState(EntityActions.close.toString());
 
       final String nodeRedApiBaseTopic =
           getIt<IMqttServerRepository>().getNodeRedApiBaseTopic();

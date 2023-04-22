@@ -4,15 +4,16 @@ import 'package:cbj_hub/domain/generic_devices/abstract_device/core_failures.dar
 import 'package:cbj_hub/domain/generic_devices/abstract_device/device_entity_abstract.dart';
 import 'package:cbj_hub/domain/generic_devices/abstract_device/value_objects_core.dart';
 import 'package:cbj_hub/domain/generic_devices/device_type_enums.dart';
-import 'package:cbj_hub/domain/generic_devices/generic_light_device/generic_light_entity.dart';
-import 'package:cbj_hub/domain/generic_devices/generic_light_device/generic_light_value_objects.dart';
+import 'package:cbj_hub/domain/generic_devices/generic_dimmable_light_device/generic_dimmable_light_entity.dart';
+import 'package:cbj_hub/domain/generic_devices/generic_dimmable_light_device/generic_dimmable_light_value_objects.dart';
 import 'package:cbj_hub/infrastructure/devices/lifx/lifx_connector_conjector.dart';
 import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
+import 'package:cbj_hub/injection.dart';
 import 'package:cbj_hub/utils.dart';
 import 'package:dartz/dartz.dart';
 import 'package:lifx_http_api/lifx_http_api.dart';
 
-class LifxWhiteEntity extends GenericLightDE {
+class LifxWhiteEntity extends GenericDimmableLightDE {
   LifxWhiteEntity({
     required super.uniqueId,
     required super.entityUniqueId,
@@ -37,11 +38,12 @@ class LifxWhiteEntity extends GenericLightDE {
     required super.lastResponseFromDeviceTimeStamp,
     required super.deviceCbjUniqueId,
     required super.lightSwitchState,
+    required super.lightBrightness,
   }) : super(
           deviceVendor: DeviceVendor(VendorsAndServices.lifx.toString()),
         );
 
-  factory LifxWhiteEntity.fromGeneric(GenericLightDE genericDevice) {
+  factory LifxWhiteEntity.fromGeneric(GenericDimmableLightDE genericDevice) {
     return LifxWhiteEntity(
       uniqueId: genericDevice.uniqueId,
       entityUniqueId: genericDevice.entityUniqueId,
@@ -67,6 +69,7 @@ class LifxWhiteEntity extends GenericLightDE {
           genericDevice.lastResponseFromDeviceTimeStamp,
       lightSwitchState: genericDevice.lightSwitchState,
       deviceCbjUniqueId: genericDevice.deviceCbjUniqueId,
+      lightBrightness: genericDevice.lightBrightness,
     );
   }
 
@@ -75,7 +78,7 @@ class LifxWhiteEntity extends GenericLightDE {
   Future<Either<CoreFailure, Unit>> executeDeviceAction({
     required DeviceEntityAbstract newEntity,
   }) async {
-    if (newEntity is! GenericLightDE) {
+    if (newEntity is! GenericDimmableLightDE) {
       return left(
         const CoreFailure.actionExcecuter(
           failedValue: 'Not the correct type',
@@ -86,20 +89,20 @@ class LifxWhiteEntity extends GenericLightDE {
     try {
       if (newEntity.lightSwitchState!.getOrCrash() !=
               lightSwitchState!.getOrCrash() ||
-          entityStateGRPC.getOrCrash() != DeviceStateGRPC.ack.toString()) {
-        final DeviceActions? actionToPreform =
+          entityStateGRPC.getOrCrash() != EntityStateGRPC.ack.toString()) {
+        final EntityActions? actionToPreform =
             EnumHelperCbj.stringToDeviceAction(
           newEntity.lightSwitchState!.getOrCrash(),
         );
 
-        if (actionToPreform == DeviceActions.on) {
+        if (actionToPreform == EntityActions.on) {
           (await turnOnLight()).fold((l) {
             logger.e('Error turning Lifx light on');
             throw l;
           }, (r) {
             logger.i('Lifx light turn on success');
           });
-        } else if (actionToPreform == DeviceActions.off) {
+        } else if (actionToPreform == EntityActions.off) {
           (await turnOffLight()).fold((l) {
             logger.e('Error turning Lifx light off');
             throw l;
@@ -110,13 +113,26 @@ class LifxWhiteEntity extends GenericLightDE {
           logger.w('actionToPreform is not set correctly on Lifx White');
         }
       }
-      entityStateGRPC = EntityState(DeviceStateGRPC.ack.toString());
+
+      if (newEntity.lightBrightness.getOrCrash() !=
+          lightBrightness.getOrCrash()) {
+        (await setBrightness(newEntity.lightBrightness.getOrCrash())).fold(
+          (l) {
+            logger.e('Error changing Lifx brightness\n$l');
+            throw l;
+          },
+          (r) {
+            logger.i('Lifx changed brightness successfully');
+          },
+        );
+      }
+      entityStateGRPC = EntityState(EntityStateGRPC.ack.toString());
       // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
       //   entityFromTheHub: this,
       // );
       return right(unit);
     } catch (e) {
-      entityStateGRPC = EntityState(DeviceStateGRPC.newStateFailed.toString());
+      entityStateGRPC = EntityState(EntityStateGRPC.newStateFailed.toString());
       // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
       //   entityFromTheHub: this,
       // );
@@ -126,14 +142,15 @@ class LifxWhiteEntity extends GenericLightDE {
 
   @override
   Future<Either<CoreFailure, Unit>> turnOnLight() async {
-    lightSwitchState = GenericLightSwitchState(DeviceActions.on.toString());
+    lightSwitchState =
+        GenericDimmableLightSwitchState(EntityActions.on.toString());
     try {
       final setStateBodyResponse =
-          await LifxConnectorConjector.lifxClient?.setState(
-        Selector.id(entityUniqueId.getOrCrash()),
-        power: 'on',
-        fast: true,
-      );
+          await getIt<LifxConnectorConjector>().lifxClient?.setState(
+                Selector.id(entityUniqueId.getOrCrash()),
+                power: 'on',
+                fast: true,
+              );
       if (setStateBodyResponse == null) {
         throw 'setStateBodyResponse is null';
       }
@@ -149,15 +166,39 @@ class LifxWhiteEntity extends GenericLightDE {
 
   @override
   Future<Either<CoreFailure, Unit>> turnOffLight() async {
-    lightSwitchState = GenericLightSwitchState(DeviceActions.off.toString());
+    lightSwitchState =
+        GenericDimmableLightSwitchState(EntityActions.off.toString());
 
     try {
       final setStateBodyResponse =
-          await LifxConnectorConjector.lifxClient?.setState(
-        Selector.id(entityUniqueId.getOrCrash()),
-        power: 'off',
-        fast: true,
-      );
+          await getIt<LifxConnectorConjector>().lifxClient?.setState(
+                Selector.id(entityUniqueId.getOrCrash()),
+                power: 'off',
+                fast: true,
+              );
+      if (setStateBodyResponse == null) {
+        throw 'setStateBodyResponse is null';
+      }
+      return right(unit);
+    } catch (e) {
+      // As we are using the fast = true the response is always
+      // LifxHttpException Error
+      return right(unit);
+      // return left(const CoreFailure.unexpected());
+    }
+  }
+
+  @override
+  Future<Either<CoreFailure, Unit>> setBrightness(String brightness) async {
+    lightBrightness = GenericDimmableLightBrightness(brightness);
+
+    try {
+      final setStateBodyResponse =
+          await getIt<LifxConnectorConjector>().lifxClient?.setState(
+                Selector.id(entityUniqueId.getOrCrash()),
+                fast: true,
+                brightness: lightBrightness.backToDecimalPointBrightness(),
+              );
       if (setStateBodyResponse == null) {
         throw 'setStateBodyResponse is null';
       }

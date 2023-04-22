@@ -11,8 +11,8 @@ Either<CoreFailure<String>, String> validateGenericSmartComputerStateNotEmpty(
 /// Return all the valid actions for blinds
 List<String> smartComputerAllValidActions() {
   return [
-    DeviceActions.suspend.toString(),
-    DeviceActions.shutdown.toString(),
-    DeviceActions.itIsFalse.toString(),
+    EntityActions.suspend.toString(),
+    EntityActions.shutdown.toString(),
+    EntityActions.itIsFalse.toString(),
   ];
 }

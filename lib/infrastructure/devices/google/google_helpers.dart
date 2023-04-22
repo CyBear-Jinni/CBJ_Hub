@@ -2,7 +2,6 @@ import 'package:cbj_hub/domain/generic_devices/abstract_device/device_entity_abs
 import 'package:cbj_hub/domain/generic_devices/abstract_device/value_objects_core.dart';
 import 'package:cbj_hub/domain/generic_devices/generic_smart_tv/generic_smart_tv_value_objects.dart';
 import 'package:cbj_hub/infrastructure/devices/google/chrome_cast/chrome_cast_entity.dart';
-import 'package:cbj_hub/infrastructure/devices/google/google_device_value_objects.dart';
 import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
 
 class GoogleHelpers {
@@ -26,7 +25,7 @@ class GoogleHelpers {
       cbjEntityName: CbjEntityName('Chromecast'),
       entityOriginalName: EntityOriginalName('Chromecast'),
       deviceOriginalName: DeviceOriginalName('Chromecast'),
-      entityStateGRPC: EntityState(DeviceStateGRPC.ack.toString()),
+      entityStateGRPC: EntityState(EntityStateGRPC.ack.toString()),
       senderDeviceOs: DeviceSenderDeviceOs('Android'),
       senderDeviceModel: DeviceSenderDeviceModel('1SE'),
       senderId: DeviceSenderId(),
@@ -35,12 +34,11 @@ class GoogleHelpers {
       lastKnownIp: DeviceLastKnownIp(ip),
       stateMassage: DeviceStateMassage('Hello World'),
       powerConsumption: DevicePowerConsumption('0'),
-      googlePort: GooglePort(port),
       smartTvSwitchState: GenericSmartTvSwitchState(
-        DeviceActions.actionNotSupported.toString(),
+        EntityActions.actionNotSupported.toString(),
       ),
       deviceUniqueId: DeviceUniqueId('0'),
-      devicePort: DevicePort('0'),
+      devicePort: DevicePort(port),
       deviceLastKnownIp: DeviceLastKnownIp('0'),
       deviceHostName: DeviceHostName('0'),
       deviceMdns: DeviceMdns('0'),

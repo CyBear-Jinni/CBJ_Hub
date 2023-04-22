@@ -16,7 +16,8 @@ class WizConnectorConjector implements AbstractCompanyConnectorConjector {
     return 'Success';
   }
 
-  static Map<String, DeviceEntityAbstract> companyDevices = {};
+  @override
+  Map<String, DeviceEntityAbstract> companyDevices = {};
 
   Future<void> addNewDeviceByHostInfo({
     required ActiveHost activeHost,
@@ -126,10 +127,12 @@ class WizConnectorConjector implements AbstractCompanyConnectorConjector {
     }
   }
 
+  @override
   Future<void> manageHubRequestsForDevice(
     DeviceEntityAbstract wizDE,
   ) async {
-    final DeviceEntityAbstract? device = companyDevices[wizDE.getDeviceId()];
+    final DeviceEntityAbstract? device =
+        companyDevices[wizDE.entityUniqueId.getOrCrash()];
 
     if (device is WizWhiteEntity) {
       device.executeDeviceAction(newEntity: wizDE);

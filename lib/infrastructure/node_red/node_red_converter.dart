@@ -65,7 +65,7 @@ class NodeRedConverter {
       image: SceneCbjBackgroundImage(null),
       lastDateOfExecute: SceneCbjLastDateOfExecute(null),
       entityStateGRPC: SceneCbjDeviceStateGRPC(
-        DeviceStateGRPC.addingNewScene.toString(),
+        EntityStateGRPC.addingNewScene.toString(),
       ),
       senderDeviceModel: SceneCbjSenderDeviceModel(null),
       senderDeviceOs: SceneCbjSenderDeviceOs(null),
@@ -120,7 +120,7 @@ class NodeRedConverter {
       image: RoutineCbjBackgroundImage(null),
       lastDateOfExecute: RoutineCbjLastDateOfExecute(null),
       entityStateGRPC: RoutineCbjDeviceStateGRPC(
-        DeviceStateGRPC.addingNewRoutine.toString(),
+        EntityStateGRPC.addingNewRoutine.toString(),
       ),
       senderDeviceModel: RoutineCbjSenderDeviceModel(null),
       senderDeviceOs: RoutineCbjSenderDeviceOs(null),
@@ -176,7 +176,7 @@ class NodeRedConverter {
       image: BindingCbjBackgroundImage(null),
       lastDateOfExecute: BindingCbjLastDateOfExecute(null),
       entityStateGRPC: BindingCbjDeviceStateGRPC(
-        DeviceStateGRPC.addingNewBinding.toString(),
+        EntityStateGRPC.addingNewBinding.toString(),
       ),
       senderDeviceModel: BindingCbjSenderDeviceModel(null),
       senderDeviceOs: BindingCbjSenderDeviceOs(null),

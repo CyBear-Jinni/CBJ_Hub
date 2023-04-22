@@ -38,7 +38,7 @@ class GenericBlindsDE extends DeviceEntityAbstract {
     required super.deviceCbjUniqueId,
     required this.blindsSwitchState,
   }) : super(
-          entityTypes: EntityType(DeviceTypes.blinds.toString()),
+          entityTypes: EntityType(EntityTypes.blinds.toString()),
         );
 
   /// Empty instance of GenericBlindsEntity
@@ -67,7 +67,7 @@ class GenericBlindsDE extends DeviceEntityAbstract {
         lastResponseFromDeviceTimeStamp: LastResponseFromDeviceTimeStamp(''),
         deviceCbjUniqueId: CoreUniqueId(),
         blindsSwitchState:
-            GenericBlindsSwitchState(DeviceActions.off.toString()),
+            GenericBlindsSwitchState(EntityActions.off.toString()),
       );
 
   /// State of the blinds on/off

@@ -38,7 +38,7 @@ class GenericBoilerDE extends DeviceEntityAbstract {
     required super.deviceCbjUniqueId,
     required this.boilerSwitchState,
   }) : super(
-          entityTypes: EntityType(DeviceTypes.boiler.toString()),
+          entityTypes: EntityType(EntityTypes.boiler.toString()),
         );
 
   /// Empty instance of GenericBoilerEntity
@@ -67,7 +67,7 @@ class GenericBoilerDE extends DeviceEntityAbstract {
         lastResponseFromDeviceTimeStamp: LastResponseFromDeviceTimeStamp(''),
         deviceCbjUniqueId: CoreUniqueId(),
         boilerSwitchState:
-            GenericBoilerSwitchState(DeviceActions.off.toString()),
+            GenericBoilerSwitchState(EntityActions.off.toString()),
       );
 
   /// State of the boiler on/off

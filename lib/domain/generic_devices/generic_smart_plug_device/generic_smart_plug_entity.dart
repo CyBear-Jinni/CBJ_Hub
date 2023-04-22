@@ -38,7 +38,7 @@ class GenericSmartPlugDE extends DeviceEntityAbstract {
     required super.deviceCbjUniqueId,
     required this.smartPlugState,
   }) : super(
-          entityTypes: EntityType(DeviceTypes.smartPlug.toString()),
+          entityTypes: EntityType(EntityTypes.smartPlug.toString()),
         );
 
   /// Empty instance of GenericSmartPlugEntity
@@ -66,7 +66,7 @@ class GenericSmartPlugDE extends DeviceEntityAbstract {
         requestTimeStamp: RequestTimeStamp(''),
         lastResponseFromDeviceTimeStamp: LastResponseFromDeviceTimeStamp(''),
         deviceCbjUniqueId: CoreUniqueId(),
-        smartPlugState: GenericSmartPlugState(DeviceActions.off.toString()),
+        smartPlugState: GenericSmartPlugState(EntityActions.off.toString()),
       );
 
   /// State of the smartPlug on/off

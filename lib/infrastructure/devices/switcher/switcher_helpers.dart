@@ -25,16 +25,16 @@ class SwitcherHelpers {
 
     if (switcherDevice.deviceType == SwitcherDevicesTypes.switcherRunner ||
         switcherDevice.deviceType == SwitcherDevicesTypes.switcherRunnerMini) {
-      DeviceActions deviceActions = DeviceActions.actionNotSupported;
+      EntityActions deviceActions = EntityActions.actionNotSupported;
 
       if (switcherDevice.deviceDirection == SwitcherDeviceDirection.up) {
-        deviceActions = DeviceActions.moveUp;
+        deviceActions = EntityActions.moveUp;
       } else if (switcherDevice.deviceDirection ==
           SwitcherDeviceDirection.stop) {
-        deviceActions = DeviceActions.stop;
+        deviceActions = EntityActions.stop;
       } else if (switcherDevice.deviceDirection ==
           SwitcherDeviceDirection.down) {
-        deviceActions = DeviceActions.moveDown;
+        deviceActions = EntityActions.moveDown;
       }
 
       final SwitcherRunnerEntity switcherRunnerDe = SwitcherRunnerEntity(
@@ -43,7 +43,7 @@ class SwitcherHelpers {
         cbjEntityName: CbjEntityName(switcherDevice.switcherName),
         entityOriginalName: EntityOriginalName(switcherDevice.switcherName),
         deviceOriginalName: DeviceOriginalName(switcherDevice.switcherName),
-        entityStateGRPC: EntityState(DeviceStateGRPC.ack.toString()),
+        entityStateGRPC: EntityState(EntityStateGRPC.ack.toString()),
         senderDeviceOs: DeviceSenderDeviceOs('switcher'),
         senderDeviceModel:
             DeviceSenderDeviceModel(switcherDevice.deviceType.toString()),
@@ -73,11 +73,11 @@ class SwitcherHelpers {
         switcherDevice.deviceType == SwitcherDevicesTypes.switcherV2Esp ||
         switcherDevice.deviceType == SwitcherDevicesTypes.switcherV2qualcomm ||
         switcherDevice.deviceType == SwitcherDevicesTypes.switcherV4) {
-      DeviceActions deviceActions = DeviceActions.actionNotSupported;
+      EntityActions deviceActions = EntityActions.actionNotSupported;
       if (switcherDevice.deviceState == SwitcherDeviceState.on) {
-        deviceActions = DeviceActions.on;
+        deviceActions = EntityActions.on;
       } else if (switcherDevice.deviceState == SwitcherDeviceState.off) {
-        deviceActions = DeviceActions.off;
+        deviceActions = EntityActions.off;
       }
       final SwitcherV2Entity switcherV2De = SwitcherV2Entity(
         uniqueId: uniqueDeviceIdTemp,
@@ -85,7 +85,7 @@ class SwitcherHelpers {
         cbjEntityName: CbjEntityName(switcherDevice.switcherName),
         entityOriginalName: EntityOriginalName(switcherDevice.switcherName),
         deviceOriginalName: DeviceOriginalName(switcherDevice.switcherName),
-        entityStateGRPC: EntityState(DeviceStateGRPC.ack.toString()),
+        entityStateGRPC: EntityState(EntityStateGRPC.ack.toString()),
         senderDeviceOs: DeviceSenderDeviceOs('switcher'),
         senderDeviceModel:
             DeviceSenderDeviceModel(switcherDevice.deviceType.toString()),
@@ -110,11 +110,11 @@ class SwitcherHelpers {
       return switcherV2De;
     } else if (switcherDevice.deviceType ==
         SwitcherDevicesTypes.switcherPowerPlug) {
-      DeviceActions deviceActions = DeviceActions.actionNotSupported;
+      EntityActions deviceActions = EntityActions.actionNotSupported;
       if (switcherDevice.deviceState == SwitcherDeviceState.on) {
-        deviceActions = DeviceActions.on;
+        deviceActions = EntityActions.on;
       } else if (switcherDevice.deviceState == SwitcherDeviceState.off) {
-        deviceActions = DeviceActions.off;
+        deviceActions = EntityActions.off;
       }
       final SwitcherSmartPlugEntity switcherSmartPlugDe =
           SwitcherSmartPlugEntity(
@@ -123,7 +123,7 @@ class SwitcherHelpers {
         cbjEntityName: CbjEntityName(switcherDevice.switcherName),
         entityOriginalName: EntityOriginalName(switcherDevice.switcherName),
         deviceOriginalName: DeviceOriginalName(switcherDevice.switcherName),
-        entityStateGRPC: EntityState(DeviceStateGRPC.ack.toString()),
+        entityStateGRPC: EntityState(EntityStateGRPC.ack.toString()),
         senderDeviceOs: DeviceSenderDeviceOs('switcher'),
         senderDeviceModel:
             DeviceSenderDeviceModel(switcherDevice.deviceType.toString()),

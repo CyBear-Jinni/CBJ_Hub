@@ -105,15 +105,15 @@ class SwitcherV2Entity extends GenericBoilerDE {
 
     try {
       if (newEntity.entityStateGRPC.getOrCrash() !=
-          DeviceStateGRPC.ack.toString()) {
+          EntityStateGRPC.ack.toString()) {
         if (newEntity.boilerSwitchState!.getOrCrash() !=
             boilerSwitchState!.getOrCrash()) {
-          final DeviceActions? actionToPreform =
+          final EntityActions? actionToPreform =
               EnumHelperCbj.stringToDeviceAction(
             newEntity.boilerSwitchState!.getOrCrash(),
           );
 
-          if (actionToPreform == DeviceActions.on) {
+          if (actionToPreform == EntityActions.on) {
             (await turnOnBoiler()).fold(
               (l) {
                 logger.e('Error turning boiler on');
@@ -123,7 +123,7 @@ class SwitcherV2Entity extends GenericBoilerDE {
                 logger.i('Boiler turn on success');
               },
             );
-          } else if (actionToPreform == DeviceActions.off) {
+          } else if (actionToPreform == EntityActions.off) {
             (await turnOffBoiler()).fold(
               (l) {
                 logger.e('Error turning boiler off');
@@ -137,7 +137,7 @@ class SwitcherV2Entity extends GenericBoilerDE {
             logger.e('actionToPreform is not set correctly on Switcher V2');
           }
         }
-        entityStateGRPC = EntityState(DeviceStateGRPC.ack.toString());
+        entityStateGRPC = EntityState(EntityStateGRPC.ack.toString());
 
         getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
           entityFromTheHub: this,
@@ -145,7 +145,7 @@ class SwitcherV2Entity extends GenericBoilerDE {
       }
       return right(unit);
     } catch (e) {
-      entityStateGRPC = EntityState(DeviceStateGRPC.newStateFailed.toString());
+      entityStateGRPC = EntityState(EntityStateGRPC.newStateFailed.toString());
 
       getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
         entityFromTheHub: this,
@@ -157,7 +157,7 @@ class SwitcherV2Entity extends GenericBoilerDE {
 
   @override
   Future<Either<CoreFailure, Unit>> turnOnBoiler() async {
-    boilerSwitchState = GenericBoilerSwitchState(DeviceActions.on.toString());
+    boilerSwitchState = GenericBoilerSwitchState(EntityActions.on.toString());
 
     try {
       await switcherObject!.turnOn();
@@ -172,7 +172,7 @@ class SwitcherV2Entity extends GenericBoilerDE {
 
   @override
   Future<Either<CoreFailure, Unit>> turnOffBoiler() async {
-    boilerSwitchState = GenericBoilerSwitchState(DeviceActions.off.toString());
+    boilerSwitchState = GenericBoilerSwitchState(EntityActions.off.toString());
 
     try {
       await switcherObject!.turnOff();

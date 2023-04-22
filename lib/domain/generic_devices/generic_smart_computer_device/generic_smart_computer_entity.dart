@@ -39,7 +39,7 @@ class GenericSmartComputerDE extends DeviceEntityAbstract {
     required this.smartComputerSuspendState,
     required this.smartComputerShutDownState,
   }) : super(
-          entityTypes: EntityType(DeviceTypes.smartComputer.toString()),
+          entityTypes: EntityType(EntityTypes.smartComputer.toString()),
         );
 
   /// Empty instance of GenericSmartComputerEntity
@@ -68,10 +68,10 @@ class GenericSmartComputerDE extends DeviceEntityAbstract {
         lastResponseFromDeviceTimeStamp: LastResponseFromDeviceTimeStamp(''),
         deviceCbjUniqueId: CoreUniqueId(),
         smartComputerSuspendState: GenericSmartComputerSuspendState(
-          DeviceActions.itIsFalse.toString(),
+          EntityActions.itIsFalse.toString(),
         ),
         smartComputerShutDownState: GenericSmartComputerShutdownState(
-          DeviceActions.itIsFalse.toString(),
+          EntityActions.itIsFalse.toString(),
         ),
       );
 

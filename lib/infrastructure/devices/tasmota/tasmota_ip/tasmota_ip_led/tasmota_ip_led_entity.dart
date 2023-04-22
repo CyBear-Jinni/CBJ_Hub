@@ -51,6 +51,35 @@ class TasmotaIpLedEntity extends GenericLightDE {
           deviceVendor: DeviceVendor(VendorsAndServices.tasmota.toString()),
         );
 
+  factory TasmotaIpLedEntity.fromGeneric(GenericLightDE genericDevice) {
+    return TasmotaIpLedEntity(
+      uniqueId: genericDevice.uniqueId,
+      entityUniqueId: genericDevice.entityUniqueId,
+      cbjEntityName: genericDevice.cbjEntityName,
+      entityOriginalName: genericDevice.entityOriginalName,
+      deviceOriginalName: genericDevice.deviceOriginalName,
+      stateMassage: genericDevice.stateMassage,
+      senderDeviceOs: genericDevice.senderDeviceOs,
+      senderDeviceModel: genericDevice.senderDeviceModel,
+      senderId: genericDevice.senderId,
+      compUuid: genericDevice.compUuid,
+      entityStateGRPC: genericDevice.entityStateGRPC,
+      powerConsumption: genericDevice.powerConsumption,
+      deviceUniqueId: genericDevice.deviceUniqueId,
+      devicePort: genericDevice.devicePort,
+      deviceLastKnownIp: genericDevice.deviceLastKnownIp,
+      deviceHostName: genericDevice.deviceHostName,
+      deviceMdns: genericDevice.deviceMdns,
+      devicesMacAddress: genericDevice.devicesMacAddress,
+      entityKey: genericDevice.entityKey,
+      requestTimeStamp: genericDevice.requestTimeStamp,
+      lastResponseFromDeviceTimeStamp:
+          genericDevice.lastResponseFromDeviceTimeStamp,
+      lightSwitchState: genericDevice.lightSwitchState,
+      deviceCbjUniqueId: genericDevice.deviceCbjUniqueId,
+    );
+  }
+
   /// Please override the following methods
   @override
   Future<Either<CoreFailure, Unit>> executeDeviceAction({
@@ -67,13 +96,13 @@ class TasmotaIpLedEntity extends GenericLightDE {
     try {
       if (newEntity.lightSwitchState!.getOrCrash() !=
               lightSwitchState!.getOrCrash() ||
-          entityStateGRPC.getOrCrash() != DeviceStateGRPC.ack.toString()) {
-        final DeviceActions? actionToPreform =
+          entityStateGRPC.getOrCrash() != EntityStateGRPC.ack.toString()) {
+        final EntityActions? actionToPreform =
             EnumHelperCbj.stringToDeviceAction(
           newEntity.lightSwitchState!.getOrCrash(),
         );
 
-        if (actionToPreform == DeviceActions.on) {
+        if (actionToPreform == EntityActions.on) {
           (await turnOnLight()).fold(
             (l) {
               logger.e('Error turning TasmotaIp light on');
@@ -83,7 +112,7 @@ class TasmotaIpLedEntity extends GenericLightDE {
               logger.i('TasmotaIp light turn on success');
             },
           );
-        } else if (actionToPreform == DeviceActions.off) {
+        } else if (actionToPreform == EntityActions.off) {
           (await turnOffLight()).fold(
             (l) {
               logger.e('Error turning TasmotaIp light off');
@@ -97,13 +126,13 @@ class TasmotaIpLedEntity extends GenericLightDE {
           logger.e('actionToPreform is not set correctly on TasmotaIp Led');
         }
       }
-      entityStateGRPC = EntityState(DeviceStateGRPC.ack.toString());
+      entityStateGRPC = EntityState(EntityStateGRPC.ack.toString());
       // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
       //   entityFromTheHub: this,
       // );
       return right(unit);
     } catch (e) {
-      entityStateGRPC = EntityState(DeviceStateGRPC.newStateFailed.toString());
+      entityStateGRPC = EntityState(EntityStateGRPC.newStateFailed.toString());
       // getIt<IMqttServerRepository>().postSmartDeviceToAppMqtt(
       //   entityFromTheHub: this,
       // );
@@ -113,7 +142,7 @@ class TasmotaIpLedEntity extends GenericLightDE {
 
   @override
   Future<Either<CoreFailure, Unit>> turnOnLight() async {
-    lightSwitchState = GenericLightSwitchState(DeviceActions.on.toString());
+    lightSwitchState = GenericLightSwitchState(EntityActions.on.toString());
 
     try {
       getIt<IMqttServerRepository>().publishMessage(
@@ -128,7 +157,7 @@ class TasmotaIpLedEntity extends GenericLightDE {
 
   @override
   Future<Either<CoreFailure, Unit>> turnOffLight() async {
-    lightSwitchState = GenericLightSwitchState(DeviceActions.off.toString());
+    lightSwitchState = GenericLightSwitchState(EntityActions.off.toString());
 
     try {
       getIt<IMqttServerRepository>().publishMessage(

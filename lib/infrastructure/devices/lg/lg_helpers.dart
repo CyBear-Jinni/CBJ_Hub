@@ -22,7 +22,7 @@ class LgHelpers {
     //   uniqueId: uniqueDeviceIdTemp,
     //   entityUniqueId: EntityUniqueId.fromUniqueString(mDnsName),
     //   cbjEntityName: CbjEntityName('LG TV'),
-    //   entityStateGRPC: EntityState(DeviceStateGRPC.ack.toString()),
+    //   entityStateGRPC: EntityState(EntityStateGRPC.ack.toString()),
     //   senderDeviceOs: DeviceSenderDeviceOs('WebOs'),
     //   senderDeviceModel: DeviceSenderDeviceModel('UP7550PVG'),
     //   senderId: DeviceSenderId(),
@@ -33,7 +33,7 @@ class LgHelpers {
     //   powerConsumption: DevicePowerConsumption('0'),
     //   port: DevicePort(port),
     //   smartTvSwitchState: GenericSmartTvSwitchState(
-    //     DeviceActions.actionNotSupported.toString(),
+    //     EntityActions.actionNotSupported.toString(),
     //   ),
     // );
     //
