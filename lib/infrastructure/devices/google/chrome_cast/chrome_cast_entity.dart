@@ -86,6 +86,10 @@ class ChromeCastEntity extends GenericSmartTvDE {
 
   Future<void> setUpNodeRedApi() async {
     // TODO: add check to add  uniqueId + action as flow in node read only if missing
+    if (lastKnownIp == null) {
+      logger.w('Chromecast last known ip is null');
+      return;
+    }
     chromecastNodeRedApi = ChromecastNodeRedApi();
     chromecastNodeRedApi.setNewYoutubeVideoNodes(
       uniqueId.getOrCrash(),
