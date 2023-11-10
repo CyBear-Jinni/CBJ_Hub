@@ -1,19 +1,17 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:cbj_hub/domain/app_communication/i_app_communication_repository.dart';
-import 'package:cbj_hub/domain/generic_devices/abstract_device/device_entity_abstract.dart';
-import 'package:cbj_hub/domain/mqtt_server/i_mqtt_server_repository.dart';
-import 'package:cbj_hub/domain/room/room_entity.dart';
-import 'package:cbj_hub/domain/room/value_objects_room.dart';
-import 'package:cbj_hub/domain/rooms/i_saved_rooms_repo.dart';
-import 'package:cbj_hub/domain/saved_devices/i_saved_devices_repo.dart';
 import 'package:cbj_hub/infrastructure/app_communication/app_communication_repository.dart';
-import 'package:cbj_hub/infrastructure/devices/companies_connector_conjector.dart';
-import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
-import 'package:cbj_hub/infrastructure/generic_devices/abstract_device/device_entity_dto_abstract.dart';
-import 'package:cbj_hub/injection.dart';
-import 'package:cbj_hub/utils.dart';
+import 'package:cbj_integrations_controller/domain/mqtt_server/i_mqtt_server_repository.dart';
+import 'package:cbj_integrations_controller/domain/room/room_entity.dart';
+import 'package:cbj_integrations_controller/domain/room/value_objects_room.dart';
+import 'package:cbj_integrations_controller/domain/rooms/i_saved_rooms_repo.dart';
+import 'package:cbj_integrations_controller/domain/saved_devices/i_saved_devices_repo.dart';
+import 'package:cbj_integrations_controller/infrastructure/devices/companies_connector_conjector.dart';
+import 'package:cbj_integrations_controller/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
+import 'package:cbj_integrations_controller/infrastructure/generic_devices/abstract_device/device_entity_abstract.dart';
+import 'package:cbj_integrations_controller/infrastructure/generic_devices/abstract_device/device_entity_dto_abstract.dart';
+import 'package:cbj_integrations_controller/utils.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -24,7 +22,7 @@ class Connector {
         /// Data will probably arrive to the function
         /// updateAllDevicesReposWithDeviceChanges where we listen to request from
         /// the mqtt with this path
-        await getIt<IMqttServerRepository>()
+        await IMqttServerRepository.instance
             .publishDeviceEntity(entityForMqtt.value as DeviceEntityAbstract);
       } else if (entityForMqtt.value is RoomEntity) {
         // TODO: Create MQTT support for rooms
@@ -34,7 +32,7 @@ class Connector {
       }
     });
 
-    final ISavedDevicesRepo savedDevicesRepo = getIt<ISavedDevicesRepo>();
+    final ISavedDevicesRepo savedDevicesRepo = ISavedDevicesRepo.instance;
 
     final Map<String, DeviceEntityAbstract> allDevices =
         await savedDevicesRepo.getAllDevices();
@@ -48,13 +46,12 @@ class Connector {
     }
 
     Future.delayed(const Duration(milliseconds: 3000)).whenComplete(() {
-      // final IAppCommunicationRepository appCommunication =
-      getIt<IAppCommunicationRepository>();
+      AppCommunicationRepository();
     });
 
-    getIt<IMqttServerRepository>().allHubDevicesSubscriptions();
+    IMqttServerRepository.instance.allHubDevicesSubscriptions();
 
-    getIt<IMqttServerRepository>().sendToApp();
+    IMqttServerRepository.instance.sendToApp();
 
     CompaniesConnectorConjector.updateAllDevicesReposWithDeviceChanges(
       ConnectorDevicesStreamFromMqtt.fromMqttStream,
@@ -68,7 +65,7 @@ class Connector {
   static Future<void> updateDevicesFromMqttDeviceChange(
     MapEntry<String, Map<String, dynamic>> deviceChangeFromMqtt,
   ) async {
-    final ISavedDevicesRepo savedDevicesRepo = getIt<ISavedDevicesRepo>();
+    final ISavedDevicesRepo savedDevicesRepo = ISavedDevicesRepo.instance;
 
     final Map<String, DeviceEntityAbstract> allDevices =
         await savedDevicesRepo.getAllDevices();
@@ -113,12 +110,17 @@ class Connector {
           if (property == 'entityStateGRPC' &&
               propertyValueString == EntityStateGRPC.ack.toString()) {
             final Map<String, RoomEntity> rooms =
-                await getIt<ISavedRoomsRepo>().getAllRooms();
+                await ISavedRoomsRepo.instance.getAllRooms();
 
             HubRequestsToApp.streamRequestsToApp.sink
                 .add(savedDeviceWithSameIdAsMqtt.toInfrastructure());
-            if (rooms[RoomUniqueId.discoveredRoomId().getOrCrash()]!
-                .roomDevicesId
+            final RoomEntity? discoverRoom =
+                rooms[RoomUniqueId.discoveredRoomId().getOrCrash()];
+            if (discoverRoom == null) {
+              continue;
+            }
+
+            if (discoverRoom.roomDevicesId
                 .getOrCrash()
                 .contains(savedDeviceWithSameIdAsMqtt.uniqueId.getOrCrash())) {
               HubRequestsToApp.streamRequestsToApp.sink.add(

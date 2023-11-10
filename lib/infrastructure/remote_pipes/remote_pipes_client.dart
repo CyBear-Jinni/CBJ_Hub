@@ -2,17 +2,16 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:cbj_hub/domain/app_communication/i_app_communication_repository.dart';
-import 'package:cbj_hub/domain/generic_devices/generic_ping_device/generic_ping_entity.dart';
 import 'package:cbj_hub/infrastructure/app_communication/app_communication_repository.dart';
-import 'package:cbj_hub/infrastructure/devices/device_helper/device_helper.dart';
-import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
-import 'package:cbj_hub/infrastructure/generic_devices/abstract_device/device_entity_dto_abstract.dart';
-import 'package:cbj_hub/infrastructure/generic_devices/generic_ping_device/generic_ping_device_dtos.dart';
-import 'package:cbj_hub/infrastructure/room/room_entity_dtos.dart';
-import 'package:cbj_hub/infrastructure/routines/routine_cbj_dtos.dart';
-import 'package:cbj_hub/infrastructure/scenes/scene_cbj_dtos.dart';
-import 'package:cbj_hub/injection.dart';
 import 'package:cbj_hub/utils.dart';
+import 'package:cbj_integrations_controller/infrastructure/devices/device_helper/device_helper.dart';
+import 'package:cbj_integrations_controller/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
+import 'package:cbj_integrations_controller/infrastructure/generic_devices/abstract_device/device_entity_dto_abstract.dart';
+import 'package:cbj_integrations_controller/infrastructure/generic_devices/generic_ping_device/generic_ping_device_dtos.dart';
+import 'package:cbj_integrations_controller/infrastructure/generic_devices/generic_ping_device/generic_ping_entity.dart';
+import 'package:cbj_integrations_controller/infrastructure/room/room_entity_dtos.dart';
+import 'package:cbj_integrations_controller/infrastructure/routines/routine_cbj_dtos.dart';
+import 'package:cbj_integrations_controller/infrastructure/scenes/scene_cbj_dtos.dart';
 import 'package:grpc/grpc.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -74,7 +73,7 @@ class RemotePipesClient {
       );
 
       /// All responses from the app->remote pipes going int the hub
-      getIt<IAppCommunicationRepository>().getFromApp(
+      IAppCommunicationRepository.instance.getFromApp(
         request: response,
         requestUrl: addressToHub,
         isRemotePipes: true,
@@ -93,7 +92,7 @@ class RemotePipesClient {
     grpcKeepAlive?.cancel();
     final GenericPingDE genericEmptyDE = GenericPingDE.empty();
     grpcKeepAlive = Timer.periodic(const Duration(minutes: 9), (Timer t) {
-      logger.v('Ping device to Remote Pipes');
+      logger.t('Ping device to Remote Pipes');
       sendRequest.add(genericEmptyDE.toInfrastructure());
     });
   }

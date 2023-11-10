@@ -1,7 +1,9 @@
-import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
+import 'package:cbj_integrations_controller/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 
 abstract class IAppCommunicationRepository {
+  static late IAppCommunicationRepository instance;
+
   Future<void> getFromApp({
     required Stream<ClientStatusRequests> request,
     required String requestUrl,

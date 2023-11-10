@@ -3,32 +3,27 @@ import 'dart:io';
 
 import 'package:cbj_hub/domain/app_communication/i_app_communication_repository.dart';
 import 'package:cbj_hub/infrastructure/app_communication/app_communication_repository.dart';
-import 'package:cbj_hub/infrastructure/devices/device_helper/device_helper.dart';
-import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/proto_gen_date.dart';
-import 'package:cbj_hub/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
-import 'package:cbj_hub/infrastructure/generic_devices/abstract_device/device_entity_dto_abstract.dart';
-import 'package:cbj_hub/infrastructure/room/room_entity_dtos.dart';
-import 'package:cbj_hub/infrastructure/routines/routine_cbj_dtos.dart';
-import 'package:cbj_hub/infrastructure/scenes/scene_cbj_dtos.dart';
-import 'package:cbj_hub/injection.dart';
 import 'package:cbj_hub/utils.dart';
+import 'package:cbj_integrations_controller/infrastructure/devices/device_helper/device_helper.dart';
+import 'package:cbj_integrations_controller/infrastructure/gen/cbj_hub_server/proto_gen_date.dart';
+import 'package:cbj_integrations_controller/infrastructure/gen/cbj_hub_server/protoc_as_dart/cbj_hub_server.pbgrpc.dart';
+import 'package:cbj_integrations_controller/infrastructure/generic_devices/abstract_device/device_entity_dto_abstract.dart';
+import 'package:cbj_integrations_controller/infrastructure/room/room_entity_dtos.dart';
+import 'package:cbj_integrations_controller/infrastructure/routines/routine_cbj_dtos.dart';
+import 'package:cbj_integrations_controller/infrastructure/scenes/scene_cbj_dtos.dart';
 import 'package:grpc/service_api.dart';
 
 /// Server to get and send information to the app
 class HubAppServer extends CbjHubServiceBase {
-  /// The app call this method and getting stream of all the changes of the
-  /// internet devices
-  Stream<MapEntry<String, String>> streamOfChanges() async* {}
-
   @override
   Stream<RequestsAndStatusFromHub> clientTransferEntities(
     ServiceCall call,
     Stream<ClientStatusRequests> request,
   ) async* {
     try {
-      logger.v('Got new Client');
+      logger.t('Got new Client');
 
-      getIt<IAppCommunicationRepository>().getFromApp(
+      IAppCommunicationRepository.instance.getFromApp(
         request: request,
         requestUrl: 'Error, Hub does not suppose to have request URL',
         isRemotePipes: false,

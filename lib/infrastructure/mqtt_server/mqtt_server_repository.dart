@@ -1,31 +1,32 @@
 import 'dart:convert';
 
 import 'package:cbj_hub/application/connector/connector.dart';
-import 'package:cbj_hub/domain/generic_devices/abstract_device/device_entity_abstract.dart';
-import 'package:cbj_hub/domain/generic_devices/abstract_device/value_objects_core.dart';
-import 'package:cbj_hub/domain/generic_devices/generic_blinds_device/generic_blinds_entity.dart';
-import 'package:cbj_hub/domain/generic_devices/generic_boiler_device/generic_boiler_entity.dart';
-import 'package:cbj_hub/domain/generic_devices/generic_dimmable_light_device/generic_dimmable_light_entity.dart';
-import 'package:cbj_hub/domain/generic_devices/generic_light_device/generic_light_entity.dart';
-import 'package:cbj_hub/domain/generic_devices/generic_rgbw_light_device/generic_rgbw_light_entity.dart';
-import 'package:cbj_hub/domain/generic_devices/generic_smart_computer_device/generic_smart_computer_entity.dart';
-import 'package:cbj_hub/domain/generic_devices/generic_smart_plug_device/generic_smart_plug_entity.dart';
-import 'package:cbj_hub/domain/generic_devices/generic_smart_tv/generic_smart_tv_entity.dart';
-import 'package:cbj_hub/domain/generic_devices/generic_switch_device/generic_switch_entity.dart';
-import 'package:cbj_hub/domain/mqtt_server/i_mqtt_server_repository.dart';
-import 'package:cbj_hub/domain/saved_devices/i_saved_devices_repo.dart';
 import 'package:cbj_hub/infrastructure/app_communication/app_communication_repository.dart';
-import 'package:cbj_hub/infrastructure/generic_devices/abstract_device/device_entity_dto_abstract.dart';
-import 'package:cbj_hub/injection.dart';
 import 'package:cbj_hub/utils.dart';
-import 'package:injectable/injectable.dart';
+import 'package:cbj_integrations_controller/domain/mqtt_server/i_mqtt_server_repository.dart';
+import 'package:cbj_integrations_controller/domain/saved_devices/i_saved_devices_repo.dart';
+import 'package:cbj_integrations_controller/infrastructure/generic_devices/abstract_device/device_entity_abstract.dart';
+import 'package:cbj_integrations_controller/infrastructure/generic_devices/abstract_device/device_entity_dto_abstract.dart';
+import 'package:cbj_integrations_controller/infrastructure/generic_devices/abstract_device/value_objects_core.dart';
+import 'package:cbj_integrations_controller/infrastructure/generic_devices/generic_blinds_device/generic_blinds_entity.dart';
+import 'package:cbj_integrations_controller/infrastructure/generic_devices/generic_boiler_device/generic_boiler_entity.dart';
+import 'package:cbj_integrations_controller/infrastructure/generic_devices/generic_dimmable_light_device/generic_dimmable_light_entity.dart';
+import 'package:cbj_integrations_controller/infrastructure/generic_devices/generic_light_device/generic_light_entity.dart';
+import 'package:cbj_integrations_controller/infrastructure/generic_devices/generic_rgbw_light_device/generic_rgbw_light_entity.dart';
+import 'package:cbj_integrations_controller/infrastructure/generic_devices/generic_smart_computer_device/generic_smart_computer_entity.dart';
+import 'package:cbj_integrations_controller/infrastructure/generic_devices/generic_smart_plug_device/generic_smart_plug_entity.dart';
+import 'package:cbj_integrations_controller/infrastructure/generic_devices/generic_smart_tv/generic_smart_tv_entity.dart';
+import 'package:cbj_integrations_controller/infrastructure/generic_devices/generic_switch_device/generic_switch_entity.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 // ignore: implementation_imports
 import 'package:mqtt_client/src/observable/src/records.dart';
 
-@LazySingleton(as: IMqttServerRepository)
 class MqttServerRepository extends IMqttServerRepository {
+  MqttServerRepository() {
+    IMqttServerRepository.instance = this;
+  }
+
   /// Static instance of connection to mqtt broker
   static MqttServerClient client = MqttServerClient('127.0.0.1', 'CBJ_Hub');
 
@@ -120,7 +121,7 @@ class MqttServerRepository extends IMqttServerRepository {
         .startClean()
         .withWillQos(MqttQos.atLeastOnce);
 
-    logger.v('Client connecting');
+    logger.t('Client connecting');
     client.connectionMessage = connMessage;
     try {
       await client.connect();
@@ -215,10 +216,10 @@ class MqttServerRepository extends IMqttServerRepository {
       final String deviceDeviceTypeThatChanged = topicsSplitted[3];
 
       final Map<String, dynamic> devicePropertyAndValues = {
-        deviceDeviceTypeThatChanged: mqttPublishMessage[0].payload
+        deviceDeviceTypeThatChanged: mqttPublishMessage[0].payload,
       };
 
-      final ISavedDevicesRepo savedDevicesRepo = getIt<ISavedDevicesRepo>();
+      final ISavedDevicesRepo savedDevicesRepo = ISavedDevicesRepo.instance;
 
       final Map<String, DeviceEntityAbstract> allDevices =
           await savedDevicesRepo.getAllDevices();
@@ -299,7 +300,7 @@ class MqttServerRepository extends IMqttServerRepository {
     mqttClientTopic.updates.asBroadcastStream();
 
     // myValueStream.listen((event) {
-    //   logger.v(event);
+    //   logger.t(event);
     // });
     // final List<MqttReceivedMessage<MqttMessage?>> result =
     //     await myValueStream.first;
@@ -311,32 +312,32 @@ class MqttServerRepository extends IMqttServerRepository {
 
   /// Callback function for connection succeeded
   void onConnected() {
-    logger.v('Connected');
+    logger.t('Connected');
   }
 
   /// Unconnected
   void onDisconnected() {
-    logger.v('Disconnected');
+    logger.t('Disconnected');
   }
 
   /// subscribe to topic succeeded
   void onSubscribed(String topic) {
-    logger.v('Subscribed topic: $topic');
+    logger.t('Subscribed topic: $topic');
   }
 
   /// subscribe to topic failed
   void onSubscribeFail(String topic) {
-    logger.v('Failed to subscribe $topic');
+    logger.t('Failed to subscribe $topic');
   }
 
   /// unsubscribe succeeded
   void onUnsubscribed(String? topic) {
-    logger.v('Unsubscribed topic: $topic');
+    logger.t('Unsubscribed topic: $topic');
   }
 
   /// PING response received
   void pong() {
-    logger.v('Ping response MQTT client callback invoked');
+    logger.t('Ping response MQTT client callback invoked');
   }
 
   /// Convert device entity properties to mqtt topic and massage
@@ -375,13 +376,13 @@ class MqttServerRepository extends IMqttServerRepository {
     }
     final List<ChangeRecord>? a =
         await readingFromMqttOnce('$pathToDeviceTopic/type');
-    logger.v('This is a $a');
+    logger.t('This is a $a');
     return DeviceEntityDtoAbstract();
   }
 
   /// Resend the device object throw mqtt
   Future<void> findDeviceAndResendItToMqtt(String deviceId) async {
-    final ISavedDevicesRepo savedDevicesRepo = getIt<ISavedDevicesRepo>();
+    final ISavedDevicesRepo savedDevicesRepo = ISavedDevicesRepo.instance;
 
     final Map<String, DeviceEntityAbstract> allDevices =
         await savedDevicesRepo.getAllDevices();
@@ -410,7 +411,7 @@ class MqttServerRepository extends IMqttServerRepository {
     bool? gotFromApp,
   }) async {
     if (entityFromTheApp is DeviceEntityAbstract) {
-      final ISavedDevicesRepo savedDevicesRepo = getIt<ISavedDevicesRepo>();
+      final ISavedDevicesRepo savedDevicesRepo = ISavedDevicesRepo.instance;
       final Map<String, DeviceEntityAbstract> allDevices =
           await savedDevicesRepo.getAllDevices();
       final DeviceEntityAbstract? savedDeviceEntity =

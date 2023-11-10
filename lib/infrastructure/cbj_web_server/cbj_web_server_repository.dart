@@ -1,19 +1,17 @@
 import 'dart:io';
 
 import 'package:cbj_hub/domain/cbj_web_server/i_cbj_web_server_repository.dart';
-import 'package:cbj_hub/domain/generic_devices/abstract_device/device_entity_abstract.dart';
-import 'package:cbj_hub/domain/saved_devices/i_saved_devices_repo.dart';
-import 'package:cbj_hub/infrastructure/generic_devices/abstract_device/device_entity_dto_abstract.dart';
-import 'package:cbj_hub/injection.dart';
 import 'package:cbj_hub/utils.dart';
-import 'package:injectable/injectable.dart';
+import 'package:cbj_integrations_controller/domain/saved_devices/i_saved_devices_repo.dart';
+import 'package:cbj_integrations_controller/infrastructure/generic_devices/abstract_device/device_entity_abstract.dart';
+import 'package:cbj_integrations_controller/infrastructure/generic_devices/abstract_device/device_entity_dto_abstract.dart';
 
 /// A cbj web server to interact with get current state requests from mqtt as
 /// well as website to change devices state locally on the network without
 /// the need of installing any app.
-@LazySingleton(as: ICbjWebServerRepository)
 class CbjWebServerRepository extends ICbjWebServerRepository {
   CbjWebServerRepository() {
+    ICbjWebServerRepository.instance = this;
     startWebServer();
   }
 
@@ -29,7 +27,7 @@ class CbjWebServerRepository extends ICbjWebServerRepository {
             final String deviceId = pathArgs[1];
 
             final ISavedDevicesRepo savedDevicesRepo =
-                getIt<ISavedDevicesRepo>();
+                ISavedDevicesRepo.instance;
 
             final Map<String, DeviceEntityAbstract> allDevices =
                 await savedDevicesRepo.getAllDevices();
